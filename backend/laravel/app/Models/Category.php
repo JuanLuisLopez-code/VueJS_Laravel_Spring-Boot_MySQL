@@ -8,6 +8,7 @@ use App\Models\Mesa;
 
 class Category extends Model
 {
+    // protected $table = 'categories';
     use HasFactory;
     protected $fillable = [
         'name_category',
@@ -16,6 +17,6 @@ class Category extends Model
 
     public function GetMesas()
     {
-        return $this->belongsToMany(Mesa::class, 'mesas_categorys', 'category_id', 'mesa_id');
+        return $this->belongsToMany(Mesa::class, 'mesas_categories', 'category_id', 'mesa_id');
     }
 }

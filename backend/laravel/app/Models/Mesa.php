@@ -18,6 +18,6 @@ class Mesa extends Model
 
     public function GetCategory()
     {
-        return $this->belongsToMany(Category::class, 'mesas_categorys', 'mesa_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'mesas_categories', 'mesa_id', 'category_id');
     }
 }

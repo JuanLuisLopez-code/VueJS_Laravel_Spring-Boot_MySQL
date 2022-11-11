@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('mesas_categorys', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('mesa_id')->constrained('mesas')->onDelete('cascade');
-            $table->foreignId('category_id')->constrained('categorys')->onDelete('cascade');
+            $table->string('name_category');
+            $table->string('photo');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mesas_categorys');
+        Schema::dropIfExists('categories');
     }
 };
