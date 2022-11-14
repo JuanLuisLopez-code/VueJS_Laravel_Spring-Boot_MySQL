@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name_mesa');
             $table->integer('capacity');
+            $table->boolean('is_active');
             $table->string('photo');
         });
     }
