@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('email');
             $table->string('type');
+            $table->boolean('is_active');
             $table->string('photo');
         });
     }

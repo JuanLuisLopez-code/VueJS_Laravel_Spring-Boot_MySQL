@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Mesa;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMesaRequest extends FormRequest
+class UpdateMesaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class StoreMesaRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_mesa' => ['required'],
-            'capacity' => ['required'],
-            'photo' => ['required'],
+            'name_mesa' => ['sometimes'],
+            'capacity' => ['sometimes'],
+            'photo' => ['sometimes'],
+            'is_active' => ['sometimes'],
         ];
     }
 }

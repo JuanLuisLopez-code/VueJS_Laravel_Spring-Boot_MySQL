@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreMesaRequest;
+use App\Http\Requests\Mesa\StoreMesaRequest;
+use App\Http\Requests\Mesa\UpdateMesaRequest;
 use App\Http\Resources\MesaResource;
 use App\Models\Mesa;
 
@@ -24,8 +25,9 @@ class MesaController extends Controller
         return MesaResource::make(Mesa::where('id', $id)->firstOrFail());
     }
 
-    public function update(StoreMesaRequest $request, $id)
+    public function update(UpdateMesaRequest $request, $id)
     {
+        error_log($request);
         $update = Mesa::where('id', $id)->update($request->validated());
         if ($update == 1) {
             MesaResource::make($update);

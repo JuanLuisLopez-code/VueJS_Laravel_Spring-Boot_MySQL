@@ -13,6 +13,7 @@ class MesaResource extends JsonResource
             'name_mesa' => $this->name_mesa,
             'capacity' => $this->capacity,
             'photo' => $this->photo,
+            'is_active' => $this->is_active,
         ];
     }
 }

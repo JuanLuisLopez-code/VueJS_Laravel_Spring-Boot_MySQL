@@ -13,6 +13,7 @@ class User extends Model
         'password',
         'email',
         'type',
+        'is_active',
         'photo',
     ];
 }
