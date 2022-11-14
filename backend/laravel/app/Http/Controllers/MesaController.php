@@ -17,7 +17,7 @@ class MesaController extends Controller
 
     public function store(StoreMesaRequest $request)
     {
-        return MesaResource::make(StoreMesaRequest::create($request->validated()));
+        return MesaResource::make(Mesa::create($request->validated()));
     }
 
     public function show($id)
@@ -27,6 +27,7 @@ class MesaController extends Controller
 
     public function update(UpdateMesaRequest $request, $id)
     {
+        error_log($request);
         $update = Mesa::where('id', $id)->update($request->validated());
         if ($update == 1) {
             MesaResource::make($update);

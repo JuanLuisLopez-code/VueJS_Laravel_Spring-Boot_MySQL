@@ -24,10 +24,10 @@ class UpdateMesaRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_mesa',
-            'capacity',
-            'photo',
-            'is_active',
+            'name_mesa' => ['sometimes'],
+            'capacity' => ['sometimes'],
+            'photo' => ['sometimes'],
+            'is_active' => ['sometimes'],
         ];
     }
 }
