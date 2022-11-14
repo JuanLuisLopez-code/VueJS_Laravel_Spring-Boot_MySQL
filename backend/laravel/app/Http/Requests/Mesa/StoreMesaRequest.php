@@ -28,6 +28,7 @@ class StoreMesaRequest extends FormRequest
             'capacity' => ['required'],
             'photo' => ['required'],
             'is_active' => ['required'],
+            'category' => ['required'],
         ];
     }
 }

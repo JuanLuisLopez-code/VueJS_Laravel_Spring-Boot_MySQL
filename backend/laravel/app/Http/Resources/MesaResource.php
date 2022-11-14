@@ -14,6 +14,7 @@ class MesaResource extends JsonResource
             'capacity' => $this->capacity,
             'photo' => $this->photo,
             'is_active' => $this->is_active,
+            'categories' => $this->categories
         ];
     }
 }

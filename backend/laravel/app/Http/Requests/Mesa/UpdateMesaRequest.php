@@ -28,6 +28,7 @@ class UpdateMesaRequest extends FormRequest
             'capacity' => ['sometimes'],
             'photo' => ['sometimes'],
             'is_active' => ['sometimes'],
+            'categories' => ['sometimes', 'array'],
         ];
     }
 }

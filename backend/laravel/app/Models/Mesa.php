@@ -18,7 +18,7 @@ class Mesa extends Model
         'photo',
     ];
 
-    public function GetCategory(): BelongsToMany
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'mesas_categories', 'mesa_id', 'category_id');
     }

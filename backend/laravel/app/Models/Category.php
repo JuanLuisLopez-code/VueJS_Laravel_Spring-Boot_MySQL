@@ -9,14 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
-    // protected $table = 'categories';
     use HasFactory;
     protected $fillable = [
         'name_category',
         'photo',
     ];
 
-    public function GetMesas(): BelongsToMany
+    public function mesas(): BelongsToMany
     {
         return $this->belongsToMany(Mesa::class, 'mesas_categories', 'category_id', 'mesa_id');
     }
