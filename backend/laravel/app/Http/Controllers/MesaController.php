@@ -18,10 +18,16 @@ class MesaController extends Controller
 
     public function store(StoreMesaRequest $request)
     {
-        $cat = Category::where('name_category', $request->category)->firstOrFail();
-        if ($cat) {
-            $mesa = Mesa::create($request->validated());
-            $mesa->categories()->attach($cat->id);
+        $data = $request->except(['categories']);
+        $categories = Category::whereIn('name_category', $request->categories)->get();
+        $categories_id = [];
+        foreach ($categories as $c) {
+            array_push($categories_id, $c->id);
+        }
+
+        if (count($categories_id) > 0) {
+            $mesa = Mesa::create($data);
+            $mesa->categories()->sync($categories_id);
             return MesaResource::make($mesa);
         } else {
             return response()->json([
@@ -35,56 +41,31 @@ class MesaController extends Controller
         return MesaResource::make(Mesa::where('id', $id)->firstOrFail());
     }
 
-    // public function addCategory($id, $categoryName)
-    // {
-    //     $category = Category::where('name_category', $categoryName)->firstOrFail();
-    //     $mesa = Mesa::where('id', $id)->firstOrFail();
-    //     if ($category) {
-    //         $mesa->categories()->attach($category->id);
-    //         return MesaResource::make($mesa);
-    //     } else {
-    //         return response()->json([
-    //             "Status" => "Not found"
-    //         ], 404);
-    //     }
-    // } //add category
-
-    // public function removeCategory($id, $categoryName)
-    // {
-    //     $category = Category::where('name_category', $categoryName)->firstOrFail();
-    //     $mesa = Mesa::where('id', $id)->firstOrFail();
-    //     if ($category) {
-    //         $mesa->categories()->detach($category->id);
-    //         return MesaResource::make($mesa);
-    //     } else {
-    //         return response()->json([
-    //             "Status" => "Not found"
-    //         ], 404);
-    //     }
-    // } //add category
-
     public function update(UpdateMesaRequest $request, $id)
     {
-        $request_string = json_encode($request->validated());
-        error_log($request_string);
-        if ($request->categories) {
-            $mesa = Mesa::where('id', $id)->firstOrFail();
-            return $mesa->categories;
-            // $mesa->categories()->detach();
-            $mesa->categories()->attach($mesa->id);
+        $data = $request->except(['categories']);
+        $categories = Category::whereIn('name_category', $request->categories)->get();
+        $categories_id = [];
+        foreach ($categories as $c) {
+            array_push($categories_id, $c->id);
         }
 
+        $update = Mesa::where('id', $id)->update($data);
+        if ($update == 1) {
+            if (count($categories_id) > 0) {
+                $mesa = Mesa::where('id', $id)->firstOrFail();
+                $mesa->categories()->detach();
+                $mesa->categories()->sync($categories_id);
+            }
 
-        // $update = Mesa::where('id', $id)->update($request->validated());
-        // if ($update == 1) {
-        //     return response()->json([
-        //         "Message" => "Updated correctly"
-        //     ]);
-        // } else {
-        //     return response()->json([
-        //         "Status" => "Not found"
-        //     ], 404);
-        // };
+            return response()->json([
+                "Message" => "Updated correctly"
+            ]);
+        } else {
+            return response()->json([
+                "Status" => "Not found"
+            ], 404);
+        };
     }
 
     public function destroy($id)
