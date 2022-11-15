@@ -7,6 +7,7 @@ use App\Http\Requests\Mesa\UpdateMesaRequest;
 use App\Http\Resources\MesaResource;
 use App\Models\Mesa;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 
 class MesaController extends Controller
 {
@@ -64,23 +65,26 @@ class MesaController extends Controller
 
     public function update(UpdateMesaRequest $request, $id)
     {
+        $request_string = json_encode($request->validated());
+        error_log($request_string);
         if ($request->categories) {
-            error_log('sasdasdsa');
+            $mesa = Mesa::where('id', $id)->firstOrFail();
+            return $mesa->categories;
+            // $mesa->categories()->detach();
+            $mesa->categories()->attach($mesa->id);
         }
 
-        $update = Mesa::where('id', $id)->update($request->validated());
-        if ($update == 1) {
-            $mesa = Mesa::where('id', $id)->firstOrFail();
-            // $mesa->categories->detach();
-            // $mesa->categories->attach();
-            return response()->json([
-                "Message" => "Updated correctly"
-            ]);
-        } else {
-            return response()->json([
-                "Status" => "Not found"
-            ], 404);
-        };
+
+        // $update = Mesa::where('id', $id)->update($request->validated());
+        // if ($update == 1) {
+        //     return response()->json([
+        //         "Message" => "Updated correctly"
+        //     ]);
+        // } else {
+        //     return response()->json([
+        //         "Status" => "Not found"
+        //     ], 404);
+        // };
     }
 
     public function destroy($id)
