@@ -23,9 +23,7 @@ public class Category {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
-    @JoinTable(name = "mesas_categories", joinColumns = { @JoinColumn(name = "category_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "mesa_id") })
+    }, mappedBy = "categories")
     @JsonIgnore
     private Set<Mesa> mesas = new HashSet<>();
 
