@@ -24,10 +24,12 @@ class StoreMesaRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_mesa' => ['required'],
-            'capacity' => ['required'],
-            'photo' => ['required'],
-            'is_active' => ['required'],
+            'name_mesa' => 'required',
+            'capacity' => 'required',
+            'photo' => 'required',
+            'is_active' => 'required',
+            'categories' => 'required', 'array:name,categories',
+            //'category' => ['required'],
         ];
     }
 }
