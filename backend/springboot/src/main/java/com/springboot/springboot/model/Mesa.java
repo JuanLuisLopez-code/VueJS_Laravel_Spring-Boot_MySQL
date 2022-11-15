@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "mesas")
 public class Mesa {
@@ -31,8 +28,7 @@ public class Mesa {
             CascadeType.MERGE
     })
     @JoinTable(name = "mesas_categories", joinColumns = { @JoinColumn(name = "mesa_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "category_id") })    
-    @JsonIgnore
+            @JoinColumn(name = "category_id") })
     private Set<Category> categories = new HashSet<>();
 
     public Mesa() {
@@ -45,7 +41,7 @@ public class Mesa {
         this.photo = photo;
     }
 
-    public Set<Category> getMesas() {
+    public Set<Category> getCategories() {
         return this.categories;
     }
 

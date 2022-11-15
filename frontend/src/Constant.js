@@ -1,6 +1,4 @@
 export default {
-    ADD_MESSA: "addMessa",
-    UPDATE_MESSA: "updateMessa",
-    DELETE_MESSA: "deleteMessa",
-    INITIALIZE_MESSA: "InitializeMessa",
+    INITIALIZE_MESA: "InitializeMesa",
+    INITIALIZE_CATEGORY: "InitializeCategory",
 }
