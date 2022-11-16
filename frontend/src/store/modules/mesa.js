@@ -13,7 +13,6 @@ export const mesa = {
     actions: {
         [Constant.INITIALIZE_MESA]: async (store) => {
             const response = await MesaService.GetMesas();
-            console.log(response.data)
             store.commit(Constant.INITIALIZE_MESA, response.data);
         },
 
