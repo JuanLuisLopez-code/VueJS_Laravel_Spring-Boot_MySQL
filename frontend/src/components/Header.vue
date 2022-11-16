@@ -5,6 +5,9 @@
                 <router-link to="/home" class="link">
                     <li class="page">Home</li>
                 </router-link>
+                <router-link to="/reservation" class="link">
+                    <li class="page">Reservation</li>
+                </router-link>
             </ul>
             <p class="search">
                 <input class="search-box" type="search" name="search" id="search" placeholder="Search..." />
