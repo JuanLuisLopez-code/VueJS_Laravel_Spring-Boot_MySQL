@@ -3,7 +3,7 @@
         <div class="countainer">
             <ul class="pages">
                 <router-link to="/home" class="link">
-                    <li class="page active">Home</li>
+                    <li class="page">Home</li>
                 </router-link>
             </ul>
             <p class="search">
