@@ -14,10 +14,14 @@
             </div>
             <div class="gallery-item-info">
                 <ul>
-                    <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart"
-                            aria-hidden="true"></i> 34</li>
-                    <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i
-                            class="fas fa-comment" aria-hidden="true"></i> 1</li>
+                    <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span>
+                        34
+                        <font-awesome-icon icon="fa-solid fa-heart" />
+                    </li>
+                    <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span>
+                        1
+                        <font-awesome-icon icon="fa-solid fa-comment" />
+                    </li>
                 </ul>
             </div>
         </div>
@@ -34,10 +38,6 @@ export default {
 </script>
 
 <style lang="scss">
-:root {
-    font-size: 10px;
-}
-
 .name {
     color: black;
 }
