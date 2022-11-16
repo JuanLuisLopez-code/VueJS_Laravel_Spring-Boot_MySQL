@@ -1,5 +1,9 @@
 <template>
-    <h1>Categories</h1>
+    <h1>
+        <font-awesome-icon icon="fa-solid fa-fish-fins" />
+        Categories
+        <font-awesome-icon icon="fa-solid fa-fish-fins" />
+    </h1>
     <carouselVue :data="state.categories" />
 </template>
 
