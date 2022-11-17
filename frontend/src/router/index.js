@@ -29,14 +29,14 @@ const router = createRouter({
     },
     //Category dashboard//
     {
-      path: "/categories",
+      path: "/dashboard/categories",
       name: "categoriesList",
       component: () => import('../views/Category/CategoryList.vue')
     },
 
     //Mesa dashboard//
     {
-      path: "/mesas",
+      path: "/dashboard/mesas",
       name: "mesasList",
       component: () => import('../views/Mesa/MesaList.vue')
     },

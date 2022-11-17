@@ -1,5 +1,5 @@
 <template>
-    <footer>
+    <footer v-if="!isDashboard">
         <div class="container footerContainer">
             <div class="footer-nav flex flex-around flex-start flex-g-1">
                 <div class="col flex flex-column flex-start flex-g-1">
@@ -67,6 +67,18 @@
     </footer>
 
 </template>
+
+<script>
+
+export default {
+    computed: {
+        isDashboard() {
+            const path = this.$route.path.split('/');
+            return path[1] == 'dashboard';
+        },
+    }
+}
+</script>
 
 <style lang="scss">
 @import url(https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap);

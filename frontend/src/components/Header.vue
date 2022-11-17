@@ -23,8 +23,6 @@
 </template>
 
 <script>
-// import { useRoute } from 'vue-router'
-// import { reactive, computed } from 'vue'
 
 export default {
     computed: {
@@ -35,7 +33,8 @@ export default {
             return this.$route.name == 'reservation'
         },
         isDashboard() {
-            return this.$route.name == 'dashboard'
+            const path = this.$route.path.split('/');
+            return path[1] == 'dashboard';
         },
     }
 }
