@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="gallery-item" tabindex="0">
+        <div class="gallery-item" tabindex="0" @click="showDetails(mesa.id)">
             <img src="../assets/img/Don_Kamaron_Logo.png" class="gallery-image" alt="">
             <div class="name">
                 <span class="capacity">
@@ -29,11 +29,20 @@
 </template>
 
 <script>
-export default {
+import { useRouter } from 'vue-router';
 
+
+export default {
     props: {
         mesa: Object
     },
+    setup() {
+        const router = useRouter()
+        const showDetails = (id) => {
+            router.push({ name: "details", params: { id } })
+        }
+        return { showDetails }
+    }
 }
 </script>
 
