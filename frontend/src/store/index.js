@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 
-import { mesa } from './modules/mesa.js';
-import { category } from './modules/category';
+import { mesa } from './modules/client/mesa.js';
+import { category } from './modules/client/category';
 
 export default Vuex.createStore({
 

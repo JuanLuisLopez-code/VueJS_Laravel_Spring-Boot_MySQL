@@ -1,5 +1,5 @@
-import Constant from '../../Constant';
-import MesaService from "../../services/MesaService"
+import Constant from '../../../Constant';
+import MesaService from "../../../services/client/MesaService"
 
 export const mesa = {
     namespaced: true,

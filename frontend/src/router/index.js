@@ -22,6 +22,24 @@ const router = createRouter({
       name: "details",
       component: () => import('../views/Details.vue')
     },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import('../views/Dashboard.vue')
+    },
+    //Category dashboard//
+    {
+      path: "/categories",
+      name: "categoriesList",
+      component: () => import('../views/Category/CategoryList.vue')
+    },
+
+    //Mesa dashboard//
+    {
+      path: "/mesas",
+      name: "mesasList",
+      component: () => import('../views/Mesa/MesaList.vue')
+    },
   ]
 })
 

@@ -8,11 +8,16 @@
                 <router-link to="/reservation" class="link">
                     <li class="page">Reservation</li>
                 </router-link>
+                <router-link to="/dashboard" class="link">
+                    <li class="page">Dashboard</li>
+                </router-link>
             </ul>
             <p class="search">
                 <input class="search-box" type="search" name="search" id="search" placeholder="Search..." />
             </p>
-            <img src="../assets/img/Don_Kamaron_Logo.png">
+            <router-link to="/home" class="link">
+                <img src="../assets/img/Don_Kamaron_Logo.png">
+            </router-link>
         </div>
     </nav>
 </template>

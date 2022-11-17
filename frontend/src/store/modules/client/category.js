@@ -1,5 +1,5 @@
-import Constant from '../../Constant';
-import CategoryService from '../../services/CategoryService';
+import Constant from '../../../Constant';
+import CategoryService from '../../../services/client/CategoryService';
 
 export const category = {
     namespaced: true,
