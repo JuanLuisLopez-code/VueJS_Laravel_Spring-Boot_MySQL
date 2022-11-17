@@ -1,5 +1,7 @@
 <template>
-    <img :src="item.photo">
+    <div class="carusel_item">
+        <img :src="item.photo" />
+    </div>
 </template>
 
 <script>
@@ -11,5 +13,10 @@ export default {
 </script>
 
 <style lang="scss">
-
+.carusel_item {
+    img {
+        width: 30%;
+        height: auto;
+    }
+}
 </style>
