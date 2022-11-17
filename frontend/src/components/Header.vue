@@ -2,13 +2,13 @@
     <nav>
         <div class="countainer">
             <ul class="pages">
-                <router-link to="/home" class="link">
+                <router-link to="/home" class="link" :class="{ active: isHome }">
                     <li class="page">Home</li>
                 </router-link>
-                <router-link to="/reservation" class="link">
+                <router-link to="/reservation" class="link" :class="{ active: isReservation }">
                     <li class="page">Reservation</li>
                 </router-link>
-                <router-link to="/dashboard" class="link">
+                <router-link to="/dashboard" class="link" :class="{ active: isDashboard }">
                     <li class="page">Dashboard</li>
                 </router-link>
             </ul>
@@ -21,6 +21,25 @@
         </div>
     </nav>
 </template>
+
+<script>
+// import { useRoute } from 'vue-router'
+// import { reactive, computed } from 'vue'
+
+export default {
+    computed: {
+        isHome() {
+            return this.$route.name == 'home'
+        },
+        isReservation() {
+            return this.$route.name == 'reservation'
+        },
+        isDashboard() {
+            return this.$route.name == 'dashboard'
+        },
+    }
+}
+</script>
 
 <style lang="scss">
 * {
@@ -66,11 +85,6 @@ li {
     color: whitesmoke;
     margin: 0%;
     padding: 0 .3rem;
-}
-
-.page:hover {
-    border-bottom: #f5f5f5 solid 1px;
-    padding-bottom: 10px;
 }
 
 .active {
