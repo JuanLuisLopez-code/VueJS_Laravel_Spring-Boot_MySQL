@@ -1,13 +1,13 @@
 <template>
     <main>
         <div class="gallery-item" tabindex="0" @click="showDetails(mesa.id)">
-            <img src="../assets/img/Don_Kamaron_Logo.png" class="gallery-image" alt="">
+            <img :src="mesa.photo" class="gallery-image" alt="">
             <div class="name">
                 <span class="capacity">
                     Capacity: {{ mesa.capacity }}
                 </span>
-                <div class="cat_name">
-                    <span v-for="cat in mesa.categories">
+                <div class="cat_name" v-for="cat in mesa.categories">
+                    <span>
                         {{ cat.name_category }}
                     </span>
                 </div>
@@ -60,6 +60,7 @@ export default {
     border: 1px solid lightblue;
     background-color: lightblue;
     border-radius: 10px;
+    margin: 1%;
 }
 
 .visually-hidden {
