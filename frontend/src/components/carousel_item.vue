@@ -1,5 +1,5 @@
 <template>
-    <img src="../assets/img/Don_Kamaron_Logo.png">
+    <img :src="item.photo">
 </template>
 
 <script>

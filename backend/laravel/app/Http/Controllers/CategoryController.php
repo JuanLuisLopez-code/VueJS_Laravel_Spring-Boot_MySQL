@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 
@@ -23,7 +24,7 @@ class CategoryController extends Controller
         return CategoryResource::make(Category::where('id', $id)->firstOrFail());
     }
 
-    public function update(StoreCategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request, $id)
     {
         $update = Category::where('id', $id)->update($request->validated());
         if ($update == 1) {
