@@ -5,21 +5,47 @@ export const mesa = {
     namespaced: true,
     mutations: {
         [Constant.INITIALIZE_MESA]: (state, payload) => {
-            if (payload){
+            if (payload) {
                 state.mesa = payload;
             }
-        }
+        },
+        [Constant.INITIALIZE_ONE_STATE_MESA]: (state, payload) => {
+            if (payload) {
+                state.OneMesa = payload;
+            }
+        },
     },//mutations
     actions: {
         [Constant.INITIALIZE_MESA]: async (store) => {
-            const response = await MesaService.GetMesas();
-            store.commit(Constant.INITIALIZE_MESA, response.data);
+            try {
+                const response = await MesaService.GetMesas();
+                store.commit(Constant.INITIALIZE_MESA, response.data);
+            } catch (error) {
+                console.error(error)
+            }
         },
-
+        [Constant.INITIALIZE_ONE_STATE_MESA]: async (store, payload) => {
+            try {
+                if (store.state.mesa != undefined) {
+                    const index = store.state.mesa.findIndex(object => {
+                        return object.id === parseInt(payload);
+                    });
+                    store.commit(Constant.INITIALIZE_ONE_STATE_MESA, store.state.mesa[index]);
+                } else {
+                    const response = await MesaService.GetOneLinkMesa(payload);
+                    store.commit(Constant.INITIALIZE_ONE_STATE_MESA, response.data);
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        },
     },//actions
     getters: {
         getMesas(state) {
             return state.mesa;
+        },
+        getOneMesaState(state) {
+            return state.OneMesa;
         },
     }//getters
 }//export

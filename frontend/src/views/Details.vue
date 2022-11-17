@@ -1,0 +1,90 @@
+<template>
+    <div class="container_gallery">
+        <div class="gallery">
+            <div class="gallery-item" tabindex="0">
+                <img src="../assets/img/Don_Kamaron_Logo.png" class="gallery-image" alt="">
+                <div class="name">
+                    <span class="capacity">
+                        Capacity: {{ stateOne.mesas?.capacity }}
+                    </span>
+                    <div class="cat_name">
+                        <span v-for="cat in stateOne.mesas?.categories">
+                            {{ cat.name_category }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { reactive, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import card_mesa from '../components/card_mesa.vue';
+import Constant from '../Constant';
+export default {
+    components: { card_mesa },
+
+    setup() {
+        const store = useStore();
+        const route = useRoute()
+        const id = route.params.id;
+
+        store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
+
+        const stateOne = reactive({
+            mesas: computed(() => store.getters["mesa/getOneMesaState"])
+        })
+
+        return { stateOne }
+    }
+}
+</script>
+
+<style>
+.container_gallery {
+    max-width: 1em;
+    margin-left: 37%;
+}
+
+.gallery {
+    display: flex;
+}
+
+
+.name {
+    color: black;
+}
+
+.capacity {
+    float: left;
+}
+
+.cat_name {
+    float: right;
+    border: 1px solid lightblue;
+    background-color: lightblue;
+    border-radius: 10px;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.gallery-item {
+    position: relative;
+    margin: 1rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.gallery-image {
+    object-fit: cover;
+}
+</style>
