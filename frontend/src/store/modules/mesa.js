@@ -32,7 +32,7 @@ export const mesa = {
                     });
                     store.commit(Constant.INITIALIZE_ONE_STATE_MESA, store.state.mesa[index]);
                 } else {
-                    const response = await MesaService.GetOneLinkMesa(payload);
+                    const response = await MesaService.GetOneMesa(payload);
                     store.commit(Constant.INITIALIZE_ONE_STATE_MESA, response.data);
                 }
             } catch (error) {
@@ -44,7 +44,7 @@ export const mesa = {
         getMesas(state) {
             return state.mesa;
         },
-        getOneMesaState(state) {
+        getOneMesa(state) {
             return state.OneMesa;
         },
     }//getters

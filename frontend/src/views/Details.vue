@@ -2,7 +2,7 @@
     <div class="container_gallery">
         <div class="gallery">
             <div class="gallery-item" tabindex="0">
-                <img src="../assets/img/Don_Kamaron_Logo.png" class="gallery-image" alt="">
+                <img :src="stateOne.mesas?.photo" class="gallery-image" alt="">
                 <div class="name">
                     <span class="capacity">
                         Capacity: {{ stateOne.mesas?.capacity }}
@@ -35,7 +35,7 @@ export default {
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
 
         const stateOne = reactive({
-            mesas: computed(() => store.getters["mesa/getOneMesaState"])
+            mesas: computed(() => store.getters["mesa/getOneMesa"])
         })
 
         return { stateOne }

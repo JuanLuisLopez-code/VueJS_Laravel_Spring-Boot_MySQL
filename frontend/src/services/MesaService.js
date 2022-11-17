@@ -6,7 +6,7 @@ export default {
     GetMesas() {
         return Api(secrets.URL_SPRING).get('mesa');
     },//GetMesas
-    GetOneLinkMesa(id) {
+    GetOneMesa(id) {
         return Api(secrets.URL_SPRING).get('mesa/' + id);
     },//GetOneLinkMesa
 
