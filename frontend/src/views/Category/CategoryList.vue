@@ -1,5 +1,11 @@
 <template>
-    <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories">
+    <button @click="test()">log</button>
+    <router-link to="/dashboard/categories/create">
+        <button>CREATE</button>
+    </router-link>
+    <button>UPDATE</button>
+    <button>DELETE</button>
+    <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -11,14 +17,13 @@
 </template>
 
 <script>
-import { reactive, computed, ref } from 'vue';
+import { reactive, computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Constant from '../../Constant';
 import DataTable from 'datatables.net-vue3'
 import DataTablesLib from 'datatables.net';
 import 'datatables.net-select';
 DataTable.use(DataTablesLib);
-
 
 export default {
     components: { DataTable },
@@ -36,7 +41,20 @@ export default {
             { data: 'photo' },
         ];
 
-        return { state, columns };
+        let dt;
+        const table = ref();
+        onMounted(() => {
+            dt = table.value.dt();
+        });
+
+        function test() {
+            const indexs = dt.rows({ selected: true })[0];
+            const cant = indexs.length;
+            console.log(indexs, cant);
+            dt.rows({ selected: true }).every(index => console.log(state.categories[index]));
+        }
+
+        return { state, columns, table, test };
     }
 }
 </script>
