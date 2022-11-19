@@ -1,10 +1,9 @@
 <template>
-    <button @click="test()">log</button>
     <router-link to="/dashboard/categories/create">
         <button>CREATE</button>
     </router-link>
-    <button>UPDATE</button>
-    <button>DELETE</button>
+    <button @click="updateCategory()">UPDATE</button>
+    <button @click="deleteCategory()">DELETE</button>
     <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
         <thead>
             <tr>
@@ -22,13 +21,17 @@ import { useStore } from 'vuex';
 import Constant from '../../Constant';
 import DataTable from 'datatables.net-vue3'
 import DataTablesLib from 'datatables.net';
+import { createToaster } from "@meforma/vue-toaster";
+import { useRouter } from 'vue-router';
 import 'datatables.net-select';
-DataTable.use(DataTablesLib);
 
 export default {
     components: { DataTable },
     setup() {
+        const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         const store = useStore();
+        const router = useRouter();
+        DataTable.use(DataTablesLib);
         store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
@@ -47,14 +50,26 @@ export default {
             dt = table.value.dt();
         });
 
-        function test() {
+        function updateCategory() {
             const indexs = dt.rows({ selected: true })[0];
-            const cant = indexs.length;
-            console.log(indexs, cant);
-            dt.rows({ selected: true }).every(index => console.log(state.categories[index]));
-        }
+            if (indexs.length === 1) {
+                const id = state.categories[indexs[0]].id;
+                router.push({ name: 'categoriesUpdate', params: { id } })
+            } else {
+                toaster.info('You have to select ONE category');
+            }
+        };
 
-        return { state, columns, table, test };
+        function deleteCategory() {
+            const indexs = dt.rows({ selected: true })[0];
+            if (indexs.length > 0) {
+                dt.rows({ selected: true }).every(index => store.dispatch(`categoryDashboard/${Constant.DELETE_CATEGORY}`, state.categories[index].id));
+            } else {
+                toaster.info('You have to at last ONE category');
+            }
+        };
+
+        return { state, columns, table, updateCategory, deleteCategory };
     }
 }
 </script>

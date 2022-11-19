@@ -7,4 +7,13 @@ export default {
         return Api(secrets.URL_LARAVEL).get('category');
     },//GetCategories
 
+    GetCategory(id) {
+        return Api(secrets.URL_LARAVEL).get(`category/${id}`);
+    },//GetCategory
+
+
+    DeleteCategory(id) {
+        return Api(secrets.URL_LARAVEL).delete(`category/${id}`);
+    }//DeleteCategory
+
 }//export
