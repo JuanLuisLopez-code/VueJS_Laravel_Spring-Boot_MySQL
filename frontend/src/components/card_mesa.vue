@@ -37,7 +37,7 @@ export default {
         mesa: Object
     },
     setup() {
-        const router = useRouter()
+        const router = useRouter();
         const showDetails = (id) => {
             router.push({ name: "details", params: { id } })
         }

@@ -50,6 +50,16 @@ const router = createRouter({
       name: "mesasList",
       component: () => import('../views/Mesa/MesaList.vue')
     },
+    {
+      path: "/dashboard/mesas/update/:id",
+      name: "updateMesa",
+      component: () => import('../views/Mesa/MesaUpdate.vue')
+    },
+    {
+      path: "/dashboard/mesas/create",
+      name: "createMesa",
+      component: () => import('../views/Mesa/MesaCreate.vue')
+    },
   ]
 })
 
