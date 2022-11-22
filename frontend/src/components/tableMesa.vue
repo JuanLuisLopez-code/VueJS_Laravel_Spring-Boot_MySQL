@@ -41,14 +41,18 @@
 <script>
 import { useStore } from 'vuex';
 import Constant from '../Constant';
+import { createToaster } from "@meforma/vue-toaster";
+
 export default {
     props: {
         mesas: Object,
     },
     setup() {
+        const toaster = createToaster({ position: "top-right" });
         const store = useStore();
         const deleteMesa = (id) => {
             store.dispatch(`mesaDashboard/${Constant.DELETE_ONE_MESA}`, { id })
+            toaster.info("Mesa deleted")
         }
         return { deleteMesa }
     }
