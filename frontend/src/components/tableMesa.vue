@@ -4,7 +4,7 @@
         <div class="container crud-table">
             <div class="clearfix">
                 <div class="form-inline pull-left">
-                    <button class="btn btn-success"><span class="glyphicon glyphicon-plus">
+                    <button class="btn btn-success" @click="createMesa()"><span class="glyphicon glyphicon-plus">
                         </span>Add more user</button>
                 </div>
             </div>
@@ -52,6 +52,10 @@ export default {
         const toaster = createToaster({ position: "top-right" });
         const store = useStore();
         const router = useRouter();
+        const createMesa = () => {
+            router.push({ name: "createMesa" })
+        }
+
         const deleteMesa = (id) => {
             store.dispatch(`mesaDashboard/${Constant.DELETE_ONE_MESA}`, { id })
             toaster.info("Mesa deleted")
@@ -59,7 +63,7 @@ export default {
         const updateMesa = (id) => {
             router.push({ name: "updateMesa", params: { id } })
         }
-        return { deleteMesa, updateMesa }
+        return { deleteMesa, updateMesa, createMesa }
     }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <formMesa :mesa="stateOne.mesa" :key="stateOne.mesa?.id" @data="prueba"/>
+    <formMesa :mesa="stateOne.mesa" :key="stateOne.mesa?.id" @data="update_emit"/>
 </template>
 
 <script>
@@ -24,13 +24,13 @@ export default {
             mesa: computed(() => store.getters["mesaDashboard/getOneMesa"])
         })
 
-        const prueba = (mesa) =>{
+        const update_emit = (mesa) =>{
             store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, mesa);
             router.push({ name: "mesasList" })
             toaster.info("Mesa updated")
         }
 
-        return { stateOne, prueba }
+        return { stateOne, update_emit }
 
     }
 }

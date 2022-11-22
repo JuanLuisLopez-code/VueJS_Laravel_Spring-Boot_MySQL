@@ -15,5 +15,8 @@ export default {
     UpdateOneMesa(mesa) {
         return Api(secrets.URL_LARAVEL).put(`mesa/${mesa.id}`, mesa)
     },
+    CreateOneMesa(mesa) {
+        return Api(secrets.URL_LARAVEL).post(`mesa`, mesa)
+    },
 
 }//export

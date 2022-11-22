@@ -27,6 +27,9 @@ export const mesaDashboard = {
                 }
             }
         },
+        [Constant.CREATE_ONE_MESA]: (state, payload) => {
+            state.mesa.push({ ...payload });
+        },
     },//mutations
     actions: {
         [Constant.INITIALIZE_MESA]: async (store) => {
@@ -67,6 +70,18 @@ export const mesaDashboard = {
                 const response = await MesaServiceDashboard.UpdateOneMesa(payload);
                 if (response.status == 200) {
                     store.commit(Constant.UPDATE_ONE_MESA, payload);
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        },
+        [Constant.CREATE_ONE_MESA]: async (store, payload) => {
+            try {
+                payload.is_active = true;
+                const response = await MesaServiceDashboard.CreateOneMesa(payload);
+                console.log(response)
+                if (response.status == 201) {
+                    store.commit(Constant.CREATE_ONE_MESA, response.data.data);
                 }
             } catch (error) {
                 console.error(error)

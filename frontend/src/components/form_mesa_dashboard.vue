@@ -14,12 +14,19 @@
                 <label>Photo</label>
                 <input type="url" name="" required="" v-model="state.mesa.photo">
             </div>
-            <a @click="editSubmit()">
+            <a @click="createSubmit()" v-if="!isUpdate">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Submit
+                Create
+            </a>
+            <a @click="editSubmit()" v-if="isUpdate">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Update
             </a>
             <a @click="cancel()">
                 <span></span>
@@ -42,6 +49,12 @@ export default {
     emits: {
         data: Object
     },
+    computed: {
+        isUpdate() {
+            const path = this.$route.path.split('/');
+            return path[3] == 'update';
+        },
+    },
     setup(props) {
         const router = useRouter();
         const mesa = props.mesa;
@@ -51,13 +64,17 @@ export default {
             mesa: { ...mesa }
         });
 
+        const createSubmit = () => {
+            emit('data', state.mesa)
+        }
+
         const editSubmit = () => {
             emit('data', state.mesa)
         }
         const cancel = () => {
             router.push({ name: "mesasList" })
         }
-        return { state, editSubmit, cancel }
+        return { state, editSubmit, cancel, createSubmit }
     }
 }
 </script>
