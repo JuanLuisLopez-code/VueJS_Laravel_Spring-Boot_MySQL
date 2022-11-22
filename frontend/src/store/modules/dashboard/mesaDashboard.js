@@ -10,7 +10,7 @@ export const mesaDashboard = {
             }
         },
         [Constant.DELETE_ONE_MESA]: (state, payload) => {
-            if (payload){
+            if (payload) {
                 state.mesa = state.mesa.filter((itemMesa) => itemMesa.id !== payload)
             }
         },
