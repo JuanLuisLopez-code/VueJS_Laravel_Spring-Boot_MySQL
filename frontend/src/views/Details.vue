@@ -29,7 +29,7 @@ export default {
 
     setup() {
         const store = useStore();
-        const route = useRoute()
+        const route = useRoute();
         const id = route.params.id;
 
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)

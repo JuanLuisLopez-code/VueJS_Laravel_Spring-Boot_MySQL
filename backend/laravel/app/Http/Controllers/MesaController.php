@@ -51,6 +51,7 @@ class MesaController extends Controller
         }
 
         $update = Mesa::where('id', $id)->update($data);
+        
         if ($update == 1) {
             if (count($categories_id) > 0) {
                 $mesa = Mesa::where('id', $id)->firstOrFail();

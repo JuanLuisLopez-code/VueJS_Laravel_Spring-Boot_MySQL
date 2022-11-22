@@ -26,7 +26,7 @@
                         <td>{{ mesa.capacity }}</td>
                         <td>{{ mesa.photo }}</td>
                         <td>
-                            <button class="pulse">Edit</button>
+                            <button class="pulse" @click="updateMesa(mesa.id)">Edit</button>
                         </td>
                         <td>
                             <button class="pulse" @click="deleteMesa(mesa.id)">Delete</button>
@@ -40,6 +40,7 @@
 
 <script>
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import Constant from '../Constant';
 import { createToaster } from "@meforma/vue-toaster";
 
@@ -50,11 +51,15 @@ export default {
     setup() {
         const toaster = createToaster({ position: "top-right" });
         const store = useStore();
+        const router = useRouter();
         const deleteMesa = (id) => {
             store.dispatch(`mesaDashboard/${Constant.DELETE_ONE_MESA}`, { id })
             toaster.info("Mesa deleted")
         }
-        return { deleteMesa }
+        const updateMesa = (id) => {
+            router.push({ name: "updateMesa", params: { id } })
+        }
+        return { deleteMesa, updateMesa }
     }
 }
 </script>
