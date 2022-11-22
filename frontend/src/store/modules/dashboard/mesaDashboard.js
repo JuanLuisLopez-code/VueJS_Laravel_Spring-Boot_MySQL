@@ -79,7 +79,6 @@ export const mesaDashboard = {
             try {
                 payload.is_active = true;
                 const response = await MesaServiceDashboard.CreateOneMesa(payload);
-                console.log(response)
                 if (response.status == 201) {
                     store.commit(Constant.CREATE_ONE_MESA, response.data.data);
                 }
