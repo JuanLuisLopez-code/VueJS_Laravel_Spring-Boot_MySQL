@@ -32,7 +32,10 @@ export default {
         const store = useStore();
         const router = useRouter();
         DataTable.use(DataTablesLib);
-        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
+
+        if (store.getters['categoryDashboard/GetCategories'] === undefined) {
+            store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
+        }
 
         const state = reactive({
             categories: computed(() => store.getters['categoryDashboard/GetCategories'])

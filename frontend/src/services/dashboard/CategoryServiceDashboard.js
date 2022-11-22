@@ -14,6 +14,14 @@ export default {
 
     DeleteCategory(id) {
         return Api(secrets.URL_LARAVEL).delete(`category/${id}`);
-    }//DeleteCategory
+    },//DeleteCategory
+
+    CreateCategory(data) {
+        return Api(secrets.URL_LARAVEL).post('category', data);
+    },//CreateCategory
+
+    UpdateCategory(data) {
+        return Api(secrets.URL_LARAVEL).put(`category/${data.id}`, data);
+    },//UpdateCategory
 
 }//export

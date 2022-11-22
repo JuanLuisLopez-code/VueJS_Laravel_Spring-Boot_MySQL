@@ -1,5 +1,5 @@
 <template>
-    <form_category_dashboardVue :category="state.category" :key="state.category?.id"/>
+    <form_category_dashboardVue :category="state.category" :key="state.category?.id" @data="updateCategory" />
 </template>
 
 <script>
@@ -17,6 +17,7 @@ export default {
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         const store = useStore();
         const route = useRoute();
+        const router = useRouter();
 
         store.dispatch(`categoryDashboard/${Constant.INITIALIZE_ONE_CATEGORY}`, route.params.id);
 
@@ -24,7 +25,13 @@ export default {
             category: computed(() => store.getters['categoryDashboard/GetCategory'])
         });
 
-        return { state };
+        const updateCategory = (data) => {
+            store.dispatch(`categoryDashboard/${Constant.UPDATE_CATEGORY}`, data);
+            toaster.success('Category updated');
+            router.push('/dashboard/categories');
+        }//updateCategory
+
+        return { state, updateCategory };
     }
 }
 </script>

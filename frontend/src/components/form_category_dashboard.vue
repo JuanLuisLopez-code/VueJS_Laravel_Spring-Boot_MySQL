@@ -24,31 +24,46 @@
                 <span></span>
                 Create
             </a>
+            <a @click="cancel()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Cancel
+            </a>
         </form>
     </div>
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { reactive, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
 
     props: {
         category: Object
     },
+    emits: {
+        data: Object
+    },
     setup(props) {
-        //const emit = defineEmits(Object);
+        const router = useRouter();
+        const { emit } = getCurrentInstance();
         const category_ = props.category ? props.category : { 'name_category': '', 'photo': '' };
         const state = reactive({
             categoryLocal: { ...category_ }
         });
 
         const sendData = () => {
-            console.log(state.categoryLocal);
-            //emit(state.categoryLocal);
+            emit('data', state.categoryLocal);
         }
 
-        return { state, sendData };
+        const cancel = () => {
+            router.push('/dashboard/categories');
+        }
+
+        return { state, sendData, cancel };
     }
 }
 </script>

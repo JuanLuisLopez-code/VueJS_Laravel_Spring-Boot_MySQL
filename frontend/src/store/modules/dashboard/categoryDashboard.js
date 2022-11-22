@@ -11,7 +11,7 @@ export const categoryDashboard = {
             } catch (error) {
                 console.error(error);
             }
-        },
+        },//INITIALIZE_CATEGORY
         [Constant.INITIALIZE_ONE_CATEGORY]: async (store, payload) => {
             try {
                 const data = store.state.categories ?? [];
@@ -25,7 +25,7 @@ export const categoryDashboard = {
             } catch (error) {
                 console.error(error);
             }
-        },
+        },//INITIALIZE_ONE_CATEGORY
         [Constant.DELETE_CATEGORY]: async (store, payload) => {
             try {
                 const response = await CategoryServiceDashboard.DeleteCategory(payload);
@@ -35,7 +35,27 @@ export const categoryDashboard = {
             } catch (error) {
                 console.error(error);
             }
-        },
+        },//DELETE_CATEGORY
+        [Constant.ADD_CATEGORY]: async (store, payload) => {
+            try {
+                const response = await CategoryServiceDashboard.CreateCategory(payload);
+                if (response.status === 201) {
+                    store.commit(Constant.ADD_CATEGORY, response.data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        },//ADD_CATEGORY
+        [Constant.UPDATE_CATEGORY]: async (store, payload) => {
+            try {
+                const response = await CategoryServiceDashboard.UpdateCategory(payload);
+                if (response.status === 200) {
+                    store.commit(Constant.UPDATE_CATEGORY, payload);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        },//UPDATE_CATEGORY
 
     },//actions
     mutations: {
@@ -43,15 +63,26 @@ export const categoryDashboard = {
             if (payload) {
                 state.categories = payload;
             }
-        },
+        },//INITIALIZE_CATEGORY
         [Constant.INITIALIZE_ONE_CATEGORY]: (state, payload) => {
             if (payload) {
                 state.category = payload;
             }
-        },
+        },//INITIALIZE_ONE_CATEGORY
         [Constant.DELETE_CATEGORY]: (state, payload) => {
             state.categories = state.categories.filter(item => item.id !== payload);
-        }
+        },//DELETE_CATEGORY
+        [Constant.ADD_CATEGORY]: (state, payload) => {
+            if (payload) {
+                state.categories.push(payload);
+            }
+        },//ADD_CATEGORY
+        [Constant.UPDATE_CATEGORY]: (state, payload) => {
+            const index = (state.categories ?? []).findIndex(item => item.id == payload.id);
+            if (index !== -1) {
+                state.categories[index] = payload;
+            }
+        },//UPDATE_CATEGORY
     },//mutations
     getters: {
         GetCategories(state) {
