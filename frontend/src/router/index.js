@@ -33,6 +33,16 @@ const router = createRouter({
       name: "categoriesList",
       component: () => import('../views/Category/CategoryList.vue')
     },
+    {
+      path: "/dashboard/categories/create",
+      name: "categoriesCreate",
+      component: () => import('../views/Category/CategoryCreate.vue')
+    },
+    {
+      path: "/dashboard/categories/update/:id",
+      name: "categoriesUpdate",
+      component: () => import('../views/Category/CategoryUpdate.vue')
+    },
 
     //Mesa dashboard//
     {

@@ -17,7 +17,10 @@ export default {
     components: { carouselVue },
     setup() {
         const store = useStore();
+
+        // if (store.getters['category/GetCategories'] === undefined) {
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
+        // }
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories'])

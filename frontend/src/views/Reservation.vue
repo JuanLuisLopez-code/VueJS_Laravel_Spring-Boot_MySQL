@@ -16,7 +16,9 @@ export default {
     setup() {
         const store = useStore();
 
+        // if (store.getters["mesa/getMesas"] === undefined) {
         store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
+        // }
 
         const state = reactive({
             mesas: computed(() => store.getters["mesa/getMesas"])

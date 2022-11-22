@@ -28,7 +28,6 @@ class CategoryController extends Controller
     {
         $update = Category::where('id', $id)->update($request->validated());
         if ($update == 1) {
-            CategoryResource::make($update);
             return response()->json([
                 "Message" => "Updated correctly"
             ]);
