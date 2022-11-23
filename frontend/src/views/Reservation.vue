@@ -32,7 +32,7 @@ export default {
 <style lang="scss">
 .container {
     max-width: 93.5rem;
-    margin: 0 auto;
+    margin: 2.43% ;
     padding: 0 2rem;
 }
 

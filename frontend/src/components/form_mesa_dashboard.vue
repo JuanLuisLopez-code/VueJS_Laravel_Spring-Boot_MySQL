@@ -1,5 +1,4 @@
 <template>
-
     <div class="login-box">
         <h2>Update</h2>
         <form>
@@ -107,7 +106,7 @@ export default {
 <style lang="scss">
 .login-box {
     position: absolute;
-    top: 50%;
+    top: 70%;
     left: 50%;
     width: 400px;
     padding: 40px;

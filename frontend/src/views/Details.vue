@@ -7,8 +7,8 @@
                     <span class="capacity">
                         Capacity: {{ stateOne.mesas?.capacity }}
                     </span>
-                    <div class="cat_name">
-                        <span v-for="cat in stateOne.mesas?.categories">
+                    <div class="cat_name" v-for="cat in stateOne.mesas?.categories">
+                        <span>
                             {{ cat.name_category }}
                         </span>
                     </div>
@@ -67,6 +67,7 @@ export default {
     border: 1px solid lightblue;
     background-color: lightblue;
     border-radius: 10px;
+    margin: 1%;
 }
 
 .visually-hidden {
