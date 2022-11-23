@@ -78,6 +78,8 @@ export default {
         margin: 1rem;
         color: #fff;
         cursor: pointer;
+        width: 20em;
+        height: 20em;
     }
 
     .gallery-item:hover .gallery-item-info,
