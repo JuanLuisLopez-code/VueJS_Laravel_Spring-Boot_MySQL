@@ -1,4 +1,5 @@
 <template>
+
     <div class="login-box">
         <h2>Update</h2>
         <form>
@@ -14,6 +15,14 @@
                 <label>Photo</label>
                 <input type="url" name="" required="" v-model="state.mesa.photo">
             </div>
+            <label for="cars">Choose a categories:</label>
+            <br>
+            <select name="cars" id="cars" multiple>
+                <option v-for="names in cat.categories" value="names.name_category">
+                    {{ names.name_category }}
+                </option>
+            </select>
+            <br><br>
             <a @click="createSubmit()" v-if="!isUpdate">
                 <span></span>
                 <span></span>
@@ -40,8 +49,10 @@
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue'
+import { reactive, getCurrentInstance, computed } from 'vue'
 import { useRouter } from 'vue-router';
+import Constant from '../Constant';
+import { useStore } from 'vuex'
 export default {
     props: {
         mesa: Object
@@ -59,9 +70,16 @@ export default {
         const router = useRouter();
         const mesa = props.mesa;
         const { emit } = getCurrentInstance();
+        const store = useStore();
 
         const state = reactive({
             mesa: { ...mesa }
+        });
+
+        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
+
+        const cat = reactive({
+            categories: computed(() => store.getters['categoryDashboard/GetCategories'])
         });
 
         const createSubmit = () => {
@@ -74,7 +92,7 @@ export default {
         const cancel = () => {
             router.push({ name: "mesasList" })
         }
-        return { state, editSubmit, cancel, createSubmit }
+        return { state, editSubmit, cancel, createSubmit, cat }
     }
 }
 </script>
@@ -246,6 +264,63 @@ export default {
     50%,
     100% {
         bottom: 100%;
+    }
+}
+
+select {
+    // styles reset, including removing the default dropdown arrow
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+
+    // Stack above custom arrow
+    z-index: 1;
+
+    // Remove focus outline
+    outline: none;
+}
+
+.select {
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+    position: relative;
+
+    select,
+    &::after {
+        grid-area: select;
+    }
+
+    min-width: 15ch;
+    max-width: 30ch;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+
+    // Optional styles
+    // remove for transparency
+    background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
+
+    // Custom arrow
+    &::after {
+        content: "";
+        justify-self: end;
+        width: 0.8em;
+        height: 0.5em;
+        background-color: var(--select-arrow);
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
     }
 }
 </style>
