@@ -262,60 +262,62 @@ export default {
     }
 }
 
-select {
-    // styles reset, including removing the default dropdown arrow
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0 1em 0 0;
-    margin: 0;
-    width: 100%;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: inherit;
-    line-height: inherit;
+.login-box {
+    select {
+        // styles reset, including removing the default dropdown arrow
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: transparent;
+        border: none;
+        padding: 0 1em 0 0;
+        margin: 0;
+        width: 100%;
+        font-family: inherit;
+        font-size: inherit;
+        cursor: inherit;
+        line-height: inherit;
 
-    // Stack above custom arrow
-    z-index: 1;
+        // Stack above custom arrow
+        z-index: 1;
 
-    // Remove focus outline
-    outline: none;
-}
-
-.select {
-    display: grid;
-    grid-template-areas: "select";
-    align-items: center;
-    position: relative;
-
-    select,
-    &::after {
-        grid-area: select;
+        // Remove focus outline
+        outline: none;
     }
 
-    min-width: 15ch;
-    max-width: 30ch;
-    border: 1px solid var(--select-border);
-    border-radius: 0.25em;
-    padding: 0.25em 0.5em;
-    font-size: 1.25rem;
-    cursor: pointer;
-    line-height: 1.1;
+    .select {
+        display: grid;
+        grid-template-areas: "select";
+        align-items: center;
+        position: relative;
 
-    // Optional styles
-    // remove for transparency
-    background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
+        select,
+        &::after {
+            grid-area: select;
+        }
 
-    // Custom arrow
-    &::after {
-        content: "";
-        justify-self: end;
-        width: 0.8em;
-        height: 0.5em;
-        background-color: var(--select-arrow);
-        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        min-width: 15ch;
+        max-width: 30ch;
+        border: 1px solid var(--select-border);
+        border-radius: 0.25em;
+        padding: 0.25em 0.5em;
+        font-size: 1.25rem;
+        cursor: pointer;
+        line-height: 1.1;
+
+        // Optional styles
+        // remove for transparency
+        background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
+
+        // Custom arrow
+        &::after {
+            content: "";
+            justify-self: end;
+            width: 0.8em;
+            height: 0.5em;
+            background-color: var(--select-arrow);
+            clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        }
     }
 }
 </style>

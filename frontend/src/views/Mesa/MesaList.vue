@@ -13,17 +13,13 @@ export default {
     setup() {
         const store = useStore();
 
-        // if (store.getters["mesaDashboard/getMesas"] === undefined) {
-            store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`)
-        // }
+        store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`)
 
         const state = reactive({
             mesas: computed(() => store.getters["mesaDashboard/getMesas"])
         })
 
         return { state }
-
     }
-
 }
 </script>

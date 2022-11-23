@@ -1,5 +1,5 @@
 <template>
-    <div class="container_gallery">
+    <div class="container_mesa_details">
         <div class="gallery">
             <div class="gallery-item" tabindex="0">
                 <img :src="stateOne.mesas?.photo" class="gallery-image" alt="">
@@ -43,49 +43,50 @@ export default {
 }
 </script>
 
-<style>
-.container_gallery {
+<style lang="scss">
+.container_mesa_details {
     max-width: 1em;
     margin-left: 37%;
-}
+    margin-top: 3%;
 
-.gallery {
-    display: flex;
-}
+    .gallery {
+        display: flex;
+    }
 
 
-.name {
-    color: black;
-}
+    .name {
+        color: black;
+    }
 
-.capacity {
-    float: left;
-}
+    .capacity {
+        float: left;
+    }
 
-.cat_name {
-    float: right;
-    border: 1px solid lightblue;
-    background-color: lightblue;
-    border-radius: 10px;
-    margin: 1%;
-}
+    .cat_name {
+        float: right;
+        border: 1px solid lightblue;
+        background-color: lightblue;
+        border-radius: 10px;
+        margin: 1%;
+    }
 
-.visually-hidden {
-    position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
-}
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
 
-.gallery-item {
-    position: relative;
-    margin: 1rem;
-    color: #fff;
-    cursor: pointer;
-}
+    .gallery-item {
+        position: relative;
+        margin: 1rem;
+        color: #fff;
+        cursor: pointer;
+    }
 
-.gallery-image {
-    object-fit: cover;
+    .gallery-image {
+        object-fit: cover;
+    }
 }
 </style>

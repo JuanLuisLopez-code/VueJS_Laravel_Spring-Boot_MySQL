@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class="cardMesa">
         <div class="gallery-item" tabindex="0" @click="showDetails(mesa.id)">
             <img :src="mesa.photo" class="gallery-image" alt="">
             <div class="name">
@@ -47,77 +47,79 @@ export default {
 </script>
 
 <style lang="scss">
-.name {
-    color: black;
-}
-
-.capacity {
-    float: left;
-}
-
-.cat_name {
-    float: right;
-    border: 1px solid lightblue;
-    background-color: lightblue;
-    border-radius: 10px;
-    margin: 1%;
-}
-
-.visually-hidden {
-    position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
-}
-
-.gallery-item {
-    position: relative;
-    flex: 1 0 22rem;
-    margin: 1rem;
-    color: #fff;
-    cursor: pointer;
-}
-
-.gallery-item:hover .gallery-item-info,
-.gallery-item:focus .gallery-item-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.gallery-item-info {
-    display: none;
-}
-
-.gallery-item-info li {
-    display: inline-block;
-    font-size: 1.7rem;
-    font-weight: 600;
-}
-
-.gallery-item-likes {
-    margin-right: 2.2rem;
-}
-
-.gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-@supports (display: grid) {
-
-    .gallery-item,
-    .gallery {
-        width: auto;
-        margin: 0;
+.cardMesa {
+    .name {
+        color: black;
     }
 
+    .capacity {
+        float: left;
+    }
+
+    .cat_name {
+        float: right;
+        border: 1px solid lightblue;
+        background-color: lightblue;
+        border-radius: 10px;
+        margin: 1%;
+    }
+
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    .gallery-item {
+        position: relative;
+        flex: 1 0 22rem;
+        margin: 1rem;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .gallery-item:hover .gallery-item-info,
+    .gallery-item:focus .gallery-item-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery-item-info {
+        display: none;
+    }
+
+    .gallery-item-info li {
+        display: inline-block;
+        font-size: 1.7rem;
+        font-weight: 600;
+    }
+
+    .gallery-item-likes {
+        margin-right: 2.2rem;
+    }
+
+    .gallery-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @supports (display: grid) {
+
+        .gallery-item,
+        .gallery {
+            width: auto;
+            margin: 0;
+        }
+
+    }
 }
 </style>

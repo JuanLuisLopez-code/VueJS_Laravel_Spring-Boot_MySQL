@@ -1,5 +1,5 @@
 <template>
-    <footer v-if="!isDashboard">
+    <footer v-if="!isDashboard" class="footer">
         <div class="container footerContainer">
             <div class="footer-nav flex flex-around flex-start flex-g-1">
                 <div class="col flex flex-column flex-start flex-g-1">
@@ -83,7 +83,7 @@ export default {
 <style lang="scss">
 @import url(https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap);
 
-footer {
+footer.footer {
     font-family: Prompt, sans-serif;
     margin: 0;
     padding: 0;

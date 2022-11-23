@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container_gallery">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
@@ -16,9 +16,7 @@ export default {
     setup() {
         const store = useStore();
 
-        // if (store.getters["mesa/getMesas"] === undefined) {
         store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
-        // }
 
         const state = reactive({
             mesas: computed(() => store.getters["mesa/getMesas"])
@@ -30,9 +28,9 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
+.container_gallery {
     max-width: 93.5rem;
-    margin: 2.43% ;
+    margin: 2.43%;
     padding: 0 2rem;
 }
 

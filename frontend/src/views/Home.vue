@@ -1,5 +1,5 @@
 <template>
-    <h1>
+    <h1 class="header_title">
         <font-awesome-icon icon="fa-solid fa-fish-fins" />
         Categories
         <font-awesome-icon icon="fa-solid fa-fish-fins" />
@@ -18,9 +18,7 @@ export default {
     setup() {
         const store = useStore();
 
-        // if (store.getters['category/GetCategories'] === undefined) {
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
-        // }
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories'])
@@ -32,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss">
-h1 {
+.header_title {
     text-align: center;
 }
 </style>
