@@ -44,13 +44,18 @@ class MesaController extends Controller
     public function update(UpdateMesaRequest $request, $id)
     {
         $data = $request->except(['categories']);
-        $categories = Category::whereIn('name_category', $request->categories)->get();
+        $categories_name = [];
+        if ($request->categories !== null) {
+            $categories_name = $request->categories;
+        }
+        $categories = Category::whereIn('name_category', $categories_name)->get();
         $categories_id = [];
         foreach ($categories as $c) {
             array_push($categories_id, $c->id);
         }
 
         $update = Mesa::where('id', $id)->update($data);
+
         if ($update == 1) {
             if (count($categories_id) > 0) {
                 $mesa = Mesa::where('id', $id)->firstOrFail();

@@ -1,5 +1,5 @@
-import Api from "./Api";
-import secrets from "../secrets.example";
+import Api from "../Api";
+import secrets from "../../secrets.example";
 
 export default {
 

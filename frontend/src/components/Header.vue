@@ -2,20 +2,43 @@
     <nav>
         <div class="countainer">
             <ul class="pages">
-                <router-link to="/home" class="link">
+                <router-link to="/home" class="link" :class="{ active: isHome }">
                     <li class="page">Home</li>
                 </router-link>
-                <router-link to="/reservation" class="link">
+                <router-link to="/reservation" class="link" :class="{ active: isReservation }">
                     <li class="page">Reservation</li>
+                </router-link>
+                <router-link to="/dashboard" class="link" :class="{ active: isDashboard }">
+                    <li class="page">Dashboard</li>
                 </router-link>
             </ul>
             <p class="search">
                 <input class="search-box" type="search" name="search" id="search" placeholder="Search..." />
             </p>
-            <img src="../assets/img/Don_Kamaron_Logo.png">
+            <router-link to="/home" class="link">
+                <img src="../assets/img/Don_Kamaron_Logo.png">
+            </router-link>
         </div>
     </nav>
 </template>
+
+<script>
+
+export default {
+    computed: {
+        isHome() {
+            return this.$route.name == 'home'
+        },
+        isReservation() {
+            return this.$route.name == 'reservation'
+        },
+        isDashboard() {
+            const path = this.$route.path.split('/');
+            return path[1] == 'dashboard';
+        },
+    }
+}
+</script>
 
 <style lang="scss">
 * {
@@ -61,11 +84,6 @@ li {
     color: whitesmoke;
     margin: 0%;
     padding: 0 .3rem;
-}
-
-.page:hover {
-    border-bottom: #f5f5f5 solid 1px;
-    padding-bottom: 10px;
 }
 
 .active {
