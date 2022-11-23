@@ -65,8 +65,6 @@ export const mesaDashboard = {
         },
         [Constant.UPDATE_ONE_MESA]: async (store, payload) => {
             try {
-                const categories = payload.categories.map((item) => item.name_category);
-                payload.categories = categories
                 const response = await MesaServiceDashboard.UpdateOneMesa(payload);
                 if (response.status == 200) {
                     store.commit(Constant.UPDATE_ONE_MESA, payload);

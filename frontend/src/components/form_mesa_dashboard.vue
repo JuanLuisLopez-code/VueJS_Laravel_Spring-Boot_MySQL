@@ -5,20 +5,25 @@
         <form>
             <div class="user-box">
                 <label>Name_mesa</label>
-                <input type="text" name="" required="" v-model="state.mesa.name_mesa">
+                <input type="text" name="" required="" v-model="state.mesa.name_mesa" />
             </div>
             <div class="user-box">
                 <label>Capacity</label>
-                <input type="number" name="" required="" v-model="state.mesa.capacity">
+                <input type="number" name="" required="" v-model="state.mesa.capacity" />
             </div>
             <div class="user-box">
                 <label>Photo</label>
-                <input type="url" name="" required="" v-model="state.mesa.photo">
+                <input type="url" name="" required="" v-model="state.mesa.photo" />
+            </div>
+            <div class="user-box">
+                <label>Active</label>
+                <input type="checkbox" name="" required="" v-model="state.mesa.is_active" />
             </div>
             <label for="cars">Choose a categories:</label>
             <br>
-            <select name="cars" id="cars" multiple>
-                <option v-for="names in cat.categories" value="names.name_category">
+            <br>
+            <select name="cars" id="cars" multiple v-model="state.mesa.categories">
+                <option v-for="names in cat.categories" :value="names.name_category">
                     {{ names.name_category }}
                 </option>
             </select>
@@ -76,6 +81,8 @@ export default {
             mesa: { ...mesa }
         });
 
+        state.mesa.is_active = Boolean(state.mesa.is_active);
+
         store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
 
         const cat = reactive({
@@ -131,17 +138,6 @@ export default {
             outline: none;
             background: transparent;
         }
-
-        // label {
-        //     position: absolute;
-        //     top: 0;
-        //     left: 0;
-        //     padding: 10px 0;
-        //     font-size: 16px;
-        //     color: #fff;
-        //     pointer-events: none;
-        //     transition: .5s;
-        // }
 
         input {
 

@@ -18,30 +18,22 @@ class MesaController extends Controller
 
     public function store(StoreMesaRequest $request)
     {
+        $data = $request->except(['categories']);
+        $categories = Category::whereIn('name_category', $request->categories)->get();
+        $categories_id = [];
+        foreach ($categories as $c) {
+            array_push($categories_id, $c->id);
+        }
 
-        //
-        //Temporal waiting for pull
-        //
-
-
-        // $data = $request->except(['categories']);
-        // $categories = Category::whereIn('name_category', $request->categories)->get();
-        // $categories_id = [];
-        // foreach ($categories as $c) {
-        //     array_push($categories_id, $c->id);
-        // }
-
-        // if (count($categories_id) > 0) {
-        //     $mesa = Mesa::create($data);
-        //     $mesa->categories()->sync($categories_id);
-        //     return MesaResource::make($mesa);
-        // } else {
-        // return response()->json([
-        //     "Status" => "Not found"
-        // ], 404);
-        // }
-        $mesa = Mesa::create($request->validated());
-        return MesaResource::make($mesa);
+        if (count($categories_id) > 0) {
+            $mesa = Mesa::create($data);
+            $mesa->categories()->sync($categories_id);
+            return MesaResource::make($mesa);
+        } else {
+            return response()->json([
+                "Status" => "Not found"
+            ], 404);
+        }
     }
 
     public function show($id)
