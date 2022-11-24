@@ -23,7 +23,6 @@ export default {
 
         try {
             const filters_URL = JSON.parse(atob(route.params.filters));
-            console.log(filters_URL);
             store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`, filters_URL)
         } catch (error) {
             store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
