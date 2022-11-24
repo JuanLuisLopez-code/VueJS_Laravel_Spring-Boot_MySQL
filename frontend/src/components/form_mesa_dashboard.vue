@@ -18,12 +18,12 @@
                 <label>Active</label>
                 <input type="checkbox" name="" required="" v-model="state.mesa.is_active" />
             </div>
-            <label for="cars">Choose a categories:</label>
+            <label>Choose a categories:</label>
             <br>
             <br>
-            <select name="cars" id="cars" multiple v-model="state.mesa.categories">
-                <option v-for="names in cat.categories" :value="names.name_category">
-                    {{ names.name_category }}
+            <select multiple v-model="state.mesa.categories">
+                <option v-for="category in cat.categories" :value="category.name_category" :key="category.id">
+                    {{ category.name_category }}
                 </option>
             </select>
             <br><br>

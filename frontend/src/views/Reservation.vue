@@ -1,4 +1,5 @@
 <template>
+    <filters @filters="ApplyFilters" />
     <div class="container_gallery">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
@@ -11,18 +12,34 @@ import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import Constant from '../Constant';
 import card_mesa from '../components/card_mesa.vue';
+import filters from '../components/filters.vue';
+import { useRouter, useRoute } from 'vue-router';
 export default {
-    components: { card_mesa },
+    components: { card_mesa, filters },
     setup() {
         const store = useStore();
+        const route = useRoute();
+        const router = useRouter();
 
-        store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
+        try {
+            const filters_URL = JSON.parse(atob(route.params.filters));
+            console.log(filters_URL);
+            store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`, filters_URL)
+        } catch (error) {
+            store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
+        }
 
         const state = reactive({
             mesas: computed(() => store.getters["mesa/getMesas"])
         })
 
-        return { state }
+        const ApplyFilters = (filters) => {
+            const filters_64 = btoa(JSON.stringify(filters));
+            router.push({ name: "reservationFilters", params: { filters: filters_64 } });
+            store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`, filters_64);
+        }
+
+        return { state, ApplyFilters }
     }
 }
 </script>
