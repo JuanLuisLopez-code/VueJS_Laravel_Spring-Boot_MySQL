@@ -19,8 +19,7 @@ export const mesa = {
         [Constant.INITIALIZE_MESA]: async (store, payload) => {
             try {
                 const response = await MesaService.GetMesas(payload ?? {});
-                console.log(response.data);
-                //store.commit(Constant.INITIALIZE_MESA, response.data);
+                store.commit(Constant.INITIALIZE_MESA, response.data);
             } catch (error) {
                 console.error(error)
             }

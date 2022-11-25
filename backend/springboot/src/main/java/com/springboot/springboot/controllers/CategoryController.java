@@ -28,6 +28,7 @@ public class CategoryController {
 			categoryRepository.findAll().forEach(categories::add);
 			return new ResponseEntity<>(categories, HttpStatus.OK);
 		} catch (Exception e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

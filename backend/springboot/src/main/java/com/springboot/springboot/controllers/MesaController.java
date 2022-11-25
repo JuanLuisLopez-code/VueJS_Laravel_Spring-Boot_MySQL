@@ -30,11 +30,14 @@ public class MesaController {
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
-			// mesaRepository.findAll().forEach(mesas::add);
-			mesaRepository.findAll().forEach(mesas::add);
+			if (mesaQueryParam.getCategories() != null) {
+				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
+			} else {
+				mesaRepository.findAll().forEach(mesas::add);
+			}
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
-			// return new ResponseEntity<>(mesaQueryParam, HttpStatus.OK);
 		} catch (Exception e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -49,6 +52,7 @@ public class MesaController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}// get one
