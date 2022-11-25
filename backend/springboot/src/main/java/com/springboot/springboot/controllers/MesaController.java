@@ -27,12 +27,13 @@ public class MesaController {
 	MesaRepository mesaRepository;
 
 	@GetMapping("/mesa")
-	public ResponseEntity<MesaQueryParam> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
+	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
+			// mesaRepository.findAll().forEach(mesas::add);
 			mesaRepository.findAll().forEach(mesas::add);
-			// return new ResponseEntity<>(mesas, HttpStatus.OK);
-			return new ResponseEntity<>(mesaQueryParam, HttpStatus.OK);
+			return new ResponseEntity<>(mesas, HttpStatus.OK);
+			// return new ResponseEntity<>(mesaQueryParam, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

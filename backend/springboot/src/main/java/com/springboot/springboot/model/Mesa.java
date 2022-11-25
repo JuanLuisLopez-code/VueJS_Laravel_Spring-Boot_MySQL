@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.*;
 @Entity
 @Table(name = "mesas")
+@NamedEntityGraph(name = "fetch-mesa-category", attributeNodes = { @NamedAttributeNode("categories") })
 public class Mesa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
