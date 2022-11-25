@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MesaQueryParam {
-    // private String name_category;
-    // private String[] categories;
-    private String categories;
+    private String name_category;
+    private String[] categories;
 }

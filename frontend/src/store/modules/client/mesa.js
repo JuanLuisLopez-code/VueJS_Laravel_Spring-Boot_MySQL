@@ -18,17 +18,7 @@ export const mesa = {
     actions: {
         [Constant.INITIALIZE_MESA]: async (store, payload) => {
             try {
-                let payload_ = null
-                if (payload) {
-                    payload_ = {
-                        categories: btoa(JSON.stringify(payload.categories))
-                    }
-                } else {
-                    payload_ = { categories: btoa(JSON.stringify([])) };
-                }
-                // const payload_sample = { categories: JSON.stringify(payload) }
-                // const payload_ = payload ? btoa(JSON.stringify(payload)) : btoa(JSON.stringify(payload_sample));
-                const response = await MesaService.GetMesas(payload_);
+                const response = await MesaService.GetMesas(payload);
                 console.log(response.data);
                 // store.commit(Constant.INITIALIZE_MESA, response.data);
             } catch (error) {
