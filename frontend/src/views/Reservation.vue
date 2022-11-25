@@ -35,7 +35,7 @@ export default {
         const ApplyFilters = (filters) => {
             const filters_64 = btoa(JSON.stringify(filters));
             router.push({ name: "reservationFilters", params: { filters: filters_64 } });
-            store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`, filters_64);
+            store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`, filters);
         }
 
         return { state, ApplyFilters }
