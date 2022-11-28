@@ -1,6 +1,6 @@
 <template>
     <filters @filters="ApplyFilters" />
-    <div class="container_gallery" v-if="state.mesas.length">
+    <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import card_mesa from '../components/card_mesa.vue';
 import filters from '../components/filters.vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -29,7 +29,7 @@ export default {
         }
 
         const state = reactive({
-            mesas: computed(() => useMesaFilters(filters_URL))
+            mesas: useMesaFilters(filters_URL)
         });
 
         const ApplyFilters = (filters) => {
