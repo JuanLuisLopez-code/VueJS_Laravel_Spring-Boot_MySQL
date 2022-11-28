@@ -16,14 +16,6 @@ export const mesa = {
         },
     },//mutations
     actions: {
-        // [Constant.INITIALIZE_MESA]: async (store, payload) => {
-        //     try {
-        //         const response = await MesaService.GetMesas(payload ?? {});
-        //         store.commit(Constant.INITIALIZE_MESA, response.data);
-        //     } catch (error) {
-        //         console.error(error)
-        //     }
-        // },
         [Constant.INITIALIZE_MESA]: async (store) => {
             try {
                 const response = await MesaService.GetMesas();
