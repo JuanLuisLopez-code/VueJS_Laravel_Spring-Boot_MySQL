@@ -4,6 +4,8 @@
             {{ category.name_category }}
         </option>
     </select>
+    <!-- <input type="text" :value="categoriy.capacity" placeholder="Capacity"/> -->
+    
     <button @click="sendFilters()">Filtrar</button>
 </template>
 

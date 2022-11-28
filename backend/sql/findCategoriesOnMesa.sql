@@ -1,7 +1,5 @@
-SELECT m.*
+SELECT *
 FROM mesas m
-    LEFT JOIN mesas_categories mc ON m.id = mc.mesa_id
-    INNER JOIN categories c ON c.id = mc.category_id
 WHERE m.is_active IS TRUE
     AND m.id IN (
         SELECT a.mesa_id
@@ -9,7 +7,7 @@ WHERE m.is_active IS TRUE
                 SELECT mc.mesa_id,
                     COUNT(mc.category_id) as count_cat_id
                 FROM mesas_categories mc
-                    INNER JOIN categories c ON mc.category_id = c.id
+                    LEFT JOIN categories c ON mc.category_id = c.id
                 WHERE c.name_category IN ('quo', 'odio')
                 GROUP BY mc.mesa_id
             ) AS a
