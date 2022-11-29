@@ -30,6 +30,17 @@ public class MesaController {
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
+			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
+				System.out.println("capacity");
+				mesaRepository.findByCapacity(mesaQueryParam.getCapacity()).forEach(mesas::add);
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
+				System.out.println("categories");
+				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0) {
+				System.out.println("categories capacity");
+				mesaRepository.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories())
+						.forEach(mesas::add);
+}
 
 			if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
 				if (mesaQueryParam.getOrder() == 1) {
@@ -46,7 +57,8 @@ public class MesaController {
 					mesaRepository.findOrderedDESC().forEach(mesas::add);
 				}
 			} else {
-				mesaRepository.findAll().forEach(mesas::add);
+				System.out.println("else");
+				mesaRepository.findActive().forEach(mesas::add);
 			}
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
 		} catch (Exception e) {

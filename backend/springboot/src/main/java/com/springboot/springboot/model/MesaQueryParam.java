@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MesaQueryParam {
+    private Integer capacity;
     private String[] categories;
     private Integer order;
 }

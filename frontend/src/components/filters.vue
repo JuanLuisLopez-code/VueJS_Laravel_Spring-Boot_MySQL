@@ -4,6 +4,7 @@
             {{ category.name_category }}
         </option>
     </select>
+    <input type="number" min="0" v-model="state.filters.capacity" />
     <select v-model="state.filters.order">
         <option :value="0" disabled hidden selected>Order</option>
         <option :value="1">Asc to Desc</option>
@@ -18,18 +19,22 @@ import Constant from '../Constant';
 import { useStore } from 'vuex'
 import { reactive, computed, getCurrentInstance } from 'vue';
 export default {
+    props: {
+        filters: Object
+    },
     emits: {
         filters: Object
     },
-    setup() {
+    setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_ = { categories: [], order: 0};
+        const filters_empty = { categories: [], order: 0, capacity: 0};
+
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories']),
-            filters: { ...filters_ }
+            filters: { ...props.filters }
         });
 
         const sendFilters = () => {
@@ -37,7 +42,7 @@ export default {
         }//sendFilters
 
         const deleteFilters = () => {
-            emit('deleteFilters', filters_);
+            emit('deleteFilters', filters_empty);
         }//sendFilters
 
         return { state, sendFilters, deleteFilters }
