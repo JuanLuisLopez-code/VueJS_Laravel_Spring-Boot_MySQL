@@ -1,9 +1,11 @@
 <template>
     <div class="container_filter">
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
+        <label>Categories</label>
         <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity" />
+        <label>Capacity (0 is all)</label>
         <select v-model="state.filters.order" class="select_order">
-            <option :value="0" disabled hidden selected>Order</option>
+            <option :value="0" disabled hidden selected>Capacity Order</option>
             <option :value="1">Asc to Desc</option>
             <option :value="2">Desc to Asc</option>
         </select>
@@ -15,7 +17,7 @@
 <script>
 import Constant from '../Constant';
 import { useStore } from 'vuex'
-import { reactive, computed, getCurrentInstance } from 'vue';
+import { reactive, getCurrentInstance } from 'vue';
 export default {
     props: {
         filters: Object
@@ -62,6 +64,10 @@ export default {
     align-items: center;
     background-color: whitesmoke;
 
+    label {
+        margin-left: 1em;
+    }
+
     .input_capacity {
         text-align: center;
         display: flex;
@@ -99,7 +105,7 @@ button {
     &:hover,
     &:focus {
         border-color: var(--hover);
-        color: #fff;
+        color: #000;
     }
 }
 
