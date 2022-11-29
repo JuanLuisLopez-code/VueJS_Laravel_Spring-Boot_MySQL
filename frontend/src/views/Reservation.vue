@@ -1,5 +1,5 @@
 <template>
-    <filters @filters="ApplyFilters" :filters_="filters_URL" />
+    <filters @filters="ApplyFilters" @deleteFilters="deleteAllFilters" :filters_="filters_URL" />
     <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
@@ -22,9 +22,11 @@ export default {
         const route = useRoute();
         const router = useRouter();
 
+
         let filters_URL = {
             categories: [],
             capacity: 0,
+            order: 0,
         };
 
         try {
@@ -33,6 +35,7 @@ export default {
             }
         } catch (error) {
         }
+        
         const state = reactive({
             mesas: useMesaFilters(filters_URL)
         });
@@ -43,7 +46,12 @@ export default {
             state.mesas = useMesaFilters(filters);
         }
 
-        return { state, ApplyFilters, filters_URL }
+        const deleteAllFilters = (deleteFilters) => {
+            router.push({ name: "reservation" });
+            state.mesas = useMesaFilters(deleteFilters);
+        }
+
+        return { state, ApplyFilters, deleteAllFilters, filters_URL }
     }
 }
 </script>

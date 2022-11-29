@@ -5,8 +5,13 @@
         </option>
     </select>
     <input type="number" min="0" v-model="state.filters.capacity" />
-
+    <select v-model="state.filters.order">
+        <option :value="0" disabled hidden selected>Order</option>
+        <option :value="1">Asc to Desc</option>
+        <option :value="2">Desc to Asc</option>
+    </select>
     <button @click="sendFilters()">Filtrar</button>
+    <button @click="deleteFilters()">Borrar</button>
 </template>
 
 <script>
@@ -15,7 +20,7 @@ import { useStore } from 'vuex'
 import { reactive, computed, getCurrentInstance } from 'vue';
 export default {
     props: {
-        filters_: Object
+        filters: Object
     },
     emits: {
         filters: Object
@@ -23,18 +28,24 @@ export default {
     setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
+        const filters_empty = { categories: [], order: 0, capacity: 0};
+
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories']),
-            filters: { ...props.filters_ }
+            filters: { ...props.filters }
         });
 
         const sendFilters = () => {
             emit('filters', state.filters);
         }//sendFilters
 
-        return { state, sendFilters }
+        const deleteFilters = () => {
+            emit('deleteFilters', filters_empty);
+        }//sendFilters
+
+        return { state, sendFilters, deleteFilters }
     }
 }
 

@@ -40,6 +40,22 @@ public class MesaController {
 				System.out.println("categories capacity");
 				mesaRepository.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories())
 						.forEach(mesas::add);
+}
+
+			if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findCategoriesOnMesaASC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				} else {
+					mesaRepository.findCategoriesOnMesaDESC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				}
+			} else if (mesaQueryParam.getOrder() == 0 && mesaQueryParam.getCategories().length > 0) {
+				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
+			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findOrderedASC().forEach(mesas::add);
+				} else {
+					mesaRepository.findOrderedDESC().forEach(mesas::add);
+				}
 			} else {
 				System.out.println("else");
 				mesaRepository.findActive().forEach(mesas::add);
