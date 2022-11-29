@@ -5,6 +5,7 @@ import store from './store';
 import VueLazyLoad from 'vue3-lazyload';
 import Toaster from "@meforma/vue-toaster";
 import { library } from '@fortawesome/fontawesome-svg-core'
+import vSelect from 'vue-select'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './assets/main.scss';
 
@@ -21,4 +22,5 @@ app.use(store);
 app.use(VueLazyLoad);
 app.use(Toaster);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.component('v-select', vSelect)
 app.mount('#app');
