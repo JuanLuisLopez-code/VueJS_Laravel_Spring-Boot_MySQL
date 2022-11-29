@@ -1,10 +1,5 @@
 <template>
-    <select multiple v-model="state.filters.categories">
-        <option v-for="category in state.categories" :value="category.name_category" :key="category.id"
-            :selected="(state.filters.categories.includes(category.name_category))">
-            {{ category.name_category }}
-        </option>
-    </select>
+    <v-select multiple v-model="state.filters.categories" :options="state.categories" />
     <input type="number" min="0" v-model="state.filters.capacity" />
     <select v-model="state.filters.order">
         <option :value="0" disabled hidden selected>Order</option>
@@ -30,12 +25,11 @@ export default {
     setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_empty = { categories: [], order: 0, capacity: 0 };
 
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
-            categories: computed(() => store.getters['category/GetCategories']),
+            categories: store.getters['category/GetCategories'].map(item => item.name_category),
             filters: { ...props.filters }
         });
 
@@ -57,5 +51,5 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import '../../node_modules/vue-select/dist/vue-select.css'
 </style>
