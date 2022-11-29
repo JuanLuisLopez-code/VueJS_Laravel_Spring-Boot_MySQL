@@ -30,32 +30,35 @@ public class MesaController {
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
-			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
-				System.out.println("capacity");
+			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0
+					&& mesaQueryParam.getOrder() == 0) {
+				// capacity
 				mesaRepository.findByCapacity(mesaQueryParam.getCapacity()).forEach(mesas::add);
-			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0 && mesaQueryParam.getOrder() == 0) {
-				System.out.println("categories");
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0
+					&& mesaQueryParam.getOrder() == 0 && mesaQueryParam.getOrder() == 0) {
+				// categories
 				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
-			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0) {
-				System.out.println("categories capacity");
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0
+					&& mesaQueryParam.getOrder() == 0) {
+				// categories capacity
 				mesaRepository.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories())
 						.forEach(mesas::add);
-			}else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+				// Order
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository.findCategoriesOnMesaASC(mesaQueryParam.getCategories()).forEach(mesas::add);
 				} else {
 					mesaRepository.findCategoriesOnMesaDESC(mesaQueryParam.getCategories()).forEach(mesas::add);
 				}
-			} else if (mesaQueryParam.getOrder() == 0 && mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
-				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
 			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
+				// Order categories
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository.findOrderedASC().forEach(mesas::add);
 				} else {
 					mesaRepository.findOrderedDESC().forEach(mesas::add);
 				}
 			} else {
-				System.out.println("else");
+				// Default
 				mesaRepository.findActive().forEach(mesas::add);
 			}
 			return new ResponseEntity<>(mesas, HttpStatus.OK);

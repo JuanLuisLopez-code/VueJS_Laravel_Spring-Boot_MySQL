@@ -23,12 +23,13 @@ export default {
         filters: Object
     },
     emits: {
-        filters: Object
+        filters: Object,
+        deleteFilters: Object
     },
     setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_empty = { categories: [], order: 0, capacity: 0};
+        const filters_empty = { categories: [], order: 0, capacity: 0 };
 
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
@@ -42,7 +43,10 @@ export default {
         }//sendFilters
 
         const deleteFilters = () => {
-            emit('deleteFilters', filters_empty);
+            state.filters.categories = [];
+            state.filters.order = 0;
+            state.filters.capacity = 0;
+            emit('deleteFilters', state.filters);
         }//sendFilters
 
         return { state, sendFilters, deleteFilters }

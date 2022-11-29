@@ -13,7 +13,6 @@ export default {
                 params_.push(`${item[0]}=${item[1]}`);
             }
         });
-        console.log(params_.join('&'));
         return Api(secrets.URL_SPRING).get(`mesa?${params_.join('&')}`);
 
     },//GetMesas
