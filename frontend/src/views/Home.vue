@@ -4,7 +4,8 @@
         Categories
         <font-awesome-icon icon="fa-solid fa-fish-fins" />
     </h1>
-    <carouselVue :data="state.categories" />
+    <carouselVue :data="state.categories" v-if="state.categories.length>0" @emitAction="redirectReservation" />
+    <span v-else>No Categories</span>
 </template>
 
 <script>
@@ -12,10 +13,12 @@ import { reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import Constant from '../Constant';
 import carouselVue from '../components/carousel.vue';
+import { useRouter } from 'vue-router';
 
 export default {
     components: { carouselVue },
     setup() {
+        const router = useRouter();
         const store = useStore();
 
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
@@ -24,7 +27,17 @@ export default {
             categories: computed(() => store.getters['category/GetCategories'])
         });
 
-        return { state };
+        const redirectReservation = (item) => {
+            const filters = {
+                categories: [item.name_category],
+                capacity: 0,
+                order: 0,
+            };
+            const filters_ = btoa(JSON.stringify(filters));
+            router.push({ name: "reservationFilters", params: { filters: filters_ } });
+        }
+
+        return { state, redirectReservation };
     }
 }
 </script>
