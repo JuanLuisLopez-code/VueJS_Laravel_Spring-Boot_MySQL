@@ -9,11 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.springboot.model.Mesa;
+import com.springboot.springboot.model.MesaQueryParam;
 import com.springboot.springboot.repository.MesaRepository;
 
 @CrossOrigin(origins = "http://localhost:5001")
@@ -25,12 +27,43 @@ public class MesaController {
 	MesaRepository mesaRepository;
 
 	@GetMapping("/mesa")
-	public ResponseEntity<List<Mesa>> getAllMesas() {
+	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
-			mesaRepository.findAll().forEach(mesas::add);
+			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0
+					&& mesaQueryParam.getOrder() == 0) {
+				// capacity
+				mesaRepository.findByCapacity(mesaQueryParam.getCapacity()).forEach(mesas::add);
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0
+					&& mesaQueryParam.getOrder() == 0 && mesaQueryParam.getOrder() == 0) {
+				// categories
+				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0
+					&& mesaQueryParam.getOrder() == 0) {
+				// categories capacity
+				mesaRepository.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories())
+						.forEach(mesas::add);
+			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+				// Order
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findCategoriesOnMesaASC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				} else {
+					mesaRepository.findCategoriesOnMesaDESC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				}
+			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
+				// Order categories
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findOrderedASC().forEach(mesas::add);
+				} else {
+					mesaRepository.findOrderedDESC().forEach(mesas::add);
+				}
+			} else {
+				// Default
+				mesaRepository.findActive().forEach(mesas::add);
+			}
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
 		} catch (Exception e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -45,9 +78,9 @@ public class MesaController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}// get one
 
-	
 }

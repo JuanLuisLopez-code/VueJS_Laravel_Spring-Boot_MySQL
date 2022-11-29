@@ -1,28 +1,57 @@
 <template>
-    <div class="container_gallery">
+    <filters @filters="ApplyFilters" @deleteFilters="deleteAllFilters" :filters="filters_URL" />
+    <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
     </div>
+    <div v-else>
+        <span>No Mesas</span>
+    </div>
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
-import { useStore } from 'vuex'
-import Constant from '../Constant';
+import { reactive } from 'vue'
 import card_mesa from '../components/card_mesa.vue';
+import filters from '../components/filters.vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useMesaFilters } from '../composables/mesas/useMesa';
 export default {
-    components: { card_mesa },
+    components: { card_mesa, filters },
     setup() {
-        const store = useStore();
+        const route = useRoute();
+        const router = useRouter();
 
-        store.dispatch(`mesa/${Constant.INITIALIZE_MESA}`)
 
+        let filters_URL = {
+            categories: [],
+            capacity: 0,
+            order: 0,
+        };
+
+        try {
+            if (route.params.filters !== '') {
+                filters_URL = JSON.parse(atob(route.params.filters));
+            }
+        } catch (error) {
+        }
+        
         const state = reactive({
-            mesas: computed(() => store.getters["mesa/getMesas"])
-        })
+            mesas: useMesaFilters(filters_URL)
+        });
 
-        return { state }
+        const ApplyFilters = (filters) => {
+            const filters_64 = btoa(JSON.stringify(filters));
+            router.push({ name: "reservationFilters", params: { filters: filters_64 } });
+            state.mesas = useMesaFilters(filters);
+        }
+
+        const deleteAllFilters = (deleteFilters) => {
+            router.push({ name: "reservation" });
+            state.mesas = useMesaFilters(deleteFilters);
+        }
+
+        return { state, ApplyFilters, deleteAllFilters, filters_URL }
     }
 }
 </script>
@@ -30,8 +59,7 @@ export default {
 <style lang="scss">
 .container_gallery {
     max-width: 93.5rem;
-    margin: 2.43%;
-    padding: 0 2rem;
+    margin: 1.3%;
 }
 
 .gallery {

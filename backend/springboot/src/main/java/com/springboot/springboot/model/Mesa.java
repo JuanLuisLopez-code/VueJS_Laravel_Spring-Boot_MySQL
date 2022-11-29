@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "mesas")
 public class Mesa {
