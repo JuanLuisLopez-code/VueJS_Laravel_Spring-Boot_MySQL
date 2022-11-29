@@ -4,8 +4,8 @@
             {{ category.name_category }}
         </option>
     </select>
-    <!-- <input type="text" :value="categoriy.capacity" placeholder="Capacity"/> -->
-    
+    <input type="number" min="0" v-model="state.filters.capacity" />
+
     <button @click="sendFilters()">Filtrar</button>
 </template>
 
@@ -14,18 +14,20 @@ import Constant from '../Constant';
 import { useStore } from 'vuex'
 import { reactive, computed, getCurrentInstance } from 'vue';
 export default {
+    props: {
+        filters_: Object
+    },
     emits: {
         filters: Object
     },
-    setup() {
+    setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_ = { categories: [] };
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories']),
-            filters: { ...filters_ }
+            filters: { ...props.filters_ }
         });
 
         const sendFilters = () => {

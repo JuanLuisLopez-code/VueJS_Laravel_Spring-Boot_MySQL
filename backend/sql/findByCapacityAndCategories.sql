@@ -20,5 +20,6 @@ WHERE m.is_active IS TRUE
                     ) b
             )
     )
+    AND m.capacity = 3
     AND m.name_mesa LIKE 'co%'
 GROUP BY m.id;

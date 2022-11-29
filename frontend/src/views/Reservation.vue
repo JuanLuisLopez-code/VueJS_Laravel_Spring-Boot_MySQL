@@ -1,5 +1,5 @@
 <template>
-    <filters @filters="ApplyFilters" />
+    <filters @filters="ApplyFilters" :filters_="filters_URL" />
     <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
@@ -22,12 +22,17 @@ export default {
         const route = useRoute();
         const router = useRouter();
 
-        let filters_URL = [];
+        let filters_URL = {
+            categories: [],
+            capacity: 0,
+        };
+
         try {
-            filters_URL = JSON.parse(atob(route.params.filters));
+            if (route.params.filters !== '') {
+                filters_URL = JSON.parse(atob(route.params.filters));
+            }
         } catch (error) {
         }
-
         const state = reactive({
             mesas: useMesaFilters(filters_URL)
         });
@@ -38,7 +43,7 @@ export default {
             state.mesas = useMesaFilters(filters);
         }
 
-        return { state, ApplyFilters }
+        return { state, ApplyFilters, filters_URL }
     }
 }
 </script>
