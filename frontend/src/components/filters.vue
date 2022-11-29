@@ -56,6 +56,7 @@ export default {
 @import '../../node_modules/vue-select/dist/vue-select.css';
 
 .container_filter {
+    padding: 1%;
     display: flex;
     background-color: transparent;
     align-items: center;
