@@ -59,8 +59,7 @@ export default {
 <style lang="scss">
 .container_gallery {
     max-width: 93.5rem;
-    margin: 2.43%;
-    padding: 0 2rem;
+    margin: 1.3%;
 }
 
 .gallery {

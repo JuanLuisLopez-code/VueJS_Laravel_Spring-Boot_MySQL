@@ -1,17 +1,19 @@
 <template>
-    <select multiple v-model="state.filters.categories">
-        <option v-for="category in state.categories" :value="category.name_category" :key="category.id">
-            {{ category.name_category }}
-        </option>
-    </select>
-    <input type="number" min="0" v-model="state.filters.capacity" />
-    <select v-model="state.filters.order">
-        <option :value="0" disabled hidden selected>Order</option>
-        <option :value="1">Asc to Desc</option>
-        <option :value="2">Desc to Asc</option>
-    </select>
-    <button @click="sendFilters()">Filtrar</button>
-    <button @click="deleteFilters()">Borrar</button>
+    <div class="container_filter">
+        <select multiple v-model="state.filters.categories">
+            <option v-for="category in state.categories" :value="category.name_category" :key="category.id">
+                {{ category.name_category }}
+            </option>
+        </select>
+        <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity" />
+        <select v-model="state.filters.order" class="select_order">
+            <option :value="0" disabled hidden selected>Order</option>
+            <option :value="1">Asc to Desc</option>
+            <option :value="2">Desc to Asc</option>
+        </select>
+        <button class="raise" @click="sendFilters()">Filtrar</button>
+        <button class="raise" @click="deleteFilters()">Borrar</button>
+    </div>
 </template>
 
 <script>
@@ -29,7 +31,6 @@ export default {
     setup(props) {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_empty = { categories: [], order: 0, capacity: 0 };
 
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
@@ -56,5 +57,61 @@ export default {
 </script>
 
 <style lang="scss">
+.container_filter {
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    background-color: whitesmoke;
 
+    .input_capacity {
+        text-align: center;
+        display: flex;
+        margin-left: 15%;
+        width: 4%;
+    }
+
+    .select_order {
+        display: flex;
+        margin-left: 15%;
+    }
+
+    .raise:hover,
+    .raise:focus {
+        box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+        transform: translateY(-0.25em);
+    }
+
+    $colors: (
+        raise: #ffa260,
+    );
+
+@each $button,
+$color in $colors {
+    .#{$button} {
+        --color: #{$color};
+        --hover: #{adjust-hue($color, 45deg)};
+    }
+}
+
+button {
+    color: var(--color);
+    transition: 0.25s;
+
+    &:hover,
+    &:focus {
+        border-color: var(--hover);
+        color: #fff;
+    }
+}
+
+button {
+    background: none;
+    border: 2px solid;
+    font: inherit;
+    line-height: 1;
+    margin-left: 5%;
+    padding: 0.5em 1em;
+    border-radius: 200%;
+}
+}
 </style>
