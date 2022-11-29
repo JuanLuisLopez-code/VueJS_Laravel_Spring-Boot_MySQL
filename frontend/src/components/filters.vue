@@ -1,6 +1,7 @@
 <template>
     <select multiple v-model="state.filters.categories">
-        <option v-for="category in state.categories" :value="category.name_category" :key="category.id">
+        <option v-for="category in state.categories" :value="category.name_category" :key="category.id"
+            :selected="(state.filters.categories.includes(category.name_category))">
             {{ category.name_category }}
         </option>
     </select>
