@@ -33,22 +33,20 @@ public class MesaController {
 			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
 				System.out.println("capacity");
 				mesaRepository.findByCapacity(mesaQueryParam.getCapacity()).forEach(mesas::add);
-			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
+			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0 && mesaQueryParam.getOrder() == 0) {
 				System.out.println("categories");
 				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
 			} else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0) {
 				System.out.println("categories capacity");
 				mesaRepository.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories())
 						.forEach(mesas::add);
-}
-
-			if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+			}else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository.findCategoriesOnMesaASC(mesaQueryParam.getCategories()).forEach(mesas::add);
 				} else {
 					mesaRepository.findCategoriesOnMesaDESC(mesaQueryParam.getCategories()).forEach(mesas::add);
 				}
-			} else if (mesaQueryParam.getOrder() == 0 && mesaQueryParam.getCategories().length > 0) {
+			} else if (mesaQueryParam.getOrder() == 0 && mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
 				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
 			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
 				if (mesaQueryParam.getOrder() == 1) {

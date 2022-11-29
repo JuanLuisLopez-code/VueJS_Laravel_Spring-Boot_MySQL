@@ -1,5 +1,5 @@
 <template>
-    <filters @filters="ApplyFilters" @deleteFilters="deleteAllFilters" :filters_="filters_URL" />
+    <filters @filters="ApplyFilters" @deleteFilters="deleteAllFilters" :filters="filters_URL" />
     <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
