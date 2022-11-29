@@ -1,5 +1,5 @@
 <template>
-    <filters @filters="ApplyFilters" />
+    <filters @filters="ApplyFilters" @deleteFilters="deleteAllFilters" />
     <div class="container_gallery" v-if="state.mesas.length > 0">
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
@@ -22,7 +22,7 @@ export default {
         const route = useRoute();
         const router = useRouter();
 
-        let filters_URL = [];
+        let filters_URL = { categories: [], order: 0 };
         try {
             filters_URL = JSON.parse(atob(route.params.filters));
         } catch (error) {
@@ -38,7 +38,12 @@ export default {
             state.mesas = useMesaFilters(filters);
         }
 
-        return { state, ApplyFilters }
+        const deleteAllFilters = (deleteFilters) => {
+            router.push({ name: "reservation" });
+            state.mesas = useMesaFilters(deleteFilters);
+        }
+
+        return { state, ApplyFilters, deleteAllFilters }
     }
 }
 </script>

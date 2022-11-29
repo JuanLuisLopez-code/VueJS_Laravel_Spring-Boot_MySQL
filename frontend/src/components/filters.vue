@@ -4,9 +4,13 @@
             {{ category.name_category }}
         </option>
     </select>
-    <!-- <input type="text" :value="categoriy.capacity" placeholder="Capacity"/> -->
-    
+    <select v-model="state.filters.order">
+        <option :value="0" disabled hidden selected>Order</option>
+        <option :value="1">Asc to Desc</option>
+        <option :value="2">Desc to Asc</option>
+    </select>
     <button @click="sendFilters()">Filtrar</button>
+    <button @click="deleteFilters()">Borrar</button>
 </template>
 
 <script>
@@ -20,7 +24,7 @@ export default {
     setup() {
         const store = useStore();
         const { emit } = getCurrentInstance();
-        const filters_ = { categories: [] };
+        const filters_ = { categories: [], order: 0};
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
@@ -32,7 +36,11 @@ export default {
             emit('filters', state.filters);
         }//sendFilters
 
-        return { state, sendFilters }
+        const deleteFilters = () => {
+            emit('deleteFilters', filters_);
+        }//sendFilters
+
+        return { state, sendFilters, deleteFilters }
     }
 }
 

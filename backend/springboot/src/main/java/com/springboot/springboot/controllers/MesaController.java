@@ -30,8 +30,21 @@ public class MesaController {
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			List<Mesa> mesas = new ArrayList<Mesa>();
-			if (mesaQueryParam.getCategories() != null) {
+
+			if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findCategoriesOnMesaASC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				} else {
+					mesaRepository.findCategoriesOnMesaDESC(mesaQueryParam.getCategories()).forEach(mesas::add);
+				}
+			} else if (mesaQueryParam.getOrder() == 0 && mesaQueryParam.getCategories().length > 0) {
 				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories()).forEach(mesas::add);
+			} else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
+				if (mesaQueryParam.getOrder() == 1) {
+					mesaRepository.findOrderedASC().forEach(mesas::add);
+				} else {
+					mesaRepository.findOrderedDESC().forEach(mesas::add);
+				}
 			} else {
 				mesaRepository.findAll().forEach(mesas::add);
 			}
