@@ -21,11 +21,8 @@
             <label>Choose a categories:</label>
             <br>
             <br>
-            <select multiple v-model="state.mesa.categories">
-                <option v-for="category in cat.categories" :value="category.name_category" :key="category.id">
-                    {{ category.name_category }}
-                </option>
-            </select>
+            <v-select multiple v-model="state.mesa.categories" :options="state.categories"
+                :getOptionLabel="categories => categories.name_category" />
             <br><br>
             <a @click="createSubmit()" v-if="!isUpdate">
                 <span></span>
@@ -76,34 +73,39 @@ export default {
         const { emit } = getCurrentInstance();
         const store = useStore();
 
+        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
+
         const state = reactive({
-            mesa: { ...mesa }
+            mesa: { ...mesa },
+            categories: computed(() => store.getters['categoryDashboard/GetCategories'])
         });
 
         state.mesa.is_active = Boolean(state.mesa.is_active);
 
-        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
-
-        const cat = reactive({
-            categories: computed(() => store.getters['categoryDashboard/GetCategories'])
-        });
-
         const createSubmit = () => {
+            const cat = state.mesa.categories;
+            const names_cat = cat.map(item => item.name_category);
+            state.mesa.categories = names_cat;
             emit('data', state.mesa)
         }
 
         const editSubmit = () => {
+            const cat = state.mesa.categories;
+            const names_cat = cat.map(item => item.name_category);
+            state.mesa.categories = names_cat;
             emit('data', state.mesa)
         }
         const cancel = () => {
             router.push({ name: "mesasList" })
         }
-        return { state, editSubmit, cancel, createSubmit, cat }
+        return { state, editSubmit, cancel, createSubmit }
     }
 }
 </script>
 
 <style lang="scss">
+@import '../../node_modules/vue-select/dist/vue-select.css';
+
 .login-box {
     position: absolute;
     top: 70%;
