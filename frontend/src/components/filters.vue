@@ -1,7 +1,8 @@
 <template>
-    <div class="container_filter">
+    <div>
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
-        <label>Categories</label>
+    </div>
+    <div class="container_filter">
         <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity" />
         <label>Capacity (0 is all)</label>
         <select v-model="state.filters.order" class="select_order">
