@@ -1,6 +1,8 @@
 <template>
 
-    <body class="tableMesa">
+    
+
+    <!-- <body class="tableMesa">
         <div class="crud-table">
             <div class="clearfix">
                 <div class="form-inline pull-left">
@@ -35,226 +37,260 @@
                 </tbody>
             </table>
         </div>
-    </body>
+    </body> -->
 </template>
 
 <script>
+import { ref, onMounted, reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import Constant from '../Constant';
 import { createToaster } from "@meforma/vue-toaster";
+import DataTable from 'datatables.net-vue3'
+import DataTablesLib from 'datatables.net';
 
 export default {
+    components: { DataTable },
     props: {
         mesas: Object,
     },
-    setup() {
+    setup(props) {
         const toaster = createToaster({ position: "top-right" });
         const store = useStore();
         const router = useRouter();
         const createMesa = () => {
             router.push({ name: "createMesa" })
         }
+        DataTable.use(DataTablesLib);
+
+
+        const state = reactive({
+            mesas: computed(() => props.mesas)
+        });
+
+        const columns = [
+            { data: 'id' },
+            { data: 'name_mesa' },
+            { data: 'capacity' },
+            { data: 'photo' },
+            { data: 'is_active' },
+        ];
+
+        let dt;
+        const table = ref();
+        onMounted(() => {
+            dt = table.value.dt();
+        });
+
+        const updateMesa = () => {
+            // router.push({ name: "updateMesa", params: { id } })
+            const indexs = dt.rows({ selected: true })[0];
+            if (indexs.length === 1) {
+                const id = state.mesas[indexs[0]].id;
+                router.push({ name: 'updateMesa', params: { id } })
+            } else {
+                toaster.info('You have to select ONE category');
+            }
+        }
 
         const deleteMesa = (id) => {
             store.dispatch(`mesaDashboard/${Constant.DELETE_ONE_MESA}`, { id })
             toaster.info("Mesa deleted")
         }
-        const updateMesa = (id) => {
-            router.push({ name: "updateMesa", params: { id } })
-        }
-        return { deleteMesa, updateMesa, createMesa }
+        return { deleteMesa, updateMesa, createMesa, columns, table, state }
     }
 }
 </script>
 <style lang="scss">
-body.tableMesa {
-    font-family: "Roboto", helvetica, arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    text-rendering: optimizeLegibility;
-}
+@import 'datatables.net-dt';
 
-div.table-title {
-    display: block;
-    margin: auto;
-    max-width: 600px;
-    padding: 5px;
-    width: 100%;
-}
+// body.tableMesa {
+//     font-family: "Roboto", helvetica, arial, sans-serif;
+//     font-size: 16px;
+//     font-weight: 400;
+//     text-rendering: optimizeLegibility;
+// }
 
-.table-title h3 {
-    color: #fafafa;
-    font-size: 30px;
-    font-weight: 400;
-    font-style: normal;
-    font-family: "Roboto", helvetica, arial, sans-serif;
-    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
-    text-transform: uppercase;
-}
+// div.table-title {
+//     display: block;
+//     margin: auto;
+//     max-width: 600px;
+//     padding: 5px;
+//     width: 100%;
+// }
+
+// .table-title h3 {
+//     color: #fafafa;
+//     font-size: 30px;
+//     font-weight: 400;
+//     font-style: normal;
+//     font-family: "Roboto", helvetica, arial, sans-serif;
+//     text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+//     text-transform: uppercase;
+// }
 
 
-/*** Table Styles **/
+// /*** Table Styles **/
 
-.table-fill {
-    background: white;
-    border-radius: 3px;
-    border-collapse: collapse;
-    height: 320px;
-    margin: auto;
-    max-width: 600px;
-    padding: 5px;
-    width: 100%;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    animation: float 5s infinite;
-}
+// .table-fill {
+//     background: white;
+//     border-radius: 3px;
+//     border-collapse: collapse;
+//     height: 320px;
+//     margin: auto;
+//     max-width: 600px;
+//     padding: 5px;
+//     width: 100%;
+//     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+//     animation: float 5s infinite;
+// }
 
-body.tableMesa {
-    th {
-        color: #D5DDE5;
-        ;
-        background: #1b1e24;
-        border-bottom: 4px solid #9ea7af;
-        border-right: 1px solid #343a45;
-        font-size: 23px;
-        font-weight: 100;
-        padding: 24px;
-        text-align: left;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-        vertical-align: middle;
-    }
+// body.tableMesa {
+//     th {
+//         color: #D5DDE5;
+//         ;
+//         background: #1b1e24;
+//         border-bottom: 4px solid #9ea7af;
+//         border-right: 1px solid #343a45;
+//         font-size: 23px;
+//         font-weight: 100;
+//         padding: 24px;
+//         text-align: left;
+//         text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+//         vertical-align: middle;
+//     }
 
-    th:first-child {
-        border-top-left-radius: 3px;
-    }
+//     th:first-child {
+//         border-top-left-radius: 3px;
+//     }
 
-    th:last-child {
-        border-top-right-radius: 3px;
-        border-right: none;
-    }
+//     th:last-child {
+//         border-top-right-radius: 3px;
+//         border-right: none;
+//     }
 
-    tr {
-        border-top: 1px solid #C1C3D1;
-        border-bottom: 1px solid #C1C3D1;
-        color: #666B85;
-        font-size: 16px;
-        font-weight: normal;
-        text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
-    }
+//     tr {
+//         border-top: 1px solid #C1C3D1;
+//         border-bottom: 1px solid #C1C3D1;
+//         color: #666B85;
+//         font-size: 16px;
+//         font-weight: normal;
+//         text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+//     }
 
-    tr:hover td {
-        background: #4E5066;
-        color: #FFFFFF;
-        border-top: 1px solid #22262e;
-    }
+//     tr:hover td {
+//         background: #4E5066;
+//         color: #FFFFFF;
+//         border-top: 1px solid #22262e;
+//     }
 
-    tr:first-child {
-        border-top: none;
-    }
+//     tr:first-child {
+//         border-top: none;
+//     }
 
-    tr:last-child {
-        border-bottom: none;
-    }
+//     tr:last-child {
+//         border-bottom: none;
+//     }
 
-    tr:nth-child(odd) td {
-        background: #EBEBEB;
-    }
+//     tr:nth-child(odd) td {
+//         background: #EBEBEB;
+//     }
 
-    tr:nth-child(odd):hover td {
-        background: #4E5066;
-    }
+//     tr:nth-child(odd):hover td {
+//         background: #4E5066;
+//     }
 
-    tr:last-child td:first-child {
-        border-bottom-left-radius: 3px;
-    }
+//     tr:last-child td:first-child {
+//         border-bottom-left-radius: 3px;
+//     }
 
-    tr:last-child td:last-child {
-        border-bottom-right-radius: 3px;
-    }
+//     tr:last-child td:last-child {
+//         border-bottom-right-radius: 3px;
+//     }
 
-    td {
-        background: #FFFFFF;
-        padding: 20px;
-        text-align: left;
-        vertical-align: middle;
-        font-weight: 300;
-        font-size: 18px;
-        text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
-        border-right: 1px solid #C1C3D1;
-    }
+//     td {
+//         background: #FFFFFF;
+//         padding: 20px;
+//         text-align: left;
+//         vertical-align: middle;
+//         font-weight: 300;
+//         font-size: 18px;
+//         text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+//         border-right: 1px solid #C1C3D1;
+//     }
 
-    td:last-child {
-        border-right: 0px;
-    }
+//     td:last-child {
+//         border-right: 0px;
+//     }
 
-    th.text-left {
-        text-align: left;
-    }
+//     th.text-left {
+//         text-align: left;
+//     }
 
-    th.text-center {
-        text-align: center;
-    }
+//     th.text-center {
+//         text-align: center;
+//     }
 
-    th.text-right {
-        text-align: right;
-    }
+//     th.text-right {
+//         text-align: right;
+//     }
 
-    td.text-left {
-        text-align: left;
-    }
+//     td.text-left {
+//         text-align: left;
+//     }
 
-    td.text-center {
-        text-align: center;
-    }
+//     td.text-center {
+//         text-align: center;
+//     }
 
-    td.text-right {
-        text-align: right;
-    }
+//     td.text-right {
+//         text-align: right;
+//     }
 
-}
+// }
 
-.pulse:hover,
-.pulse:focus {
-    animation: pulse 1s;
-    box-shadow: 0 0 0 2em transparent;
-}
+// .pulse:hover,
+// .pulse:focus {
+//     animation: pulse 1s;
+//     box-shadow: 0 0 0 2em transparent;
+// }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 var(--hover);
-    }
-}
+// @keyframes pulse {
+//     0% {
+//         box-shadow: 0 0 0 0 var(--hover);
+//     }
+// }
 
-body.tableMesa {
-    $colors: (pulse: #ef6eae,
-    );
+// body.tableMesa {
+//     $colors: (pulse: #ef6eae,
+//     );
 
-    @each $button,
-    $color in $colors {
-        .#{$button} {
-            --color: #{$color};
-            --hover: #{adjust-hue($color, 45deg)};
-        }
-    }
+//     @each $button,
+//     $color in $colors {
+//         .#{$button} {
+//             --color: #{$color};
+//             --hover: #{adjust-hue($color, 45deg)};
+//         }
+//     }
 
-    button {
-        color: var(--color);
-        transition: 0.25s;
+//     button {
+//         color: var(--color);
+//         transition: 0.25s;
 
-        &:hover,
-        &:focus {
-            border-color: var(--hover);
-            color: #fff;
-        }
-    }
+//         &:hover,
+//         &:focus {
+//             border-color: var(--hover);
+//             color: #fff;
+//         }
+//     }
 
-    button {
-        background: none;
-        border: 2px solid;
-        font: inherit;
-        line-height: 1;
-        margin: 0.5em;
-        padding: 1em 2em;
-    }
-}
+//     button {
+//         background: none;
+//         border: 2px solid;
+//         font: inherit;
+//         line-height: 1;
+//         margin: 0.5em;
+//         padding: 1em 2em;
+//     }
+// }
 </style>
