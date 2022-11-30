@@ -1,10 +1,15 @@
 <template>
-    <div class="container_filter">
+    <div>
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
-        <label>Categories</label>
-        <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity" />
+    </div>
+    <div class="container_filter_search">
+        <searchVue :search="state.filters.name_mesa" @emitSearch="updateSearch" />
+    </div>
+    <div class="container_filter">
+        <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity"
+            v-if="(state.filters.order == 0)" />
         <label>Capacity (0 is all)</label>
-        <select v-model="state.filters.order" class="select_order">
+        <select v-model="state.filters.order" class="select_order" v-if="(state.filters.capacity == 0)">
             <option :value="0" disabled hidden selected>Capacity Order</option>
             <option :value="1">Asc to Desc</option>
             <option :value="2">Desc to Asc</option>
@@ -18,7 +23,9 @@
 import Constant from '../Constant';
 import { useStore } from 'vuex'
 import { reactive, getCurrentInstance } from 'vue';
+import searchVue from './search.vue';
 export default {
+    components: { searchVue },
     props: {
         filters: Object
     },
@@ -45,10 +52,15 @@ export default {
             state.filters.categories = [];
             state.filters.order = 0;
             state.filters.capacity = 0;
+            state.filters.name_mesa = "";
             emit('deleteFilters', state.filters);
         }//sendFilters
 
-        return { state, sendFilters, deleteFilters }
+        const updateSearch = (search) => {
+            state.filters.name_mesa = search;
+        }
+
+        return { state, sendFilters, deleteFilters, updateSearch }
     }
 }
 
@@ -56,6 +68,13 @@ export default {
 
 <style lang="scss">
 @import '../../node_modules/vue-select/dist/vue-select.css';
+
+.container_filter_search {
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    background-color: whitesmoke;
+}
 
 .container_filter {
     padding: 1%;

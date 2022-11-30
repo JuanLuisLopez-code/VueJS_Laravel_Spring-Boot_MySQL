@@ -12,9 +12,7 @@
                     <li class="page">Dashboard</li>
                 </router-link>
             </ul>
-            <p class="search">
-                <input class="search-box" type="search" name="search" id="search" placeholder="Search..." />
-            </p>
+            <search-vue v-if="!isReservation" />
             <router-link to="/home" class="link">
                 <img src="../assets/img/Don_Kamaron_Logo.png">
             </router-link>
@@ -23,14 +21,16 @@
 </template>
 
 <script>
-
+import searchVue from './search.vue';
 export default {
+    components: { searchVue },
     computed: {
         isHome() {
             return this.$route.name == 'home'
         },
         isReservation() {
-            return this.$route.name == 'reservation'
+            const path = this.$route.path.split('/');
+            return path[1] == 'reservation';
         },
         isDashboard() {
             const path = this.$route.path.split('/');
@@ -97,23 +97,11 @@ export default {
         display: none;
     }
 
-    .search {
-        display: none;
-    }
 
     @media (min-width: 426px) {
 
-        .search,
         .logo {
             display: block;
-        }
-
-        .search-box {
-            height: 28px;
-            font-size: 18px;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
         }
 
         .link {

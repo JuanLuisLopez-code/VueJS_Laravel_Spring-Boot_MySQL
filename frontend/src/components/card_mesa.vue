@@ -5,6 +5,9 @@
             <div class="name">
                 <span class="capacity">
                     Capacity: {{ mesa.capacity }}
+                </span><br>
+                <span class="capacity">
+                    Name: {{ mesa.name_mesa }}
                 </span>
                 <div class="cat_name" v-for="cat in mesa.categories">
                     <span>
