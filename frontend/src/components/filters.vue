@@ -2,16 +2,23 @@
     <div>
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
     </div>
+
+    <div class="container_filter_search">
+        <searchVue :search="state.filters.name_mesa" @emitSearch="updateSearch" />
+    </div>
     <div class="container_filter">
-        <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity" />
+        <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity"
+            v-if="(state.filters.order == 0)" />
+        <label class="delete" v-if="(state.filters.order == 0)" @click="resetFilters.capacity()">X</label>
         <label>Capacity (0 is all)</label>
-        <select v-model="state.filters.order" class="select_order">
+        <select v-model="state.filters.order" class="select_order" v-if="(state.filters.capacity == 0)">
             <option :value="0" disabled hidden selected>Capacity Order</option>
             <option :value="1">Asc to Desc</option>
             <option :value="2">Desc to Asc</option>
         </select>
-        <button class="raise" @click="sendFilters()">Filtrar</button>
-        <button class="raise" @click="deleteFilters()">Borrar</button>
+        <label class="delete" v-if="(state.filters.capacity == 0)" @click="resetFilters.order()">X</label>
+        <button class="raise" @click="sendFilters()">Filter</button>
+        <button class="raise" @click="deleteFilters()">Clear</button>
     </div>
 </template>
 
@@ -19,7 +26,9 @@
 import Constant from '../Constant';
 import { useStore } from 'vuex'
 import { reactive, getCurrentInstance } from 'vue';
+import searchVue from './search.vue';
 export default {
+    components: { searchVue },
     props: {
         filters: Object
     },
@@ -46,10 +55,20 @@ export default {
             state.filters.categories = [];
             state.filters.order = 0;
             state.filters.capacity = 0;
+            state.filters.name_mesa = "";
             emit('deleteFilters', state.filters);
         }//sendFilters
 
-        return { state, sendFilters, deleteFilters }
+        const updateSearch = (search) => {
+            state.filters.name_mesa = search;
+        }
+
+        const resetFilters = {
+            capacity: () => { state.filters.capacity = 0; sendFilters(); },
+            order: () => { state.filters.order = 0; sendFilters(); }
+        };
+
+        return { state, sendFilters, deleteFilters, updateSearch, resetFilters }
     }
 }
 
@@ -58,12 +77,32 @@ export default {
 <style lang="scss">
 @import '../../node_modules/vue-select/dist/vue-select.css';
 
+.container_filter_search {
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+    background-color: whitesmoke;
+}
+
 .container_filter {
     padding: 1%;
     display: flex;
     background-color: transparent;
     align-items: center;
     background-color: whitesmoke;
+
+    .delete {
+        border: 1px #ffa260 solid;
+        border-radius: 100%;
+        padding: 0.5%;
+        cursor: pointer;
+    }
+
+    &:hover,
+    &:focus {
+        border-color: var(--hover);
+        color: #000;
+    }
 
     label {
         margin-left: 1em;

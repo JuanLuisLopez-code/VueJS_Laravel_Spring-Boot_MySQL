@@ -27,6 +27,7 @@ export default {
             categories: [],
             capacity: 0,
             order: 0,
+            name_mesa: "",
         };
 
         try {
@@ -35,7 +36,7 @@ export default {
             }
         } catch (error) {
         }
-        
+
         const state = reactive({
             mesas: useMesaFilters(filters_URL)
         });

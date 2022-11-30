@@ -11,10 +11,11 @@ import './assets/main.scss';
 
 
 //////ADD ICONS//////
-import { faFishFins, faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
+import { faFishFins, faHeart, faComment, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 library.add(faFishFins);
 library.add(faHeart);
 library.add(faComment);
+library.add(faMagnifyingGlass);
 
 const app = createApp(App);
 app.use(router);
