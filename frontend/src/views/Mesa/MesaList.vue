@@ -1,5 +1,4 @@
 <template>
-    <!-- <tableMesa :mesas="state.mesas" /> -->
     <button @click="updateMesa()">UPDATE</button>
     <button @click="deleteMesa()">DELETE</button>
     <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.mesas" ref="table">
@@ -16,8 +15,6 @@
 </template>
 
 <script>
-
-// import tableMesa from '../../components/tableMesa.vue'
 import { ref, onMounted, reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
