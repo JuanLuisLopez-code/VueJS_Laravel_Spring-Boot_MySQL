@@ -1,4 +1,5 @@
 <template>
+    <button @click="createMesa()">CREATE</button>
     <button @click="updateMesa()">UPDATE</button>
     <button @click="deleteMesa()">DELETE</button>
     <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.mesas" ref="table">
