@@ -2,6 +2,7 @@
     <div>
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
     </div>
+
     <div class="container_filter_search">
         <searchVue :search="state.filters.name_mesa" @emitSearch="updateSearch" />
     </div>
