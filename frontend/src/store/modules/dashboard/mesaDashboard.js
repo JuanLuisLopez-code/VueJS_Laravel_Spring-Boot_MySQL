@@ -42,8 +42,8 @@ export const mesaDashboard = {
         },
         [Constant.DELETE_ONE_MESA]: async (store, payload) => {
             try {
-                await MesaServiceDashboard.DeleteMesa(payload.id);
-                store.commit(Constant.DELETE_ONE_MESA, payload.id)
+                await MesaServiceDashboard.DeleteMesa(payload);
+                store.commit(Constant.DELETE_ONE_MESA, payload)
             } catch (error) {
                 console.error(error)
             }
