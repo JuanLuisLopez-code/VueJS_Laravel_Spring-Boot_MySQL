@@ -1,9 +1,14 @@
 <template>
+    <div class="back-button">
+        <div class="arrow-wrap">
+            <span class="arrow-part-1"></span>
+            <span class="arrow-part-2"></span>
+            <span class="arrow-part-3"></span>
+        </div>
+    </div>
     <div class="categoriList">
         <h1>Categories</h1>
-        <router-link to="/dashboard/categories/create">
-            <button class="pulse create">CREATE</button>
-        </router-link>
+        <button class="pulse create" @click="redirectCreate()">CREATE</button>
         <button @click="updateCategory()" class="pulse update">UPDATE</button>
         <button @click="deleteCategory()" class="pulse delete">DELETE</button>
         <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
@@ -54,7 +59,7 @@ export default {
             dt = table.value.dt();
         });
 
-        function updateCategory() {
+        const updateCategory = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length === 1) {
                 const id = state.categories[indexs[0]].id;
@@ -64,7 +69,7 @@ export default {
             }
         };
 
-        function deleteCategory() {
+        const deleteCategory = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => store.dispatch(`categoryDashboard/${Constant.DELETE_CATEGORY}`, state.categories[index].id));
@@ -73,7 +78,11 @@ export default {
             }
         };
 
-        return { state, columns, table, updateCategory, deleteCategory };
+        const redirectCreate = () => {
+            router.push({ name: 'categoriesCreate' })
+        }
+
+        return { state, columns, table, updateCategory, deleteCategory, redirectCreate };
     }
 }
 </script>
@@ -132,14 +141,73 @@ button {
     padding: 1em 2em;
 }
 
-h1 {
-    font-weight: 400;
-}
+// .back-button {
+//     width: 50px;
+//     height: 50px;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     border-radius: 50%;
+//     border: #03A9F4 1px solid;
+//     overflow: hidden;
+//     transition: background 0.3s ease;
 
-code {
-    color: #e4cb58;
-    font: inherit;
-}
+//     &.back {
+//         .arrow-wrap {
+//             left: -50%;
+//         }
+//     }
+
+//     &:hover {
+//         background: #03A9F4;
+
+//         .arrow-wrap {
+//             span {
+//                 background: #fff;
+//             }
+//         }
+//     }
+
+//     .arrow-wrap {
+//         display: block;
+//         position: absolute;
+//         height: 70%;
+//         width: 70%;
+//         top: 50%;
+//         left: 50%;
+//         transform: translate(-50%, -50%);
+//         transition: left 0.3s ease;
+
+//         span {
+//             height: 1px;
+//             left: 0;
+//             top: 50%;
+//             background: #03A9F4;
+//             position: absolute;
+//             display: block;
+//             transition: background 0.3s ease;
+//         }
+
+//         .arrow-part-1 {
+//             width: 100%;
+//             transform: translate(0, -50%);
+//         }
+
+//         .arrow-part-2 {
+//             width: 60%;
+//             transform: rotate(-45deg);
+//             transform-origin: 0 0;
+//         }
+
+//         .arrow-part-3 {
+//             width: 60%;
+//             transform: rotate(45deg);
+//             transform-origin: 0 0;
+//         }
+//     }
+// }
+
 
 }
 </style>
