@@ -1,8 +1,9 @@
 <template>
     <p class="search">
         <input class="search-box" type="search" name="search" id="search" placeholder="Search..."
-            v-model="state.name_mesa" @change="emitSearch()"/>
-        <button @click="search()" v-if="!isReservation">send</button>
+            v-model="state.name_mesa" @change="emitSearch()" autocomplete="false" />
+        <font-awesome-icon icon="fa-solid fa-magnifying-glass" @click="search()" v-if="!isReservation" />
+
 
     </p>
 </template>
@@ -31,14 +32,17 @@ export default {
         });
 
         const search = () => {
-            const filters = {
-                categories: [],
-                capacity: 0,
-                order: 0,
-                name_mesa: state.name_mesa,
-            };
-            const filters_64 = btoa(JSON.stringify(filters));
-            router.push({ name: "reservationFilters", params: { filters: filters_64 } });
+            if (state.name_mesa !== "") {
+
+                const filters = {
+                    categories: [],
+                    capacity: 0,
+                    order: 0,
+                    name_mesa: state.name_mesa,
+                };
+                const filters_64 = btoa(JSON.stringify(filters));
+                router.push({ name: "reservationFilters", params: { filters: filters_64 } });
+            }
         }
 
         const emitSearch = () => {
@@ -59,6 +63,8 @@ export default {
 
     .search {
         display: block;
+        cursor: pointer;
+
     }
 
     .search-box {
@@ -67,6 +73,7 @@ export default {
         border: none;
         padding: 5px 10px;
         border-radius: 3px;
+        margin-right: 8px;
     }
 
 }

@@ -8,14 +8,16 @@
     <div class="container_filter">
         <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity"
             v-if="(state.filters.order == 0)" />
+        <label class="delete" v-if="(state.filters.order == 0)" @click="resetFilters.capacity()">X</label>
         <label>Capacity (0 is all)</label>
         <select v-model="state.filters.order" class="select_order" v-if="(state.filters.capacity == 0)">
             <option :value="0" disabled hidden selected>Capacity Order</option>
             <option :value="1">Asc to Desc</option>
             <option :value="2">Desc to Asc</option>
         </select>
-        <button class="raise" @click="sendFilters()">Filtrar</button>
-        <button class="raise" @click="deleteFilters()">Borrar</button>
+        <label class="delete" v-if="(state.filters.capacity == 0)" @click="resetFilters.order()">X</label>
+        <button class="raise" @click="sendFilters()">Filter</button>
+        <button class="raise" @click="deleteFilters()">Clear</button>
     </div>
 </template>
 
@@ -60,7 +62,12 @@ export default {
             state.filters.name_mesa = search;
         }
 
-        return { state, sendFilters, deleteFilters, updateSearch }
+        const resetFilters = {
+            capacity: () => { state.filters.capacity = 0; sendFilters(); },
+            order: () => { state.filters.order = 0; sendFilters(); }
+        };
+
+        return { state, sendFilters, deleteFilters, updateSearch, resetFilters }
     }
 }
 
@@ -82,6 +89,19 @@ export default {
     background-color: transparent;
     align-items: center;
     background-color: whitesmoke;
+
+    .delete {
+        border: 1px #ffa260 solid;
+        border-radius: 100%;
+        padding: 0.5%;
+        cursor: pointer;
+    }
+
+    &:hover,
+    &:focus {
+        border-color: var(--hover);
+        color: #000;
+    }
 
     label {
         margin-left: 1em;
