@@ -82,6 +82,20 @@ public class MesaController {
 		}
 	}
 
+	@GetMapping("/mesaInfinite")
+	public ResponseEntity<List<Mesa>> getGigMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
+		try {
+			List<Mesa> mesas = new ArrayList<Mesa>();
+			Integer limit = mesaQueryParam.getPage() * mesaQueryParam.getLimit();
+			mesaRepository.findBigTables(limit).forEach(mesas::add);
+			return new ResponseEntity<>(mesas, HttpStatus.OK);
+
+		} catch (Exception e) {
+			System.err.println(e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/mesa/{id}")
 	public ResponseEntity<Mesa> getOneLinkMesa(@PathVariable(required = true) Long id) {
 		try {

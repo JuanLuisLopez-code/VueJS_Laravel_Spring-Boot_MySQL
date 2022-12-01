@@ -14,10 +14,14 @@ export default {
             }
         });
         return Api(secrets.URL_SPRING).get(`mesa?${params_.join('&')}`);
-
     },//GetMesas
+
     GetOneMesa(id) {
         return Api(secrets.URL_SPRING).get('mesa/' + id);
+    },//GetOneMesa
+
+    GetMesasInfinite(page, limit) {
+        return Api(secrets.URL_SPRING).get('mesaInfinite', { params: { page: page, limit: limit } });
     },//GetOneMesa
 
 }//export

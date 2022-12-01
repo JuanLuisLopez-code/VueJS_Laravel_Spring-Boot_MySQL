@@ -22,7 +22,6 @@ export default {
         const route = useRoute();
         const router = useRouter();
 
-
         let filters_URL = {
             categories: [],
             capacity: 0,

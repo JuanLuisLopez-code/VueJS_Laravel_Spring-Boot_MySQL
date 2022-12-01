@@ -6,6 +6,8 @@
     </h1>
     <carouselVue :data="state.categories" v-if="state.categories" @emitAction="redirectReservation" />
     <span v-else>The carousel is not available</span>
+    <br>
+    <bigestTablesVue :data="state.mesasInfinite" @page="addInfinite" />
 </template>
 
 <script>
@@ -14,9 +16,11 @@ import { useStore } from 'vuex';
 import Constant from '../Constant';
 import carouselVue from '../components/carousel.vue';
 import { useRouter } from 'vue-router';
+import bigestTablesVue from '../components/bigestTables.vue';
+import { useMesaInfinite } from '../composables/mesas/useMesa';
 
 export default {
-    components: { carouselVue },
+    components: { carouselVue, bigestTablesVue },
     setup() {
         const router = useRouter();
         const store = useStore();
@@ -24,7 +28,8 @@ export default {
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
-            categories: computed(() => store.getters['category/GetCategories'])
+            categories: computed(() => store.getters['category/GetCategories']),
+            mesasInfinite: useMesaInfinite(1, 4),
         });
 
         const redirectReservation = (item) => {
@@ -38,7 +43,11 @@ export default {
             router.push({ name: "reservationFilters", params: { filters: filters_ } });
         }
 
-        return { state, redirectReservation };
+        const addInfinite = (page) => {
+            state.mesasInfinite = useMesaInfinite(page, 4);
+        }
+
+        return { state, redirectReservation, addInfinite };
     }
 }
 </script>
