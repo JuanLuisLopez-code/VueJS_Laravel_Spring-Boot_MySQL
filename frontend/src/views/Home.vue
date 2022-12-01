@@ -7,8 +7,7 @@
     <carouselVue :data="state.categories" v-if="state.categories" @emitAction="redirectReservation" />
     <span v-else>The carousel is not available</span>
     <br>
-    <p>{{state.mesasInfinite}}</p>
-    <bigestTablesVue />
+    <bigestTablesVue :data="state.mesasInfinite" @page="addInfinite" />
 </template>
 
 <script>
@@ -30,7 +29,7 @@ export default {
 
         const state = reactive({
             categories: computed(() => store.getters['category/GetCategories']),
-            mesasInfinite: computed(() => useMesaInfinite(1, 2)),
+            mesasInfinite: useMesaInfinite(1, 4),
         });
 
         const redirectReservation = (item) => {
@@ -44,7 +43,11 @@ export default {
             router.push({ name: "reservationFilters", params: { filters: filters_ } });
         }
 
-        return { state, redirectReservation };
+        const addInfinite = (page) => {
+            state.mesasInfinite = useMesaInfinite(page, 4);
+        }
+
+        return { state, redirectReservation, addInfinite };
     }
 }
 </script>

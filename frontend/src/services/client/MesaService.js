@@ -21,8 +21,7 @@ export default {
     },//GetOneMesa
 
     GetMesasInfinite(page, limit) {
-        const params = { page, limit };
-        return Api(secrets.URL_SPRING).get('mesaInfinite', params);
+        return Api(secrets.URL_SPRING).get('mesaInfinite', { params: { page: page, limit: limit } });
     },//GetOneMesa
 
 }//export
