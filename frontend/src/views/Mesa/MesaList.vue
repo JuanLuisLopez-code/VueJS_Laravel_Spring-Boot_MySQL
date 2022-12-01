@@ -1,5 +1,6 @@
 <template>
     <div class="listMesa">
+        <h1>Mesas</h1>
         <button class="pulse create" @click="createMesa()">CREATE</button>
         <button class="pulse update" @click="updateMesa()">UPDATE</button>
         <button class="pulse delete" @click="deleteMesa()">DELETE</button>
@@ -107,20 +108,23 @@ export default {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => {
+                    console.log(state.mesas[index]);
                     const payload = {
                         id: state.mesas[index].id,
                         is_active: state.mesas[index].is_active,
                     }
                     store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
+
+                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
                     store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
                 });
-                store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
+
             }
         }
 
         const label_status_active = () => {
             if (state.checkbox_dissabled == 1) {
-                toaster.warning('You have to select at last ONE mesa');
+                toaster.warning('Select at least 1 mesa for change ACTIVE');
             } else if (state.checkbox_dissabled == 2) {
                 let change_active = [];
                 const indexs = dt.rows({ selected: true })[0];
@@ -144,8 +148,9 @@ export default {
 @import 'datatables.net-dt';
 
 .listMesa {
-
-
+    h1{
+        text-align: center;
+    }
     .pulse:hover,
     .pulse:focus {
         animation: pulse 1s;

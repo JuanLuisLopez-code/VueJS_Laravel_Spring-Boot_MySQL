@@ -72,7 +72,7 @@ export const mesaDashboard = {
                 }
                 const response = await MesaServiceDashboard.UpdateOneMesa(payload);
                 if (response.status == 200) {
-                    // store.commit(Constant.UPDATE_ONE_MESA, payload);
+                    store.commit(Constant.UPDATE_ONE_MESA, payload);
                 }
             } catch (error) {
                 console.error(error)
