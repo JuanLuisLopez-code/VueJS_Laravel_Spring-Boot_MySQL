@@ -1,13 +1,13 @@
 <template>
-    <div class="container_mesa_details">
+    <div class="container_mesa_details" v-if="stateOne.mesas">
         <div class="gallery">
             <div class="gallery-item" tabindex="0">
-                <img :src="stateOne.mesas?.photo" class="gallery-image" alt="">
+                <img :src="stateOne.mesas.photo" class="gallery-image" alt="">
                 <div class="name">
                     <span class="capacity">
-                        Capacity: {{ stateOne.mesas?.capacity }}
+                        Capacity: {{ stateOne.mesas.capacity }}
                     </span>
-                    <div class="cat_name" v-for="cat in stateOne.mesas?.categories">
+                    <div class="cat_name" v-for="cat in stateOne.mesas.categories">
                         <span>
                             {{ cat.name_category }}
                         </span>
@@ -15,6 +15,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div v-else>
+        <span>Table not available</span>
     </div>
 </template>
 

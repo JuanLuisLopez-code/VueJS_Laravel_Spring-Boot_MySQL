@@ -1,18 +1,23 @@
 <template>
-    <router-link to="/dashboard/categories/create">
-        <button>CREATE</button>
-    </router-link>
-    <button @click="updateCategory()">UPDATE</button>
-    <button @click="deleteCategory()">DELETE</button>
-    <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Photo</th>
-            </tr>
-        </thead>
-    </DataTable>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
+    <div class="categoriList">
+        <h1>Categories</h1><br>
+        <div v-if="state.categories">
+            <button class="pulse create" @click="redirects.create()">CREATE</button>
+            <button @click="updateCategory()" class="pulse update">UPDATE</button>
+            <button @click="deleteCategory()" class="pulse delete">DELETE</button>
+        </div>
+        <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Photo</th>
+                </tr>
+            </thead>
+        </DataTable>
+    </div>
 </template>
 
 <script>
@@ -51,7 +56,7 @@ export default {
             dt = table.value.dt();
         });
 
-        function updateCategory() {
+        const updateCategory = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length === 1) {
                 const id = state.categories[indexs[0]].id;
@@ -61,20 +66,78 @@ export default {
             }
         };
 
-        function deleteCategory() {
+        const deleteCategory = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => store.dispatch(`categoryDashboard/${Constant.DELETE_CATEGORY}`, state.categories[index].id));
             } else {
-                toaster.info('You have to at last ONE category');
+                toaster.info('You have to select at last ONE category');
             }
         };
 
-        return { state, columns, table, updateCategory, deleteCategory };
+        const redirects = {
+            create: () => router.push({ name: 'categoriesCreate' }),
+            return: () => router.push({ name: 'dashboard' }),
+        };
+
+        return { state, columns, table, updateCategory, deleteCategory, redirects };
     }
 }
 </script>
 
 <style lang="scss">
 @import 'datatables.net-dt';
+
+.categoriList {
+    h1 {
+        text-align: center;
+    }
+
+    .pulse:hover,
+    .pulse:focus {
+        animation: pulse 1s;
+        box-shadow: 0 0 0 2em transparent;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 var(--hover);
+        }
+    }
+
+    $colors: (
+        create: green,
+        update: blue,
+        delete: red,
+    );
+
+@each $button,
+$color in $colors {
+    .#{$button} {
+        --color: #{$color};
+        --hover: #{adjust-hue($color, 45deg)};
+    }
+}
+
+button {
+    color: var(--color);
+    transition: 0.25s;
+
+    &:hover,
+    &:focus {
+        border-color: var(--hover);
+        color: #fff;
+    }
+}
+
+button {
+    background: none;
+    border: 2px solid;
+    font: inherit;
+    line-height: 1;
+    margin: 0.5em;
+    padding: 1em 2em;
+}
+
+}
 </style>

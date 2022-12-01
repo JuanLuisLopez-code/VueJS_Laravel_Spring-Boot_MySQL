@@ -2,26 +2,22 @@
     <nav class="header">
         <div class="countainer">
             <ul class="pages">
-                <router-link to="/home" class="link" :class="{ active: isHome }">
-                    <li class="page">Home</li>
-                </router-link>
-                <router-link to="/reservation" class="link" :class="{ active: isReservation }">
-                    <li class="page">Reservation</li>
-                </router-link>
-                <router-link to="/dashboard" class="link" :class="{ active: isDashboard }">
-                    <li class="page">Dashboard</li>
-                </router-link>
+                <li @click="redirects.home()" class="page link" :class="{ active: isHome }">Home</li>
+                <li @click="redirects.reservation()" class="page link" :class="{ active: isReservation }">Reservation
+                </li>
+                <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
             </ul>
             <search-vue v-if="!isReservation" />
-            <router-link to="/home" class="link">
+            <div class="link" @click="redirects.home()">
                 <img src="../assets/img/Don_Kamaron_Logo.png">
-            </router-link>
+            </div>
         </div>
     </nav>
 </template>
 
 <script>
 import searchVue from './search.vue';
+import { useRouter } from 'vue-router';
 export default {
     components: { searchVue },
     computed: {
@@ -36,6 +32,15 @@ export default {
             const path = this.$route.path.split('/');
             return path[1] == 'dashboard';
         },
+    },
+    setup() {
+        const router = useRouter();
+        const redirects = {
+            home: () => router.push({ name: 'home' }),
+            reservation: () => router.push({ name: 'reservation' }),
+            dashboard: () => router.push({ name: 'dashboard' }),
+        };
+        return { redirects };
     }
 }
 </script>
@@ -68,6 +73,7 @@ export default {
     }
 
     .pages {
+        cursor: pointer;
         display: flex;
         flex-direction: row;
         justify-content: space-between;

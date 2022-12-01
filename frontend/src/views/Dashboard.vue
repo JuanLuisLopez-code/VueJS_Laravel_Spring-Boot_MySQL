@@ -1,16 +1,29 @@
 <template>
   <h1>Dashboard</h1>
-
-  <router-link to="/dashboard/categories"><button class="pulse">List categories</button></router-link>
+  <button class="pulse" @click="redirects.categories()">List categories</button>
   <br>
-  <router-link to="/dashboard/mesas"><button class="pulse">List mesas</button></router-link>
+  <button class="pulse" @click="redirects.mesas()">List mesas</button>
 </template>
 
 <script>
-export default {};
+import { useRouter } from 'vue-router';
+export default {
+  setup() {
+    const router = useRouter();
+    const redirects = {
+      categories: () => router.push({ name: 'categoriesList' }),
+      mesas: () => router.push({ name: 'mesasList' }),
+    };
+    return { redirects };
+  }
+
+};
 </script>
 
 <style lang="scss">
+$pulse_color: blue;
+$pulse_color_hover: grey;
+
 .pulse:hover,
 .pulse:focus {
   animation: pulse 1s;
@@ -19,18 +32,18 @@ export default {};
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 var(--hover);
+    box-shadow: 0 0 0 0 $pulse_color_hover;
   }
 }
 
 button.pulse {
-  color: var(--color);
+  color: $pulse_color;
   transition: 0.25s;
 
   &:hover,
   &:focus {
-    border-color: var(--hover);
-    color: #fff;
+    border-color: $pulse_color_hover;
+    color: $pulse_color_hover;
   }
 }
 

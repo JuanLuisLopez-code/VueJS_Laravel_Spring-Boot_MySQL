@@ -1,6 +1,9 @@
 <template>
-    <div>
+    <div v-if="state.categories">
         <v-select multiple v-model="state.filters.categories" :options="state.categories" />
+    </div>
+    <div v-else>
+        <span>Can not filter by categories</span>
     </div>
 
     <div class="container_filter_search">
@@ -25,7 +28,7 @@
 <script>
 import Constant from '../Constant';
 import { useStore } from 'vuex'
-import { reactive, getCurrentInstance } from 'vue';
+import { reactive, getCurrentInstance, computed } from 'vue';
 import searchVue from './search.vue';
 export default {
     components: { searchVue },
@@ -43,7 +46,7 @@ export default {
         store.dispatch(`category/${Constant.INITIALIZE_CATEGORY}`);
 
         const state = reactive({
-            categories: store.getters['category/GetCategories'].map(item => item.name_category),
+            categories: computed(() => store.getters['category/GetCategories']?.map(item => item.name_category)),
             filters: { ...props.filters }
         });
 

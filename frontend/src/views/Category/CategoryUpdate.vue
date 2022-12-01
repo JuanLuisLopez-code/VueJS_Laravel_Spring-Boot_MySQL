@@ -1,4 +1,6 @@
 <template>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
     <form_category_dashboardVue :category="state.category" :key="state.category?.id" @data="updateCategory" />
 </template>
 
@@ -31,7 +33,11 @@ export default {
             router.push('/dashboard/categories');
         }//updateCategory
 
-        return { state, updateCategory };
+        const redirects = {
+            return: () => router.push({ name: 'categoriesList' }),
+        };
+
+        return { state, updateCategory, redirects };
     }
 }
 </script>
