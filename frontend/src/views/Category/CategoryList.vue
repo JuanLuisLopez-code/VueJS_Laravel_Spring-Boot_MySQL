@@ -1,14 +1,9 @@
 <template>
-    <div class="back-button">
-        <div class="arrow-wrap">
-            <span class="arrow-part-1"></span>
-            <span class="arrow-part-2"></span>
-            <span class="arrow-part-3"></span>
-        </div>
-    </div>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
     <div class="categoriList">
         <h1>Categories</h1>
-        <button class="pulse create" @click="redirectCreate()">CREATE</button>
+        <button class="pulse create" @click="redirects.create()">CREATE</button>
         <button @click="updateCategory()" class="pulse update">UPDATE</button>
         <button @click="deleteCategory()" class="pulse delete">DELETE</button>
         <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
@@ -74,15 +69,16 @@ export default {
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => store.dispatch(`categoryDashboard/${Constant.DELETE_CATEGORY}`, state.categories[index].id));
             } else {
-                toaster.info('You have to at last ONE category');
+                toaster.info('You have to select at last ONE category');
             }
         };
 
-        const redirectCreate = () => {
-            router.push({ name: 'categoriesCreate' })
-        }
+        const redirects = {
+            create: () => router.push({ name: 'categoriesCreate' }),
+            return: () => router.push({ name: 'dashboard' }),
+        };
 
-        return { state, columns, table, updateCategory, deleteCategory, redirectCreate };
+        return { state, columns, table, updateCategory, deleteCategory, redirects };
     }
 }
 </script>
@@ -140,74 +136,6 @@ button {
     margin: 0.5em;
     padding: 1em 2em;
 }
-
-// .back-button {
-//     width: 50px;
-//     height: 50px;
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     border-radius: 50%;
-//     border: #03A9F4 1px solid;
-//     overflow: hidden;
-//     transition: background 0.3s ease;
-
-//     &.back {
-//         .arrow-wrap {
-//             left: -50%;
-//         }
-//     }
-
-//     &:hover {
-//         background: #03A9F4;
-
-//         .arrow-wrap {
-//             span {
-//                 background: #fff;
-//             }
-//         }
-//     }
-
-//     .arrow-wrap {
-//         display: block;
-//         position: absolute;
-//         height: 70%;
-//         width: 70%;
-//         top: 50%;
-//         left: 50%;
-//         transform: translate(-50%, -50%);
-//         transition: left 0.3s ease;
-
-//         span {
-//             height: 1px;
-//             left: 0;
-//             top: 50%;
-//             background: #03A9F4;
-//             position: absolute;
-//             display: block;
-//             transition: background 0.3s ease;
-//         }
-
-//         .arrow-part-1 {
-//             width: 100%;
-//             transform: translate(0, -50%);
-//         }
-
-//         .arrow-part-2 {
-//             width: 60%;
-//             transform: rotate(-45deg);
-//             transform-origin: 0 0;
-//         }
-
-//         .arrow-part-3 {
-//             width: 60%;
-//             transform: rotate(45deg);
-//             transform-origin: 0 0;
-//         }
-//     }
-// }
-
 
 }
 </style>
