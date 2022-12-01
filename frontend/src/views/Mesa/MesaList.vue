@@ -4,9 +4,9 @@
         <button class="pulse create" @click="createMesa()">CREATE</button>
         <button class="pulse update" @click="updateMesa()">UPDATE</button>
         <button class="pulse delete" @click="deleteMesa()">DELETE</button>
-        <input type="checkbox" id="switch" name="switch" @click="button_status_active()"
-            :disabled="(state.checkbox_dissabled > 0)" v-model="state.checkbox_checked">
-        <label for="switch" class="switch" @click="label_status_active()"></label>
+        <input type="checkbox" id="switch" name="switch" :disabled="state.checkbox_dissabled"
+            v-model="state.checkbox_checked">
+        <label for="switch" class="switch" @click="updateActive()"></label>
     </div>
     <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.mesas" ref="table"
         @click="check_status_active()">
@@ -43,7 +43,7 @@ export default {
 
         const state = reactive({
             mesas: computed(() => store.getters["mesaDashboard/getMesas"]),
-            checkbox_dissabled: 1,
+            checkbox_dissabled: true,
             checkbox_checked: false,
         })
 
@@ -86,59 +86,103 @@ export default {
             }
         }
 
+        // const check_status_active = () => {
+        //     let change_active = [];
+        //     const indexs = dt.rows({ selected: true })[0];
+        //     if (indexs.length > 0) {
+        //         dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
+        //         if (change_active.length == 1) {
+        //             first_click = change_active[0].is_active;
+        //         }
+        //         if (!change_active.every(item => item.is_active == first_click)) {
+        //             state.checkbox_dissabled = 2;
+        //             state.checkbox_checked = false;
+        //         } else {
+        //             state.checkbox_dissabled = 0;
+        //             state.checkbox_checked = true;
+        //         }
+        //     }
+        // }
+
         const check_status_active = () => {
-            let change_active = [];
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
-                dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-                if (change_active.length == 1) {
-                    first_click = change_active[0].is_active;
+                let mesas_active = [];
+                dt.rows({ selected: true }).every(index => mesas_active.push(state.mesas[index]));
+                if (mesas_active.length == 1) {
+                    first_click = mesas_active[0].is_active;
                 }
-                if (!change_active.every(item => item.is_active == first_click)) {
-                    state.checkbox_dissabled = 2;
+                if (!mesas_active.every(item => item.is_active === first_click)) {
+                    state.checkbox_dissabled = true;
                     state.checkbox_checked = false;
                 } else {
-                    state.checkbox_dissabled = 0;
+                    state.checkbox_dissabled = false;
                     state.checkbox_checked = true;
                 }
             }
         }
 
-        const button_status_active = () => {
-            const indexs = dt.rows({ selected: true })[0];
-            if (indexs.length > 0) {
-                dt.rows({ selected: true }).every(index => {
-                    const payload = {
-                        id: state.mesas[index].id,
-                        is_active: state.mesas[index].is_active,
-                    }
-                    store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
+        // const button_status_active = () => {
+        //     const indexs = dt.rows({ selected: true })[0];
+        //     if (indexs.length > 0) {
+        //         dt.rows({ selected: true }).every(index => {
+        //             const payload = {
+        //                 id: state.mesas[index].id,
+        //                 is_active: state.mesas[index].is_active,
+        //             }
+        //             store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
 
-                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-                });
+        //             store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
+        //             store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
+        //         });
 
-            }
-        }
+        //     }
+        // }
 
-        const label_status_active = () => {
-            if (state.checkbox_dissabled == 1) {
-                toaster.warning('Select at least 1 mesa for change ACTIVE');
-            } else if (state.checkbox_dissabled == 2) {
-                let change_active = [];
+        // const updateActive = () => {
+        //     if (state.checkbox_dissabled == 1) {
+        //         toaster.warning('Select at least 1 mesa for change ACTIVE');
+        //     } else if (state.checkbox_dissabled == 2) {
+        //         let change_active = [];
+        //         const indexs = dt.rows({ selected: true })[0];
+        //         if (indexs.length > 0) {
+        //             dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
+        //             if (change_active.length == 1) {
+        //                 first_click = change_active[0].is_active;
+        //             }
+        //             const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
+        //             toaster.warning('Unselect mesa ID: ' + save_bad_active);
+        //         }
+        //     }
+        // }
+
+        const updateActive = () => {
+            if (!state.checkbox_dissabled) {
                 const indexs = dt.rows({ selected: true })[0];
                 if (indexs.length > 0) {
-                    dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-                    if (change_active.length == 1) {
-                        first_click = change_active[0].is_active;
-                    }
-                    const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
-                    toaster.warning('Unselect mesa ID: ' + save_bad_active);
+                    let mesas_active = [];
+                    dt.rows({ selected: true }).every(index => mesas_active.push(state.mesas[index]));
+                    console.log(mesas_active);
                 }
+            } else {
+                toaster.warning('Select at least 1 mesa for change ACTIVE');
             }
+            // if (state.checkbox_dissabled == 1) {
+            //     toaster.warning('Select at least 1 mesa for change ACTIVE');
+            // } else if (state.checkbox_dissabled == 2) {
+            //     let change_active = [];
+            //     const indexs = dt.rows({ selected: true })[0];
+            //     if (indexs.length > 0) {
+            //         dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
+            //         if (change_active.length == 1) {
+            //             first_click = change_active[0].is_active;
+            //         }
+            //         const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
+            //         toaster.warning('Unselect mesa ID: ' + save_bad_active);
+            //     }
+            // }
         }
-
-        return { createMesa, updateMesa, deleteMesa, columns, table, state, check_status_active, button_status_active, label_status_active }
+        return { createMesa, updateMesa, deleteMesa, columns, table, state, check_status_active, updateActive }
     }
 }
 </script>
@@ -147,9 +191,10 @@ export default {
 @import 'datatables.net-dt';
 
 .listMesa {
-    h1{
+    h1 {
         text-align: center;
     }
+
     .pulse:hover,
     .pulse:focus {
         animation: pulse 1s;
