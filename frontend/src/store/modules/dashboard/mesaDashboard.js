@@ -21,6 +21,7 @@ export const mesaDashboard = {
         },
         [Constant.UPDATE_ONE_MESA]: (state, payload) => {
             if (payload) {
+                payload.is_active = Number(payload.is_active)
                 let index = (state.mesa || []).findIndex((item) => item.id == payload.id);
                 if (index !== -1) {
                     state.mesa[index] = payload;
@@ -34,6 +35,7 @@ export const mesaDashboard = {
     actions: {
         [Constant.INITIALIZE_MESA]: async (store) => {
             try {
+                console.log("asd");
                 const response = await MesaServiceDashboard.GetMesas();
                 store.commit(Constant.INITIALIZE_MESA, response.data.data);
             } catch (error) {
@@ -65,9 +67,12 @@ export const mesaDashboard = {
         },
         [Constant.UPDATE_ONE_MESA]: async (store, payload) => {
             try {
+                if (typeof payload.is_active == 'number') {
+                    payload.is_active = Boolean(!payload.is_active);
+                }
                 const response = await MesaServiceDashboard.UpdateOneMesa(payload);
                 if (response.status == 200) {
-                    store.commit(Constant.UPDATE_ONE_MESA, payload);
+                    // store.commit(Constant.UPDATE_ONE_MESA, payload);
                 }
             } catch (error) {
                 console.error(error)

@@ -4,7 +4,7 @@
         <button class="pulse update" @click="updateMesa()">UPDATE</button>
         <button class="pulse delete" @click="deleteMesa()">DELETE</button>
         <input type="checkbox" id="switch" name="switch" @click="button_status_active()"
-            :disabled="state.checkbox_dissabled" v-model="state.checkbox_checked">
+            :disabled="(state.checkbox_dissabled > 0)" v-model="state.checkbox_checked">
         <label for="switch" class="switch" @click="label_status_active()"></label>
     </div>
     <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.mesas" ref="table"
@@ -42,9 +42,11 @@ export default {
 
         const state = reactive({
             mesas: computed(() => store.getters["mesaDashboard/getMesas"]),
-            checkbox_dissabled: true,
+            checkbox_dissabled: 1,
             checkbox_checked: false,
         })
+
+        let first_click = 0;
 
         const columns = [
             { data: 'id' },
@@ -88,30 +90,48 @@ export default {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-                for (let i = 0; i < change_active.length; i++) {
-                    if (change_active[0].is_active != change_active[i].is_active) {
-                        state.checkbox_dissabled = true;
-                        state.checkbox_checked = false;
-                    } else {
-                        state.checkbox_dissabled = false;
-                        state.checkbox_checked = true;
-                    }
+                if (change_active.length == 1) {
+                    first_click = change_active[0].is_active;
                 }
-            } else {
-                toaster.info('You have to select at last ONE mesa');
+                if (!change_active.every(item => item.is_active == first_click)) {
+                    state.checkbox_dissabled = 2;
+                    state.checkbox_checked = false;
+                } else {
+                    state.checkbox_dissabled = 0;
+                    state.checkbox_checked = true;
+                }
             }
         }
 
         const button_status_active = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
-                // dt.rows({ selected: true }).every(index => store.dispatch(`mesaDashboard/${Constant.DELETE_ONE_MESA}`, state.mesas[index].id));
+                dt.rows({ selected: true }).every(index => {
+                    const payload = {
+                        id: state.mesas[index].id,
+                        is_active: state.mesas[index].is_active,
+                    }
+                    store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
+                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
+                });
+                store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
             }
         }
 
         const label_status_active = () => {
-            if (state.checkbox_dissabled == true) {
+            if (state.checkbox_dissabled == 1) {
                 toaster.warning('You have to select at last ONE mesa');
+            } else if (state.checkbox_dissabled == 2) {
+                let change_active = [];
+                const indexs = dt.rows({ selected: true })[0];
+                if (indexs.length > 0) {
+                    dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
+                    if (change_active.length == 1) {
+                        first_click = change_active[0].is_active;
+                    }
+                    const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
+                    toaster.warning('Unselect mesa ID: ' + save_bad_active);
+                }
             }
         }
 
