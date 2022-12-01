@@ -32,6 +32,7 @@ export default {
                 categories: [item.name_category],
                 capacity: 0,
                 order: 0,
+                name_mesa: "",
             };
             const filters_ = btoa(JSON.stringify(filters));
             router.push({ name: "reservationFilters", params: { filters: filters_ } });
