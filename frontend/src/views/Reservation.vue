@@ -4,6 +4,9 @@
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
+        <paginate :page-count="20" :page-range="3" :margin-pages="2" :click-handler="clickCallback" :prev-text="'Prev'"
+            :next-text="'Next'" :container-class="'pagination'" :page-class="'page-item'">
+        </paginate>
     </div>
     <div v-else>
         <span>No tables</span>
@@ -16,8 +19,9 @@ import card_mesa from '../components/card_mesa.vue';
 import filters from '../components/filters.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMesaFilters } from '../composables/mesas/useMesa';
+import Paginate from 'vuejs-paginate-next';
 export default {
-    components: { card_mesa, filters },
+    components: { card_mesa, filters, Paginate },
     setup() {
         const route = useRoute();
         const router = useRouter();
@@ -57,6 +61,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
+
+
 .container_gallery {
     max-width: 93.5rem;
     margin: 1.3%;
