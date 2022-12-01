@@ -108,7 +108,6 @@ export default {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
                 dt.rows({ selected: true }).every(index => {
-                    console.log(state.mesas[index]);
                     const payload = {
                         id: state.mesas[index].id,
                         is_active: state.mesas[index].is_active,
