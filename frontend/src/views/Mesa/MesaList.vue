@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { useMesaActive } from '../../composables/dashboard/mesas/useMesasDashboard';
 import { ref, onMounted, reactive, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -86,24 +87,6 @@ export default {
             }
         }
 
-        // const check_status_active = () => {
-        //     let change_active = [];
-        //     const indexs = dt.rows({ selected: true })[0];
-        //     if (indexs.length > 0) {
-        //         dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-        //         if (change_active.length == 1) {
-        //             first_click = change_active[0].is_active;
-        //         }
-        //         if (!change_active.every(item => item.is_active == first_click)) {
-        //             state.checkbox_dissabled = 2;
-        //             state.checkbox_checked = false;
-        //         } else {
-        //             state.checkbox_dissabled = 0;
-        //             state.checkbox_checked = true;
-        //         }
-        //     }
-        // }
-
         const check_status_active = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
@@ -119,42 +102,11 @@ export default {
                     state.checkbox_dissabled = false;
                     state.checkbox_checked = true;
                 }
+            } else {
+                state.checkbox_dissabled = true;
+                state.checkbox_checked = false;
             }
         }
-
-        // const button_status_active = () => {
-        //     const indexs = dt.rows({ selected: true })[0];
-        //     if (indexs.length > 0) {
-        //         dt.rows({ selected: true }).every(index => {
-        //             const payload = {
-        //                 id: state.mesas[index].id,
-        //                 is_active: state.mesas[index].is_active,
-        //             }
-        //             store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
-
-        //             store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-        //             store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-        //         });
-
-        //     }
-        // }
-
-        // const updateActive = () => {
-        //     if (state.checkbox_dissabled == 1) {
-        //         toaster.warning('Select at least 1 mesa for change ACTIVE');
-        //     } else if (state.checkbox_dissabled == 2) {
-        //         let change_active = [];
-        //         const indexs = dt.rows({ selected: true })[0];
-        //         if (indexs.length > 0) {
-        //             dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-        //             if (change_active.length == 1) {
-        //                 first_click = change_active[0].is_active;
-        //             }
-        //             const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
-        //             toaster.warning('Unselect mesa ID: ' + save_bad_active);
-        //         }
-        //     }
-        // }
 
         const updateActive = () => {
             if (!state.checkbox_dissabled) {
@@ -162,25 +114,11 @@ export default {
                 if (indexs.length > 0) {
                     let mesas_active = [];
                     dt.rows({ selected: true }).every(index => mesas_active.push(state.mesas[index]));
-                    console.log(mesas_active);
+                    useMesaActive(mesas_active);
                 }
             } else {
                 toaster.warning('Select at least 1 mesa for change ACTIVE');
             }
-            // if (state.checkbox_dissabled == 1) {
-            //     toaster.warning('Select at least 1 mesa for change ACTIVE');
-            // } else if (state.checkbox_dissabled == 2) {
-            //     let change_active = [];
-            //     const indexs = dt.rows({ selected: true })[0];
-            //     if (indexs.length > 0) {
-            //         dt.rows({ selected: true }).every(index => change_active.push(state.mesas[index]));
-            //         if (change_active.length == 1) {
-            //             first_click = change_active[0].is_active;
-            //         }
-            //         const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
-            //         toaster.warning('Unselect mesa ID: ' + save_bad_active);
-            //     }
-            // }
         }
         return { createMesa, updateMesa, deleteMesa, columns, table, state, check_status_active, updateActive }
     }

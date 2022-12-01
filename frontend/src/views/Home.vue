@@ -17,7 +17,7 @@ import Constant from '../Constant';
 import carouselVue from '../components/carousel.vue';
 import { useRouter } from 'vue-router';
 import bigestTablesVue from '../components/bigestTables.vue';
-import { useMesaInfinite } from '../composables/mesas/useMesa';
+import { useMesaInfinite } from '../composables/client/mesas/useMesa';
 
 export default {
     components: { carouselVue, bigestTablesVue },

@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import MesaService from '../../services/client/MesaService';
+import MesaService from '../../../services/client/MesaService';
 
 export const useMesaFilters = (filters = {}) => {
     const mesas = ref([])

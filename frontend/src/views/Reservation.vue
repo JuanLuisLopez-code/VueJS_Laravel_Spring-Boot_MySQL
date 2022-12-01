@@ -15,7 +15,7 @@ import { reactive } from 'vue'
 import card_mesa from '../components/card_mesa.vue';
 import filters from '../components/filters.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useMesaFilters } from '../composables/mesas/useMesa';
+import { useMesaFilters } from '../composables/client/mesas/useMesa';
 export default {
     components: { card_mesa, filters },
     setup() {
