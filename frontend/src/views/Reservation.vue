@@ -6,7 +6,7 @@
         </div>
     </div>
     <div v-else>
-        <span>No Mesas</span>
+        <span>No tables</span>
     </div>
 </template>
 

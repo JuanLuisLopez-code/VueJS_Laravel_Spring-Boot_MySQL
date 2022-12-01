@@ -5,7 +5,7 @@
         <font-awesome-icon icon="fa-solid fa-fish-fins" />
     </h1>
     <carouselVue :data="state.categories" v-if="state.categories" @emitAction="redirectReservation" />
-    <span v-else>No Categories</span>
+    <span v-else>The carousel is not available</span>
 </template>
 
 <script>

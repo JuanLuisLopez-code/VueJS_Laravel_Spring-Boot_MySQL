@@ -2,10 +2,12 @@
     <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
         @click="redirects.return()" />
     <div class="categoriList">
-        <h1>Categories</h1>
-        <button class="pulse create" @click="redirects.create()">CREATE</button>
-        <button @click="updateCategory()" class="pulse update">UPDATE</button>
-        <button @click="deleteCategory()" class="pulse delete">DELETE</button>
+        <h1>Categories</h1><br>
+        <div v-if="state.categories">
+            <button class="pulse create" @click="redirects.create()">CREATE</button>
+            <button @click="updateCategory()" class="pulse update">UPDATE</button>
+            <button @click="deleteCategory()" class="pulse delete">DELETE</button>
+        </div>
         <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.categories" ref="table">
             <thead>
                 <tr>
