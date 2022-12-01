@@ -14,4 +14,6 @@ public class MesaQueryParam {
     private String[] categories;
     private Integer order;
     private String name_mesa;
+    private Integer page = 1;
+    private Integer limit = 3;
 }

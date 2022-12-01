@@ -6,6 +6,8 @@
     </h1>
     <carouselVue :data="state.categories" v-if="state.categories" @emitAction="redirectReservation" />
     <span v-else>The carousel is not available</span>
+    <br>
+    <bigestTablesVue />
 </template>
 
 <script>
@@ -14,9 +16,10 @@ import { useStore } from 'vuex';
 import Constant from '../Constant';
 import carouselVue from '../components/carousel.vue';
 import { useRouter } from 'vue-router';
+import bigestTablesVue from '../components/bigestTables.vue';
 
 export default {
-    components: { carouselVue },
+    components: { carouselVue, bigestTablesVue },
     setup() {
         const router = useRouter();
         const store = useStore();

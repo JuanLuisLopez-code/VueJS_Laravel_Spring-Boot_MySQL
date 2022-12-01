@@ -40,4 +40,8 @@ public interface MesaRepository extends JpaRepository<Mesa, Long> {
     // Categories DESC
     @Query(value = "SELECT * FROM mesas m WHERE m.is_active IS TRUE AND m.id IN( SELECT a.mesa_id FROM ( SELECT mc.mesa_id, COUNT(mc.category_id) as count_cat_id FROM mesas_categories mc LEFT JOIN categories c ON mc.category_id = c.id WHERE c.name_category IN :categories GROUP BY mc.mesa_id) AS a WHERE a.count_cat_id >= ALL ( SELECT b.count_cat FROM ( SELECT COUNT(*) as count_cat FROM categories cc WHERE cc.name_category IN :categories ) b ) ) AND m.name_mesa LIKE :name_mesa GROUP BY m.id ORDER BY m.capacity DESC", nativeQuery = true)
     List<Mesa> findCategoriesOnMesaDESC(@Param("categories") String[] categories, @Param("name_mesa") String name_mesa);
+
+    // BigestTables
+    @Query(value = "SELECT * FROM mesas m WHERE m.is_active IS TRUE ORDER BY m.capacity DESC LIMIT :limit", nativeQuery = true)
+    List<Mesa> findBigTables(@Param("limit") Integer limit);
 }
