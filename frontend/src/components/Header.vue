@@ -6,6 +6,7 @@
                 <li @click="redirects.reservation()" class="page link" :class="{ active: isReservation }">Reservation
                 </li>
                 <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
+                <li @click="redirects.login()" class="page link" :class="{ active: isLogin }">Login</li>
             </ul>
             <search-vue v-if="!isReservation" />
             <div class="link" @click="redirects.home()">
@@ -32,6 +33,9 @@ export default {
             const path = this.$route.path.split('/');
             return path[1] == 'dashboard';
         },
+        isLogin() {
+            return this.$route.name == 'login'
+        },
     },
     setup() {
         const router = useRouter();
@@ -39,6 +43,7 @@ export default {
             home: () => router.push({ name: 'home' }),
             reservation: () => router.push({ name: 'reservation' }),
             dashboard: () => router.push({ name: 'dashboard' }),
+            login: () => router.push({ name: 'login' }),
         };
         return { redirects };
     }
