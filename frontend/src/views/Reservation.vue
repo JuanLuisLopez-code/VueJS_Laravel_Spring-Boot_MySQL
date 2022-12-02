@@ -31,6 +31,8 @@ export default {
             capacity: 0,
             order: 0,
             name_mesa: "",
+            page: 1,
+            limit: 9,
         };
 
         try {
@@ -40,6 +42,7 @@ export default {
         } catch (error) {
         }
 
+        console.log(filters_URL);
         const state = reactive({
             mesas: useMesaFilters(filters_URL)
         });
@@ -55,7 +58,18 @@ export default {
             state.mesas = useMesaFilters(deleteFilters);
         }
 
-        return { state, ApplyFilters, deleteAllFilters, filters_URL }
+        const clickCallback = (pageNum) => {
+            try {
+                if (route.params.filters !== '') {
+                    filters_URL = JSON.parse(atob(route.params.filters));
+                }
+            } catch (error) {
+            }
+            filters_URL.page = pageNum;
+            ApplyFilters(filters_URL)
+        }
+
+        return { state, ApplyFilters, deleteAllFilters, filters_URL, clickCallback }
     }
 }
 </script>

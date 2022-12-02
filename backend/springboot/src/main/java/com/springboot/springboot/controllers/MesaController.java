@@ -29,7 +29,10 @@ public class MesaController {
 	@GetMapping("/mesa")
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
+			System.out.println(mesaQueryParam.getLimit());
+			System.out.println(mesaQueryParam.getPage());
 			mesaQueryParam.setName_mesa(mesaQueryParam.getName_mesa() + '%');
+			Integer offset = (mesaQueryParam.getPage() - 1) * mesaQueryParam.getLimit();
 			List<Mesa> mesas = new ArrayList<Mesa>();
 			// Only capacity
 			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
@@ -72,7 +75,7 @@ public class MesaController {
 			}
 			// No filters
 			else {
-				mesaRepository.findActive(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+				mesaRepository.findActive(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
 			}
 
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
