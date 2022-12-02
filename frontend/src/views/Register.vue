@@ -1,6 +1,5 @@
 <template>
-    <h1>REGISTER</h1>
-    <loginRegisterFormVue :isLogin="false" />
+    <loginRegisterFormVue :isLogin="false" @send="register" />
 </template>
 
 <script>
@@ -8,7 +7,13 @@ import loginRegisterFormVue from '../components/loginRegisterForm.vue';
 
 export default {
     components: { loginRegisterFormVue },
+    setup() {
+        const register = (data) => {
+            console.log(data, 'register')
+        }
 
+        return { register };
+    }
 }
 </script>
 

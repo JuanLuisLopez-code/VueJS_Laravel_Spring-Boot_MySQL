@@ -20,21 +20,22 @@
                         <div class="input-control">
                             <label for="username" class="input-label" hidden>Username</label>
                             <input type="username" name="username" id="username" class="input-field"
-                                placeholder="Username">
+                                placeholder="Username" v-model="state.username">
                         </div>
                         <div class="input-control" v-if="!isLogin">
                             <label for="email" class="input-label" hidden>Email Address</label>
-                            <input type="email" name="email" id="email" class="input-field" placeholder="Email Address">
+                            <input type="email" name="email" id="email" class="input-field" placeholder="Email Address"
+                                v-model="state.email">
                         </div>
                         <div class="input-control">
                             <label for="password" class="input-label" hidden>Password</label>
                             <input type="password" name="password" id="password" class="input-field"
-                                placeholder="Password">
+                                placeholder="Password" v-model="state.password">
                         </div>
                         <div class="input-control" v-if="!isLogin">
                             <label for="password" class="input-label" hidden>Repeat Password</label>
                             <input type="password" name="password2" id="password2" class="input-field"
-                                placeholder="Repeat Password">
+                                placeholder="Repeat Password" v-model="state.password2">
                         </div>
                         <div class="input-control" v-if="isLogin">
                             <!-- <a href="#" class="text text-links">Forgot Password</a> -->
@@ -77,7 +78,7 @@
 
 <script>
 import { useRouter } from 'vue-router';
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, reactive, computed } from 'vue';
 export default {
     props: {
         isLogin: Boolean
@@ -85,7 +86,7 @@ export default {
     emits: {
         send: Object
     },
-    setup(props) {
+    setup() {
         const { emit } = getCurrentInstance();
         const router = useRouter();
 
@@ -94,15 +95,34 @@ export default {
             login: () => router.push({ name: 'login' }),
         };
 
+        const state = reactive({
+            username: "",
+            email: "",
+            password: "",
+            password2: ""
+        });
+
         const login = () => {
-            console.log('login');
+            const data = {
+                username: state.username,
+                password: state.password
+            };
+
+            emit('send', data);
         }
 
         const register = () => {
-            console.log('register');
+            const data = {
+                username: state.username,
+                email: state.email,
+                password: state.password,
+                password2: state.password2
+            };
+
+            emit('send', data);
         }
 
-        return { redirect, login, register }
+        return { redirect, login, register, state }
     }
 }
 </script>
