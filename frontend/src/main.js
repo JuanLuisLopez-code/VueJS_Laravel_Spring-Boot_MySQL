@@ -8,7 +8,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import vSelect from 'vue-select'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './assets/main.scss';
-
+import Paginate from "vuejs-paginate-next";
 
 //////ADD ICONS//////
 import { faFishFins, faHeart, faComment, faMagnifyingGlass, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +23,7 @@ app.use(router);
 app.use(store);
 app.use(VueLazyLoad);
 app.use(Toaster);
+app.use(Paginate);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('v-select', vSelect)
 app.mount('#app');
