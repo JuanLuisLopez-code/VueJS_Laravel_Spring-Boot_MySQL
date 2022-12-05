@@ -6,7 +6,6 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -23,7 +22,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $user = $this->user->create($request->all());
+        $user = $this->user->create($request->validated());
         return UserResource::make($user);
     }
 
@@ -34,7 +33,30 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $user = User::where('id', $id)->firstOrFail();
+        if (!$user) {
+            return response()->json([
+                "Status" => "Not found"
+            ], 404);
+        }
+
+        if (isset($request->validated()['username'])) {
+            error_log('username');
+        }
+        if (isset($request->validated()['email'])) {
+            error_log('email');
+        }
+        if (isset($request->validated()['password'])) {
+            error_log('password');
+        }
+        if (isset($request->validated()['photo'])) {
+            error_log('photo');
+        }
+        if (isset($request->validated()['is_active'])) {
+            error_log('is_active');
+        }
+
+        return UserResource::make($user);
     }
 
     public function destroy($id)
