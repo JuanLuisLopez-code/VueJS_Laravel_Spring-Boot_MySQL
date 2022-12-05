@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     public function index()
     {
         return UserResource::collection(User::all());
@@ -17,7 +23,8 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        //
+        $user = $this->user->create($request->all());
+        return UserResource::make($user);
     }
 
     public function show($id)
