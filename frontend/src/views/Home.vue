@@ -38,6 +38,8 @@ export default {
                 capacity: 0,
                 order: 0,
                 name_mesa: "",
+                page: 1,
+                limit: 9,
             };
             const filters_ = btoa(JSON.stringify(filters));
             router.push({ name: "reservationFilters", params: { filters: filters_ } });
