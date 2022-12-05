@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $categories = Category::factory()->count(7)->create();
-        $mesas = Mesa::factory()->count(30)->create();
+        $mesas = Mesa::factory()->count(150)->create();
 
         foreach ($mesas as $mesa) {
             $mesa->categories()->attach($categories->random(rand(1, 3)));

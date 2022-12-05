@@ -34,13 +34,17 @@ public class MesaController {
 			List<Mesa> mesas = new ArrayList<Mesa>();
 			// Only capacity
 			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
-				mesaRepository.findByCapacity(mesaQueryParam.getCapacity(), mesaQueryParam.getName_mesa())
+				mesaRepository
+						.findByCapacity(mesaQueryParam.getCapacity(), mesaQueryParam.getName_mesa(),
+								mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
 			// Only categories
 			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0
 					&& mesaQueryParam.getOrder() == 0 && mesaQueryParam.getOrder() == 0) {
-				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+				mesaRepository
+						.findCategoriesOnMesa(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+								mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
 			// Categories with capacity
@@ -48,27 +52,31 @@ public class MesaController {
 					&& mesaQueryParam.getOrder() == 0) {
 				mesaRepository
 						.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories(),
-								mesaQueryParam.getName_mesa())
+								mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
 			// Categories with order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository
-							.findCategoriesOnMesaASC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+							.findCategoriesOnMesaASC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+									mesaQueryParam.getLimit(), offset)
 							.forEach(mesas::add);
 				} else {
 					mesaRepository
-							.findCategoriesOnMesaDESC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+							.findCategoriesOnMesaDESC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+									mesaQueryParam.getLimit(), offset)
 							.forEach(mesas::add);
 				}
 			}
 			// Only order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
 				if (mesaQueryParam.getOrder() == 1) {
-					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
+					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+							.forEach(mesas::add);
 				} else {
-					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
+					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+							.forEach(mesas::add);
 				}
 			}
 			// No filters
