@@ -53,7 +53,7 @@ public class MesaController {
 								mesaQueryParam.getName_mesa())
 						.forEach(mesas::add);
 			}
-			// Only order
+			// Categories with order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository
@@ -65,17 +65,18 @@ public class MesaController {
 							.forEach(mesas::add);
 				}
 			}
-			// Categories with order
+			// Only order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
 				if (mesaQueryParam.getOrder() == 1) {
-					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
 				} else {
-					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
 				}
 			}
 			// No filters
 			else {
-				mesaRepository.findActive(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset).forEach(mesas::add);
+				mesaRepository.findActive(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+						.forEach(mesas::add);
 			}
 
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
