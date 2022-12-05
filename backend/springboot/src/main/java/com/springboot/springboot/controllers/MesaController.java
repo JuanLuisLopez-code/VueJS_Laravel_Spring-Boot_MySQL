@@ -29,8 +29,6 @@ public class MesaController {
 	@GetMapping("/mesa")
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
-			System.out.println(mesaQueryParam.getLimit());
-			System.out.println(mesaQueryParam.getPage());
 			mesaQueryParam.setName_mesa(mesaQueryParam.getName_mesa() + '%');
 			Integer offset = (mesaQueryParam.getPage() - 1) * mesaQueryParam.getLimit();
 			List<Mesa> mesas = new ArrayList<Mesa>();

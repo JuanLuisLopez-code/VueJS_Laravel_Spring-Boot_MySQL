@@ -32,7 +32,7 @@ export default {
             order: 0,
             name_mesa: "",
             page: 1,
-            limit: 3,
+            limit: 9,
         };
         
         try {
@@ -45,7 +45,7 @@ export default {
         console.log(filters_URL);
         const state = reactive({
             mesas: useMesaFilters(filters_URL),
-            page: filters_URL.page
+            page: filters_URL.page,
         });
 
         const ApplyFilters = (filters) => {
@@ -57,6 +57,7 @@ export default {
         const deleteAllFilters = (deleteFilters) => {
             router.push({ name: "reservation" });
             state.mesas = useMesaFilters(deleteFilters);
+            state.page = 1;
         }
 
         const clickCallback = (pageNum) => {
