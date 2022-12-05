@@ -4,8 +4,9 @@
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
-        <paginate v-model="state.page" :page-count="20" :page-range="3" :margin-pages="2" :click-handler="clickCallback" :prev-text="'Prev'"
-            :next-text="'Next'" :container-class="'pagination'" :page-class="'page-item'">
+        <paginate v-model="state.page" :page-count="state.count_mesas" :page-range="3" :margin-pages="2"
+            :click-handler="clickCallback" :prev-text="'Prev'" :next-text="'Next'" :container-class="'pagination'"
+            :page-class="'page-item'">
         </paginate>
     </div>
     <div v-else>
@@ -19,6 +20,7 @@ import card_mesa from '../components/card_mesa.vue';
 import filters from '../components/filters.vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMesaFilters } from '../composables/mesas/useMesa';
+import { useMesaPaginate } from '../composables/mesas/useMesa';
 import Paginate from 'vuejs-paginate-next';
 export default {
     components: { card_mesa, filters, Paginate },
@@ -34,30 +36,34 @@ export default {
             page: 1,
             limit: 9,
         };
-        
+
+
         try {
             if (route.params.filters !== '') {
                 filters_URL = JSON.parse(atob(route.params.filters));
             }
         } catch (error) {
         }
-        
-        console.log(filters_URL);
+
         const state = reactive({
             mesas: useMesaFilters(filters_URL),
             page: filters_URL.page,
+            count_mesas: useMesaPaginate(filters_URL)
         });
 
         const ApplyFilters = (filters) => {
             const filters_64 = btoa(JSON.stringify(filters));
             router.push({ name: "reservationFilters", params: { filters: filters_64 } });
             state.mesas = useMesaFilters(filters);
+            state.count_mesas = useMesaPaginate(filters);
+
         }
 
         const deleteAllFilters = (deleteFilters) => {
             router.push({ name: "reservation" });
             state.mesas = useMesaFilters(deleteFilters);
             state.page = 1;
+            state.count_mesas = useMesaPaginate(deleteFilters);
         }
 
         const clickCallback = (pageNum) => {
@@ -71,7 +77,6 @@ export default {
             state.page = filters_URL.page;
             pageNum = filters_URL.page;
             ApplyFilters(filters_URL)
-            console.log(state.mesas);
         }
 
         return { state, ApplyFilters, deleteAllFilters, filters_URL, clickCallback }
