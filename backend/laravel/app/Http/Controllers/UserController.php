@@ -23,6 +23,20 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
+        $username_exist = User::where('username', $request->validated()['username'])->get()->count();
+        if ($username_exist == 1) {
+            return response()->json([
+                "Status" => "Username taken"
+            ], 400);
+        }
+
+        $email_exist = User::where('email', $request->validated()['email'])->get()->count();
+        if ($email_exist == 1) {
+            return response()->json([
+                "Status" => "Email taken"
+            ], 400);
+        }
+
         $user = $this->user->create($request->validated());
         return UserResource::make($user);
     }
@@ -35,16 +49,28 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $user = User::where('id', $id)->firstOrFail();
-        if (!$user) {
-            return response()->json([
-                "Status" => "Not found"
-            ], 404);
-        }
+        // if (!$user) {
+        //     return response()->json([
+        //         "Status" => "Not found"
+        //     ], 404);
+        // }
 
         if (isset($request->validated()['username'])) {
+            $username_exist = User::where('username', $request->validated()['username'])->get()->count();
+            if ($username_exist == 1) {
+                return response()->json([
+                    "Status" => "Username taken"
+                ], 400);
+            }
             $user->username = $request->validated()['username'];
         }
         if (isset($request->validated()['email'])) {
+            $email_exist = User::where('email', $request->validated()['email'])->get()->count();
+            if ($email_exist == 1) {
+                return response()->json([
+                    "Status" => "Email taken"
+                ], 400);
+            }
             $user->email = $request->validated()['email'];
         }
         if (isset($request->validated()['password'])) {
@@ -80,6 +106,14 @@ class UserController extends Controller
 
     public function login(LoginUserRequest $request)
     {
+        // $user = User::where('username', $request->validated()['username'])->get();
+        $user = User::where('username', $request->validated()['username'])->firstOrFail();
+        // if (!$user) {
+        //     return response()->json([
+        //         "Status" => "Not found"
+        //     ], 404);
+        // }
+
         return response()->json(['test' => 'aaa']);
     }
 }//class
