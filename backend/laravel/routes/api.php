@@ -8,3 +8,4 @@ use App\Http\Controllers\UserController;
 Route::resource('mesa', MesaController::class);
 Route::resource('category', CategoryController::class);
 Route::resource('user', UserController::class);
+Route::post('login', [UserController::class, 'login']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
@@ -75,5 +76,10 @@ class UserController extends Controller
                 "Status" => "Not found"
             ], 404);
         }
+    }
+
+    public function login(LoginUserRequest $request)
+    {
+        return response()->json(['test' => 'aaa']);
     }
 }//class
