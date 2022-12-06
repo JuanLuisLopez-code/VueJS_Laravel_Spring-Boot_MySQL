@@ -41,22 +41,25 @@ class UserController extends Controller
         }
 
         if (isset($request->validated()['username'])) {
-            error_log('username');
+            $user->username = $request->validated()['username'];
         }
         if (isset($request->validated()['email'])) {
-            error_log('email');
+            $user->email = $request->validated()['email'];
         }
         if (isset($request->validated()['password'])) {
-            error_log('password');
+            $user->password = password_hash(strval($request->validated()['password']), PASSWORD_DEFAULT, ['cost' => 12]);
         }
         if (isset($request->validated()['photo'])) {
-            error_log('photo');
+            $user->photo = $request->validated()['photo'];
         }
         if (isset($request->validated()['is_active'])) {
-            error_log('is_active');
+            $user->is_active = $request->validated()['is_active'];
         }
-
-        return UserResource::make($user);
+        $user->save();
+        // return UserResource::make($user);
+        return response()->json([
+            "Message" => "Updated correctly"
+        ]);
     }
 
     public function destroy($id)
