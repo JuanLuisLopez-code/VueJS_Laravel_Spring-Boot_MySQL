@@ -18,7 +18,6 @@ class MesaFactory extends Factory
             'capacity' => $this->faker->numberBetween(1, 15),
             'is_active' => $this->faker->boolean(),
             'photo' => $cats[rand(0, count($cats) - 1)],
-            // 'photo' => $this->faker->unique()->imageUrl(360, 360, 'animals', true, 'cats'),
         ];
     }
 }

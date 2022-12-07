@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCategoryRequest extends FormRequest
+class LoginUserRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -15,8 +14,8 @@ class UpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_category' => 'sometimes',
-            'photo' => 'sometimes',
+            'username' => 'required',
+            'password' => 'required',
         ];
     }
 }
