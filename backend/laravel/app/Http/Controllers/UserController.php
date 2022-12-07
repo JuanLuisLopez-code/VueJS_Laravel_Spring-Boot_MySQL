@@ -49,11 +49,6 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $user = User::where('id', $id)->firstOrFail();
-        // if (!$user) {
-        //     return response()->json([
-        //         "Status" => "Not found"
-        //     ], 404);
-        // }
 
         if (isset($request->validated()['username'])) {
             $username_exist = User::where('username', $request->validated()['username'])->get()->count();
@@ -82,8 +77,8 @@ class UserController extends Controller
         if (isset($request->validated()['is_active'])) {
             $user->is_active = $request->validated()['is_active'];
         }
+
         $user->save();
-        // return UserResource::make($user);
         return response()->json([
             "Message" => "Updated correctly"
         ]);
@@ -106,14 +101,14 @@ class UserController extends Controller
 
     public function login(LoginUserRequest $request)
     {
-        // $user = User::where('username', $request->validated()['username'])->get();
         $user = User::where('username', $request->validated()['username'])->firstOrFail();
-        // if (!$user) {
-        //     return response()->json([
-        //         "Status" => "Not found"
-        //     ], 404);
-        // }
+        $token =  $user->login();
+        if (!$token) {
+            return response()->json([
+                "error" => "Unauthorized"
+            ], 401);
+        }
 
-        return response()->json(['test' => 'aaa']);
+        return response()->json(['Token' => $token]);
     }
 }//class

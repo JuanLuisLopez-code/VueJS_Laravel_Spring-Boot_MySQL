@@ -3,11 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -37,19 +34,18 @@ class User extends Authenticatable implements JWTSubject
         ]);
     }
 
-    // public function logout($token)
-    // {
-    //     if (!JWTAuth::invalidate($token)) {
-    //         throw new \Exception('Exception', -404);
-    //     }
-    // }
+    public function login()
+    {
+        $credentials = request(['username', 'password']);
+        $token = auth()->attempt($credentials);
+        return $token;
+    }
 
-    // public function login($data)
+    // public function logout()
     // {
-    //     if (!$token = JWTAuth::attempt($data)) {
-    //         throw new \Exception('Email o passwd incorrectos, intente nuevamente', -404);
-    //     }
-    //     return $token;
+    //     auth()->logout();
+
+    //     return response()->json(['message' => 'Successfully logged out']);
     // }
 
 
