@@ -11,6 +11,8 @@ use App\Models\User;
 class UserController extends Controller
 {
 
+    protected User $user;
+
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -19,19 +21,19 @@ class UserController extends Controller
     public function index()
     {
         return UserResource::collection(User::all());
-    }
+    } //list all
 
     public function store(StoreUserRequest $request)
     {
         $username_exist = User::where('username', $request->validated()['username'])->get()->count();
-        if ($username_exist == 1) {
+        if ($username_exist === 1) {
             return response()->json([
                 "Status" => "Username taken"
             ], 400);
         }
 
         $email_exist = User::where('email', $request->validated()['email'])->get()->count();
-        if ($email_exist == 1) {
+        if ($email_exist === 1) {
             return response()->json([
                 "Status" => "Email taken"
             ], 400);
@@ -39,12 +41,12 @@ class UserController extends Controller
 
         $user = $this->user->create($request->validated());
         return UserResource::make($user);
-    }
+    } //Create
 
     public function show($id)
     {
         return UserResource::make(User::where('id', $id)->firstOrFail());
-    }
+    } //list one
 
     public function update(UpdateUserRequest $request, $id)
     {
@@ -52,7 +54,7 @@ class UserController extends Controller
 
         if (isset($request->validated()['username'])) {
             $username_exist = User::where('username', $request->validated()['username'])->get()->count();
-            if ($username_exist == 1) {
+            if ($username_exist === 1) {
                 return response()->json([
                     "Status" => "Username taken"
                 ], 400);
@@ -61,7 +63,7 @@ class UserController extends Controller
         }
         if (isset($request->validated()['email'])) {
             $email_exist = User::where('email', $request->validated()['email'])->get()->count();
-            if ($email_exist == 1) {
+            if ($email_exist === 1) {
                 return response()->json([
                     "Status" => "Email taken"
                 ], 400);
@@ -82,13 +84,13 @@ class UserController extends Controller
         return response()->json([
             "Message" => "Updated correctly"
         ]);
-    }
+    } //update
 
     public function destroy($id)
     {
         $delete = User::where('id', $id)->delete();
 
-        if ($delete == 1) {
+        if ($delete === 1) {
             return response()->json([
                 "Message" => "Deleted correctly"
             ], 200);
@@ -97,12 +99,11 @@ class UserController extends Controller
                 "Status" => "Not found"
             ], 404);
         }
-    }
+    } //delete
 
     public function login(LoginUserRequest $request)
     {
-        $user = User::where('username', $request->validated()['username'])->firstOrFail();
-        $token =  $user->login();
+        $token = auth()->attempt($request->validated());
         if (!$token) {
             return response()->json([
                 "error" => "Unauthorized"
@@ -110,5 +111,27 @@ class UserController extends Controller
         }
 
         return response()->json(['Token' => $token]);
+    } //login
+
+    public function logout()
+    {
+        try {
+            if (auth()->user() === null) {
+                return response()->json(['error' => 'logout error'], 500);
+            }
+            auth()->logout();
+            return response()->json(["Message" => "Logout correctly"]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'logout error'], 500);
+        }
+    } //logout
+
+    public function getUserToken()
+    {
+        try {
+            return UserResource::make(auth()->user());
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'get user error'], 500);
+        }
     }
 }//class

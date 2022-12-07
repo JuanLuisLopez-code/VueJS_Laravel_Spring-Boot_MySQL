@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
+//https://laravel-jwt-auth.readthedocs.io/en/latest/
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
@@ -32,22 +33,7 @@ class User extends Authenticatable implements JWTSubject
             'is_active' => true,
             'photo' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
         ]);
-    }
-
-    public function login()
-    {
-        $credentials = request(['username', 'password']);
-        $token = auth()->attempt($credentials);
-        return $token;
-    }
-
-    // public function logout()
-    // {
-    //     auth()->logout();
-
-    //     return response()->json(['message' => 'Successfully logged out']);
-    // }
-
+    } //create
 
     public function getJWTIdentifier()
     {
