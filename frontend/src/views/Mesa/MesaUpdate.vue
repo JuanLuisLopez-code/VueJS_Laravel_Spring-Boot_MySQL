@@ -1,5 +1,7 @@
 <template>
-    <formMesa :mesa="stateOne.mesa" :key="stateOne.mesa?.id" @data="update_emit"/>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
+    <formMesa :mesa="stateOne.mesa" :key="stateOne.mesa?.id" @data="update_emit" />
 </template>
 
 <script>
@@ -24,13 +26,17 @@ export default {
             mesa: computed(() => store.getters["mesaDashboard/getOneMesa"])
         })
 
-        const update_emit = (mesa) =>{
+        const update_emit = (mesa) => {
             store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, mesa);
             router.push({ name: "mesasList" })
             toaster.info("Mesa updated")
         }
 
-        return { stateOne, update_emit }
+        const redirects = {
+            return: () => router.push({ name: 'mesasList' }),
+        };
+
+        return { stateOne, update_emit, redirects }
 
     }
 }
