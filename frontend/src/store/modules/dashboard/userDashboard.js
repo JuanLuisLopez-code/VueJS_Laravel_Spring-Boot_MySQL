@@ -26,6 +26,17 @@ export const userDashboard = {
             }
         },//DELETE_USER
 
+        [Constant.ADD_USER]: async (store, payload) => {
+            try {
+                const response = await UserServiceDashboard.CreateUser(payload);
+                if (response.status === 201) {
+                    store.commit(Constant.ADD_USER, response.data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        },//ADD_USER
+
     },//actions
     mutations: {
         [Constant.INITIALIZE_USER]: (state, payload) => {
@@ -39,6 +50,12 @@ export const userDashboard = {
                 state.users = state.users.filter(item => item.id !== payload);
             }
         },//DELETE_USER
+
+        [Constant.ADD_USER]: (state, payload) => {
+            if (payload) {
+                state.users.push(payload);
+            }
+        },//ADD_USER
 
     },//mutations
     getters: {
