@@ -18,6 +18,8 @@ class StoreUserRequest extends FormRequest
             'username' => 'required',
             'email' => 'required',
             'password' => 'required',
+            'photo' => 'sometimes',
+            'is_active' => 'sometimes',
         ];
     }
 }

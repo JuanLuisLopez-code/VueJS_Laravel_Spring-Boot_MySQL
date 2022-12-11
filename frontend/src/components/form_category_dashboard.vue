@@ -24,13 +24,6 @@
                 <span></span>
                 Create
             </a>
-            <a @click="cancel()">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Cancel
-            </a>
         </form>
     </div>
 </template>
@@ -59,11 +52,7 @@ export default {
             emit('data', state.categoryLocal);
         }
 
-        const cancel = () => {
-            router.push('/dashboard/categories');
-        }
-
-        return { state, sendData, cancel };
+        return { state, sendData };
     }
 }
 </script>

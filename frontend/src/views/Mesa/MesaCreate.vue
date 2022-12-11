@@ -1,9 +1,10 @@
 <template>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
     <formMesa @data="create_emit" />
 </template>
 
 <script>
-import { reactive, computed } from 'vue';
 import Constant from '../../Constant';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -19,11 +20,15 @@ export default {
 
         const create_emit = (mesa) => {
             store.dispatch(`mesaDashboard/${Constant.CREATE_ONE_MESA}`, mesa);
-            router.push({ name: "mesasList" })
-            toaster.info("Mesa created")
+            toaster.success("Mesa created")
+            redirects.return();
         }
 
-        return { create_emit }
+        const redirects = {
+            return: () => router.push({ name: 'mesasList' }),
+        };
+
+        return { create_emit, redirects }
     }
 }
 </script>

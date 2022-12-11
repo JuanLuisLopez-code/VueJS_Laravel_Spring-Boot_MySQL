@@ -1,7 +1,9 @@
 <template>
+    <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
+        @click="redirects.return()" />
     <div class="listMesa">
         <h1>Mesas</h1>
-        <button class="pulse create" @click="createMesa()">CREATE</button>
+        <button class="pulse create" @click="redirects.create()">CREATE</button>
         <button class="pulse update" @click="updateMesa()">UPDATE</button>
         <button class="pulse delete" @click="deleteMesa()">DELETE</button>
         <input type="checkbox" id="switch" name="switch" @click="button_status_active()"
@@ -63,9 +65,10 @@ export default {
             dt = table.value.dt();
         });
 
-        const createMesa = () => {
-            router.push({ name: "createMesa" })
-        }
+        const redirects = {
+            create: () => router.push({ name: 'createMesa' }),
+            return: () => router.push({ name: 'dashboard' }),
+        };
 
         const updateMesa = () => {
             const indexs = dt.rows({ selected: true })[0];
@@ -138,7 +141,7 @@ export default {
             }
         }
 
-        return { createMesa, updateMesa, deleteMesa, columns, table, state, check_status_active, button_status_active, label_status_active }
+        return { redirects, updateMesa, deleteMesa, columns, table, state, check_status_active, button_status_active, label_status_active }
     }
 }
 </script>
@@ -147,9 +150,10 @@ export default {
 @import 'datatables.net-dt';
 
 .listMesa {
-    h1{
+    h1 {
         text-align: center;
     }
+
     .pulse:hover,
     .pulse:focus {
         animation: pulse 1s;

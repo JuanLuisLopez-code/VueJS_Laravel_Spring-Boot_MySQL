@@ -1,7 +1,7 @@
 <template>
     <font-awesome-icon icon="fa-solid fa-arrow-left" class="fa-2x" style="cursor:pointer; margin-left:0.2em;"
         @click="redirects.return()" />
-    <form_category_dashboardVue :category="state.category" :key="state.category?.id" @data="updateCategory" />
+    <form_user_dashboardVue :user="state.user" v-if="state.user" @data="updateUser" />
 </template>
 
 <script>
@@ -11,33 +11,32 @@ import { createToaster } from "@meforma/vue-toaster";
 import Constant from '../../Constant';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
-import form_category_dashboardVue from '../../components/form_category_dashboard.vue';
-
+import form_user_dashboardVue from '../../components/form_user_dashboard.vue';
 export default {
-    components: { form_category_dashboardVue },
+    components: { form_user_dashboardVue },
     setup() {
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         const store = useStore();
         const route = useRoute();
         const router = useRouter();
 
-        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_ONE_CATEGORY}`, route.params.id);
+        store.dispatch(`userDashboard/${Constant.INITIALIZE_ONE_USER}`, route.params.id);
 
         const state = reactive({
-            category: computed(() => store.getters['categoryDashboard/GetCategory'])
+            user: computed(() => store.getters['userDashboard/GetUser'])
         });
 
-        const updateCategory = (data) => {
-            store.dispatch(`categoryDashboard/${Constant.UPDATE_CATEGORY}`, data);
-            toaster.success('Category updated');
+        const updateUser = (data) => {
+            store.dispatch(`userDashboard/${Constant.UPDATE_USER}`, data);
+            toaster.success('User updated');
             redirects.return();
-        }//updateCategory
+        }//updateUser
 
         const redirects = {
-            return: () => router.push({ name: 'categoriesList' }),
+            return: () => router.push({ name: 'usersList' }),
         };
 
-        return { state, updateCategory, redirects };
+        return { state, redirects, updateUser };
     }
 }
 </script>

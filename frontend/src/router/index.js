@@ -80,6 +80,23 @@ const router = createRouter({
       name: "createMesa",
       component: () => import('../views/Mesa/MesaCreate.vue')
     },
+
+    //User dashboard//
+    {
+      path: "/dashboard/users",
+      name: "usersList",
+      component: () => import('../views/User/UserList.vue')
+    },
+    {
+      path: "/dashboard/users/update/:id",
+      name: "updateUser",
+      component: () => import('../views/User/UserUpdate.vue')
+    },
+    {
+      path: "/dashboard/users/create",
+      name: "createUser",
+      component: () => import('../views/User/UserCreate.vue')
+    },
   ]
 })
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
+//JWT LIBRARY DELETE COMMENT LATER
 //https://laravel-jwt-auth.readthedocs.io/en/latest/
 class User extends Authenticatable implements JWTSubject
 {
@@ -30,8 +31,8 @@ class User extends Authenticatable implements JWTSubject
             'password' => password_hash(strval($fields['password']), PASSWORD_DEFAULT, ['cost' => 12]),
             'email' => $fields['email'],
             'type' => 'client',
-            'is_active' => true,
-            'photo' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
+            'is_active' =>  isset($fields['is_active']) ? $fields['is_active'] : true, //CHANGE TO FALSE, TRUE ONLY FOR TESTING
+            'photo' =>  isset($fields['photo']) ? $fields['photo'] : 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
         ]);
     } //create
 

@@ -4,6 +4,7 @@ import { mesa } from './modules/client/mesa.js';
 import { category } from './modules/client/category';
 import { mesaDashboard } from './modules/dashboard/mesaDashboard';
 import { categoryDashboard } from './modules/dashboard/categoryDashboard';
+import { userDashboard } from "./modules/dashboard/userDashboard.js";
 
 export default Vuex.createStore({
 
@@ -12,5 +13,6 @@ export default Vuex.createStore({
         category: category,
         mesaDashboard: mesaDashboard,
         categoryDashboard: categoryDashboard,
+        userDashboard: userDashboard,
     }
 });

@@ -1,105 +1,84 @@
 <template>
     <div class="login-box">
-        <h2>Update</h2>
+        <h2>User</h2>
         <form>
             <div class="user-box">
-                <label>Name_mesa</label>
-                <input type="text" name="" required="" v-model="state.mesa.name_mesa" />
+                <label>Username</label>
+                <input type="text" v-model="state.userLocal.username">
             </div>
             <div class="user-box">
-                <label>Capacity</label>
-                <input type="number" name="" required="" v-model="state.mesa.capacity" />
+                <label>Email</label>
+                <input type="text" v-model="state.userLocal.email">
+            </div>
+            <div class="user-box">
+                <label>Password</label>
+                <input type="password" v-model="state.userLocal.password">
             </div>
             <div class="user-box">
                 <label>Photo</label>
-                <input type="url" name="" required="" v-model="state.mesa.photo" />
+                <input type="url" v-model="state.userLocal.photo">
             </div>
             <div class="user-box">
                 <label>Active</label>
-                <input type="checkbox" name="" required="" v-model="state.mesa.is_active" />
+                <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
             </div>
-            <label>Choose a categories:</label>
-            <br>
-            <br>
-            <v-select multiple v-model="state.mesa.categories" :options="state.categories"
-                :getOptionLabel="categories => categories.name_category" />
-            <br><br>
-            <a @click="createSubmit()" v-if="!isUpdate">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Create
-            </a>
-            <a @click="editSubmit()" v-if="isUpdate">
+            <a @click="sendData()" v-if="user">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Update
             </a>
+            <a @click="sendData()" v-else>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Create
+            </a>
         </form>
     </div>
 </template>
 
 <script>
-import { reactive, getCurrentInstance, computed } from 'vue'
+import { reactive, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-import Constant from '../Constant';
-import { useStore } from 'vuex'
+
 export default {
+
     props: {
-        mesa: Object
+        user: Object
     },
     emits: {
         data: Object
     },
-    computed: {
-        isUpdate() {
-            const path = this.$route.path.split('/');
-            return path[3] == 'update';
-        },
-    },
     setup(props) {
         const router = useRouter();
-        const mesa = props.mesa;
         const { emit } = getCurrentInstance();
-        const store = useStore();
 
-        store.dispatch(`categoryDashboard/${Constant.INITIALIZE_CATEGORY}`);
-
+        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 0 };
         const state = reactive({
-            mesa: { ...mesa },
-            categories: computed(() => store.getters['categoryDashboard/GetCategories'])
+            userLocal: { ...user_ }
         });
+        state.userLocal.is_active = Boolean(state.userLocal.is_active);
 
-        state.mesa.is_active = Boolean(state.mesa.is_active);
-
-        const createSubmit = () => {
-            const cat = state.mesa.categories;
-            const names_cat = cat.map(item => item.name_category);
-            state.mesa.categories = names_cat;
-            emit('data', state.mesa)
+        const sendData = () => {
+            const emit_data = state.userLocal;
+            Object.entries(emit_data).forEach(item => {
+                if (!item[1] && item[0] !== 'is_active') { delete (emit_data[item[0]]); }
+            });
+            emit('data', emit_data);
         }
 
-        const editSubmit = () => {
-            const cat = state.mesa.categories;
-            const names_cat = cat.map(item => item.name_category);
-            state.mesa.categories = names_cat;
-            emit('data', state.mesa)
-        }
-
-        return { state, editSubmit, createSubmit }
+        return { state, sendData };
     }
 }
 </script>
 
 <style lang="scss">
-@import '../../node_modules/vue-select/dist/vue-select.css';
-
 .login-box {
     position: absolute;
-    top: 70%;
+    top: 50%;
     left: 50%;
     width: 400px;
     padding: 40px;
@@ -129,6 +108,12 @@ export default {
             border-bottom: 1px solid #fff;
             outline: none;
             background: transparent;
+        }
+
+        label {
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
         }
 
         input {
@@ -252,65 +237,6 @@ export default {
     50%,
     100% {
         bottom: 100%;
-    }
-}
-
-.login-box {
-    select {
-        // styles reset, including removing the default dropdown arrow
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-color: transparent;
-        border: none;
-        padding: 0 1em 0 0;
-        margin: 0;
-        width: 100%;
-        font-family: inherit;
-        font-size: inherit;
-        cursor: inherit;
-        line-height: inherit;
-
-        // Stack above custom arrow
-        z-index: 1;
-
-        // Remove focus outline
-        outline: none;
-    }
-
-    .select {
-        display: grid;
-        grid-template-areas: "select";
-        align-items: center;
-        position: relative;
-
-        select,
-        &::after {
-            grid-area: select;
-        }
-
-        min-width: 15ch;
-        max-width: 30ch;
-        border: 1px solid var(--select-border);
-        border-radius: 0.25em;
-        padding: 0.25em 0.5em;
-        font-size: 1.25rem;
-        cursor: pointer;
-        line-height: 1.1;
-
-        // Optional styles
-        // remove for transparency
-        background: linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
-
-        // Custom arrow
-        &::after {
-            content: "";
-            justify-self: end;
-            width: 0.8em;
-            height: 0.5em;
-            background-color: var(--select-arrow);
-            clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-        }
     }
 }
 </style>
