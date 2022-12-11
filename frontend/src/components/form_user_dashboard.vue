@@ -20,7 +20,7 @@
             </div>
             <div class="user-box">
                 <label>Active</label>
-                <input type="checkbox" v-model="state.userLocal.is_active">
+                <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
             </div>
             <a @click="sendData()" v-if="user">
                 <span></span>
@@ -56,15 +56,16 @@ export default {
         const router = useRouter();
         const { emit } = getCurrentInstance();
 
-        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': false };
+        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 0 };
         const state = reactive({
             userLocal: { ...user_ }
         });
+        state.userLocal.is_active = Boolean(state.userLocal.is_active);
 
         const sendData = () => {
             const emit_data = state.userLocal;
             Object.entries(emit_data).forEach(item => {
-                if (!item[1]) { delete (emit_data[item[0]]); }
+                if (!item[1] && item[0] !== 'is_active') { delete (emit_data[item[0]]); }
             });
             emit('data', emit_data);
         }

@@ -20,8 +20,8 @@ export default {
 
         const create_emit = (mesa) => {
             store.dispatch(`mesaDashboard/${Constant.CREATE_ONE_MESA}`, mesa);
-            router.push({ name: "mesasList" })
-            toaster.info("Mesa created")
+            toaster.success("Mesa created")
+            redirects.return();
         }
 
         const redirects = {

@@ -28,8 +28,8 @@ export default {
 
         const update_emit = (mesa) => {
             store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, mesa);
-            router.push({ name: "mesasList" })
-            toaster.info("Mesa updated")
+            toaster.success("Mesa updated")
+           redirects.return();
         }
 
         const redirects = {

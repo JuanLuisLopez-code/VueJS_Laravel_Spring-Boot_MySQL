@@ -30,7 +30,7 @@ export default {
         const updateCategory = (data) => {
             store.dispatch(`categoryDashboard/${Constant.UPDATE_CATEGORY}`, data);
             toaster.success('Category updated');
-            router.push('/dashboard/categories');
+            redirects.return();
         }//updateCategory
 
         const redirects = {

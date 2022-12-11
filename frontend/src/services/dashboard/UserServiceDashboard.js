@@ -7,6 +7,11 @@ export default {
         return Api(secrets.URL_LARAVEL).get('user');
     },//GetUsers
 
+    GetOneUser(id) {
+        return Api(secrets.URL_LARAVEL).get(`user/${id}`);
+    },//GetOneUser
+
+
     DeleteUser(id) {
         return Api(secrets.URL_LARAVEL).delete(`user/${id}`);
     },//DeleteUser

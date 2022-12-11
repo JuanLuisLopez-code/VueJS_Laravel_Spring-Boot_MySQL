@@ -65,8 +65,7 @@ export default {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length === 1) {
                 const id = state.users[indexs[0]].id;
-                console.log('update', id)
-                // router.push({ name: 'categoriesUpdate', params: { id } })
+                router.push({ name: 'updateUser', params: { id } })
             } else {
                 toaster.info('You have to select ONE user');
             }

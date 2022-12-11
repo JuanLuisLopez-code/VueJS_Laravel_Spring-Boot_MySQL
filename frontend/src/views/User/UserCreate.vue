@@ -21,7 +21,7 @@ export default {
             console.log(data);
             store.dispatch(`userDashboard/${Constant.ADD_USER}`, data);
             toaster.success('User added');
-            router.push({ name: 'usersList' });
+            redirects.return();
         }//createCategory
 
         const redirects = {

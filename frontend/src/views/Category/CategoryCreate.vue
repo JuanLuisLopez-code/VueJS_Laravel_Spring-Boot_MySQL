@@ -20,7 +20,7 @@ export default {
         const createCategory = (data) => {
             store.dispatch(`categoryDashboard/${Constant.ADD_CATEGORY}`, data);
             toaster.success('Category added');
-            router.push('/dashboard/categories');
+            redirects.return();
         }//createCategory
 
         const redirects = {
