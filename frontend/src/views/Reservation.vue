@@ -4,7 +4,7 @@
         <div class="gallery">
             <card_mesa v-for="mesa in state.mesas" :key="mesa.id" :mesa="mesa" />
         </div>
-        <paginate v-model="state.page" :page-count="state.count_mesas" :page-range="3" :margin-pages="2"
+        <paginate v-model="state.page" :page-count="state.totalPages" :page-range="3" :margin-pages="2"
             :click-handler="clickCallback" :prev-text="'Prev'" :next-text="'Next'" :container-class="'pagination'"
             :page-class="'page-item'">
         </paginate>
@@ -48,14 +48,14 @@ export default {
         const state = reactive({
             mesas: useMesaFilters(filters_URL),
             page: filters_URL.page,
-            count_mesas: useMesaPaginate(filters_URL)
+            totalPages: useMesaPaginate(filters_URL)
         });
 
         const ApplyFilters = (filters) => {
             const filters_64 = btoa(JSON.stringify(filters));
             router.push({ name: "reservationFilters", params: { filters: filters_64 } });
             state.mesas = useMesaFilters(filters);
-            state.count_mesas = useMesaPaginate(filters);
+            state.totalPages = useMesaPaginate(filters);
 
         }
 
@@ -63,7 +63,8 @@ export default {
             router.push({ name: "reservation" });
             state.mesas = useMesaFilters(deleteFilters);
             state.page = 1;
-            state.count_mesas = useMesaPaginate(deleteFilters);
+            filters_URL = deleteFilters;
+            state.totalPages = useMesaPaginate(deleteFilters);
         }
 
         const clickCallback = (pageNum) => {
@@ -74,8 +75,7 @@ export default {
             } catch (error) {
             }
             filters_URL.page = pageNum;
-            state.page = filters_URL.page;
-            pageNum = filters_URL.page;
+            state.page = pageNum;
             ApplyFilters(filters_URL)
         }
 

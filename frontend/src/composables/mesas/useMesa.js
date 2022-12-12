@@ -11,12 +11,17 @@ export const useMesaFilters = (filters = {}) => {
 };
 
 export const useMesaPaginate = (filters = {}) => {
-    filters.limit = 1000;
-    const count_mesas = ref([])
-    MesaService.GetMesas(filters)
-        .then(res => count_mesas.value = Math.ceil(res.data.length / 9))
+
+    const totalPages = ref(0)
+    MesaService.GetMesasPaginate(filters)
+        .then(res => {
+            const limit = filters.limit ?? 9;
+            const total = res.data;
+            const pages = Math.ceil(total / limit);
+            totalPages.value = pages;
+        })
         .catch(error => console.error(error))
-    return count_mesas;
+    return totalPages;
 };
 
 export const useMesaInfinite = (page = 1, limit = 3) => {

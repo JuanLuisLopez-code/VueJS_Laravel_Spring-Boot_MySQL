@@ -92,6 +92,38 @@ public class MesaController {
 		}
 	}
 
+	@GetMapping("/mesaPaginate")
+	public ResponseEntity<Integer> getAllMesasPaginate(@ModelAttribute MesaQueryParam mesaQueryParam) {
+		try {
+			mesaQueryParam.setName_mesa(mesaQueryParam.getName_mesa() + '%');
+			Integer total = 0;
+			// Only capacity
+			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
+				total = mesaRepository.findByCapacityPaginate(mesaQueryParam.getCapacity(),
+						mesaQueryParam.getName_mesa());
+			}
+			// Only categories
+			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
+				total = mesaRepository.findCategoriesOnMesaPaginate(mesaQueryParam.getCategories(),
+						mesaQueryParam.getName_mesa());
+			}
+			// Categories with capacity
+			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0) {
+				total = mesaRepository.findByCapacityAndCategoriesPaginate(mesaQueryParam.getCapacity(),
+						mesaQueryParam.getCategories(),
+						mesaQueryParam.getName_mesa());
+			}
+			else {
+				total = mesaRepository.findActivePaginate(mesaQueryParam.getName_mesa());
+			}
+
+			return new ResponseEntity<>(total, HttpStatus.OK);
+		} catch (Exception e) {
+			System.err.println(e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/mesaInfinite")
 	public ResponseEntity<List<Mesa>> getGigMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
