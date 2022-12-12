@@ -24,6 +24,7 @@
     </DataTable>
 </template>
 
+
 <script>
 import { ref, onMounted, reactive, computed } from 'vue';
 import { useStore } from 'vuex';
@@ -108,19 +109,20 @@ export default {
         }
 
         const button_status_active = () => {
+            let payload = {}
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
-                dt.rows({ selected: true }).every(index => {
-                    const payload = {
-                        id: state.mesas[index].id,
-                        is_active: state.mesas[index].is_active,
+                for (let i = 0; i < indexs.length; i++) {
+                    let item = dt.rows().data()[i];
+                    payload = {
+                        id: item.id,
+                        name_mesa: item.name_mesa,
+                        capacity: item.capacity,
+                        photo: item.photo,
+                        is_active: item.is_active,
                     }
                     store.dispatch(`mesaDashboard/${Constant.UPDATE_ONE_MESA}`, payload);
-
-                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-                    store.dispatch(`mesaDashboard/${Constant.INITIALIZE_MESA}`);
-                });
-
+                }
             }
         }
 
@@ -135,7 +137,7 @@ export default {
                     if (change_active.length == 1) {
                         first_click = change_active[0].is_active;
                     }
-                    const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ")
+                    const save_bad_active = change_active.filter(item => item.is_active != first_click).map(item => item.id).join(", ");
                     toaster.warning('Unselect mesa ID: ' + save_bad_active);
                 }
             }

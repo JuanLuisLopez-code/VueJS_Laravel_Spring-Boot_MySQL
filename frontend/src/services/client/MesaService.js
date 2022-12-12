@@ -2,8 +2,7 @@ import Api from "../Api";
 import secrets from "../../secrets.example";
 
 export default {
-
-    GetMesas(params) {
+    FormatFilters(params) {
         let params_ = [];
         Object.entries(params).forEach(item => {
             if (item[0] === 'categories' && item[1].length > 0) {
@@ -13,7 +12,15 @@ export default {
                 params_.push(`${item[0]}=${item[1]}`);
             }
         });
-        return Api(secrets.URL_SPRING).get(`mesa?${params_.join('&')}`);
+        return params_.join('&')
+    },
+
+    GetMesas(params) {
+        return Api(secrets.URL_SPRING).get(`mesa?${this.FormatFilters(params)}`);
+    },//GetMesas
+
+    GetMesasPaginate(params) {
+        return Api(secrets.URL_SPRING).get(`mesaPaginate?${this.FormatFilters(params)}`);
     },//GetMesas
 
     GetOneMesa(id) {

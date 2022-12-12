@@ -59,6 +59,8 @@ export default {
             state.filters.order = 0;
             state.filters.capacity = 0;
             state.filters.name_mesa = "";
+            state.filters.page = 1;
+            state.filters.limit = 9;
             emit('deleteFilters', state.filters);
         }//sendFilters
 

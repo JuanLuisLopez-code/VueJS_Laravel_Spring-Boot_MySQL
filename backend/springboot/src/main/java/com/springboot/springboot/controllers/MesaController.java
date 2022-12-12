@@ -30,16 +30,21 @@ public class MesaController {
 	public ResponseEntity<List<Mesa>> getAllMesas(@ModelAttribute MesaQueryParam mesaQueryParam) {
 		try {
 			mesaQueryParam.setName_mesa(mesaQueryParam.getName_mesa() + '%');
+			Integer offset = (mesaQueryParam.getPage() - 1) * mesaQueryParam.getLimit();
 			List<Mesa> mesas = new ArrayList<Mesa>();
 			// Only capacity
 			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
-				mesaRepository.findByCapacity(mesaQueryParam.getCapacity(), mesaQueryParam.getName_mesa())
+				mesaRepository
+						.findByCapacity(mesaQueryParam.getCapacity(), mesaQueryParam.getName_mesa(),
+								mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
 			// Only categories
 			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0
 					&& mesaQueryParam.getOrder() == 0 && mesaQueryParam.getOrder() == 0) {
-				mesaRepository.findCategoriesOnMesa(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+				mesaRepository
+						.findCategoriesOnMesa(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+								mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
 			// Categories with capacity
@@ -47,35 +52,72 @@ public class MesaController {
 					&& mesaQueryParam.getOrder() == 0) {
 				mesaRepository
 						.findByCapacityAndCategories(mesaQueryParam.getCapacity(), mesaQueryParam.getCategories(),
-								mesaQueryParam.getName_mesa())
+								mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
 						.forEach(mesas::add);
 			}
-			// Only order
+			// Categories with order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length > 0) {
 				if (mesaQueryParam.getOrder() == 1) {
 					mesaRepository
-							.findCategoriesOnMesaASC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+							.findCategoriesOnMesaASC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+									mesaQueryParam.getLimit(), offset)
 							.forEach(mesas::add);
 				} else {
 					mesaRepository
-							.findCategoriesOnMesaDESC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa())
+							.findCategoriesOnMesaDESC(mesaQueryParam.getCategories(), mesaQueryParam.getName_mesa(),
+									mesaQueryParam.getLimit(), offset)
 							.forEach(mesas::add);
 				}
 			}
-			// Categories with order
+			// Only order
 			else if (mesaQueryParam.getOrder() != 0 && mesaQueryParam.getCategories().length == 0) {
 				if (mesaQueryParam.getOrder() == 1) {
-					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+					mesaRepository.findOrderedASC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+							.forEach(mesas::add);
 				} else {
-					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+					mesaRepository.findOrderedDESC(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+							.forEach(mesas::add);
 				}
 			}
 			// No filters
 			else {
-				mesaRepository.findActive(mesaQueryParam.getName_mesa()).forEach(mesas::add);
+				mesaRepository.findActive(mesaQueryParam.getName_mesa(), mesaQueryParam.getLimit(), offset)
+						.forEach(mesas::add);
 			}
 
 			return new ResponseEntity<>(mesas, HttpStatus.OK);
+		} catch (Exception e) {
+			System.err.println(e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/mesaPaginate")
+	public ResponseEntity<Integer> getAllMesasPaginate(@ModelAttribute MesaQueryParam mesaQueryParam) {
+		try {
+			mesaQueryParam.setName_mesa(mesaQueryParam.getName_mesa() + '%');
+			Integer total = 0;
+			// Only capacity
+			if (mesaQueryParam.getCategories().length == 0 && mesaQueryParam.getCapacity() > 0) {
+				total = mesaRepository.findByCapacityPaginate(mesaQueryParam.getCapacity(),
+						mesaQueryParam.getName_mesa());
+			}
+			// Only categories
+			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() == 0) {
+				total = mesaRepository.findCategoriesOnMesaPaginate(mesaQueryParam.getCategories(),
+						mesaQueryParam.getName_mesa());
+			}
+			// Categories with capacity
+			else if (mesaQueryParam.getCategories().length > 0 && mesaQueryParam.getCapacity() > 0) {
+				total = mesaRepository.findByCapacityAndCategoriesPaginate(mesaQueryParam.getCapacity(),
+						mesaQueryParam.getCategories(),
+						mesaQueryParam.getName_mesa());
+			}
+			else {
+				total = mesaRepository.findActivePaginate(mesaQueryParam.getName_mesa());
+			}
+
+			return new ResponseEntity<>(total, HttpStatus.OK);
 		} catch (Exception e) {
 			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
