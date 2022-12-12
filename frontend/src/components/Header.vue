@@ -1,11 +1,14 @@
 <template>
     <nav class="header">
         <div class="countainer">
-            <ul class="pages">
+            <ul class="pages" :key="state.profile.username">
                 <li @click="redirects.home()" class="page link" :class="{ active: isHome }">Home</li>
                 <li @click="redirects.reservation()" class="page link" :class="{ active: isReservation }">Reservation
                 </li>
                 <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
+                <li @click="redirects.login()" class="page link" :class="{ active: isLogin }">Login</li>
+                <li v-if="state.profile.username" class="page link">{{ state.profile.username }}</li>
+                <li @click="logout()" v-if="state.profile.username" class="page link">Log Out</li>
             </ul>
             <search-vue v-if="!isReservation" />
             <div class="link" @click="redirects.home()">
@@ -18,6 +21,9 @@
 <script>
 import searchVue from './search.vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { reactive, computed } from 'vue';
+import Constant from '../Constant';
 export default {
     components: { searchVue },
     computed: {
@@ -32,15 +38,28 @@ export default {
             const path = this.$route.path.split('/');
             return path[1] == 'dashboard';
         },
+        isLogin() {
+            return this.$route.name == 'login'
+        },
     },
     setup() {
         const router = useRouter();
+        const store = useStore();
         const redirects = {
             home: () => router.push({ name: 'home' }),
             reservation: () => router.push({ name: 'reservation' }),
             dashboard: () => router.push({ name: 'dashboard' }),
+            login: () => router.push({ name: 'login' }),
         };
-        return { redirects };
+
+        const state = reactive({
+            profile: computed(() => store.getters['user/GetProfile']),
+        });
+
+        const logout = () => {
+            store.dispatch(`user/${Constant.LOGOUT}`);
+        }
+        return { redirects, state, logout };
     }
 }
 </script>

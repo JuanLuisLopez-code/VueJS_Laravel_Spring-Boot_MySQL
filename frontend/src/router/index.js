@@ -28,6 +28,20 @@ const router = createRouter({
       name: "details",
       component: () => import('../views/Details.vue')
     },
+    ///LOGIN///
+    ,
+    {
+      path: "/login",
+      name: "login",
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: () => import('../views/Register.vue')
+    },
+
+    ///DASHBOARD///
     {
       path: "/dashboard",
       name: "dashboard",
@@ -65,6 +79,23 @@ const router = createRouter({
       path: "/dashboard/mesas/create",
       name: "createMesa",
       component: () => import('../views/Mesa/MesaCreate.vue')
+    },
+
+    //User dashboard//
+    {
+      path: "/dashboard/users",
+      name: "usersList",
+      component: () => import('../views/User/UserList.vue')
+    },
+    {
+      path: "/dashboard/users/update/:id",
+      name: "updateUser",
+      component: () => import('../views/User/UserUpdate.vue')
+    },
+    {
+      path: "/dashboard/users/create",
+      name: "createUser",
+      component: () => import('../views/User/UserCreate.vue')
     },
   ]
 })

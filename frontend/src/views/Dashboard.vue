@@ -3,6 +3,8 @@
   <button class="pulse" @click="redirects.categories()">List categories</button>
   <br>
   <button class="pulse" @click="redirects.mesas()">List mesas</button>
+  <br>
+  <button class="pulse" @click="redirects.users()">List users</button>
 </template>
 
 <script>
@@ -13,6 +15,7 @@ export default {
     const redirects = {
       categories: () => router.push({ name: 'categoriesList' }),
       mesas: () => router.push({ name: 'mesasList' }),
+      users: () => router.push({ name: 'usersList' }),
     };
     return { redirects };
   }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Mesa;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMesaRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
 
     public function authorize()
@@ -15,11 +15,11 @@ class UpdateMesaRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_mesa' => 'sometimes',
-            'capacity' => 'sometimes',
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
             'photo' => 'sometimes',
             'is_active' => 'sometimes',
-            'categories' => 'sometimes', 'array:name,categories',
         ];
     }
 }

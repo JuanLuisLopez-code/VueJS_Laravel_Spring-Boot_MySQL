@@ -43,7 +43,6 @@ class MesaController extends Controller
 
     public function update(UpdateMesaRequest $request, $id)
     {
-        error_log($request);
         $data = $request->except(['categories']);
         $categories_name = [];
         if ($request->categories !== null) {
