@@ -1,6 +1,8 @@
 import Constant from '../../../Constant';
 import UserService from '../../../services/client/UserService';
 import { createToaster } from "@meforma/vue-toaster";
+import router from '../../../router/index.js'
+
 const toaster = createToaster({ "position": "top-right", "duration": 1500 });
 export const user = {
     namespaced: true,
@@ -17,7 +19,7 @@ export const user = {
                     store.commit(Constant.LOGIN, response.data.Token);
                 }
             } catch (error) {
-                console.error(error);
+                toaster.error('Login error');
             }
         },//LOGIN
 
@@ -26,7 +28,7 @@ export const user = {
                 const response = await UserService.Logout();
                 store.commit(Constant.LOGOUT);
             } catch (error) {
-                console.error(error);
+                toaster.error('Logout error');
             }
         },//LOGOUT
 
@@ -38,7 +40,7 @@ export const user = {
                     store.commit(Constant.ADD_USER, response.data.data);
                 }
             } catch (error) {
-                console.error(error);
+                toaster.error('Register error');
             }
         },//ADD_USER
 
@@ -59,11 +61,13 @@ export const user = {
             if (payload) {
                 toaster.success('Login successfuly');
                 localStorage.setItem("token", payload);
+                router.push({ name: 'home' });
             }
         },//LOGIN
         [Constant.ADD_USER]: (state, payload) => {
             if (payload) {
                 toaster.success('Register successfuly');
+                router.push({ name: 'login' });
             }
         },//ADD_USER
         [Constant.INITIALIZE_PROFILE]: (state, payload) => {
@@ -79,6 +83,8 @@ export const user = {
             state.isAuth = false;
             state.isAdmin = false;
             localStorage.removeItem('token');
+            router.push({ name: 'home' });
+
         },//LOGOUT
     },//mutations
     getters: {

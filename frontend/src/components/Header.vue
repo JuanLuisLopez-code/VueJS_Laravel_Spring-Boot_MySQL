@@ -58,10 +58,9 @@ export default {
 
         const logout = () => {
             store.dispatch(`user/${Constant.LOGOUT}`);
-            router.push({ name: "home" });
         }
 
-        console.log(state.profile)
+        console.log(state.profile, "state")
 
         return { redirects, state, logout };
     }

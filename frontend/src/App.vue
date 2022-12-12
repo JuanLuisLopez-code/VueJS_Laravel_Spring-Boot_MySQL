@@ -11,6 +11,7 @@ import HeaderVue from './components/Header.vue';
 import { useStore } from 'vuex';
 import Constant from './Constant';
 const store = useStore();
-store.dispatch(`user/${Constant.INITIALIZE_PROFILE}`);
-
+if (localStorage.getItem("token")) {
+  store.dispatch(`user/${Constant.INITIALIZE_PROFILE}`);
+}
 </script>
