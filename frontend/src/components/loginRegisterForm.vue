@@ -5,46 +5,54 @@
                 <section class="wrapper">
                     <div class="heading" v-if="isLogin">
                         <h1 class="text text-large">Login</h1>
-                        <p class="text text-normal">New user? <span><a href="#" class="text text-links"
+                        <p class="text text-normal">New user? <span><a class="text text-links"
                                     @click="redirect.register()">Create an
                                     account</a></span>
                         </p>
                     </div>
                     <div class="heading" v-else>
                         <h1 class="text text-large">Register</h1>
-                        <p class="text text-normal">Have an account? <span><a href="#" class="text text-links"
+                        <p class="text text-normal">Have an account? <span><a class="text text-links"
                                     @click="redirect.login()">Sign up</a></span>
                         </p>
                     </div>
-                    <form name="signin" class="form">
+                    <div name="signin" class="form">
                         <div class="input-control">
-                            <label for="username" class="input-label" hidden>Username</label>
+                            <label for="username" class="input-label">Username</label>
                             <input type="username" name="username" id="username" class="input-field"
                                 placeholder="Username" v-model="state.username">
                         </div>
                         <div class="input-control" v-if="!isLogin">
-                            <label for="email" class="input-label" hidden>Email Address</label>
+                            <label for="email" class="input-label">Email Address</label>
                             <input type="email" name="email" id="email" class="input-field" placeholder="Email Address"
                                 v-model="state.email">
                         </div>
                         <div class="input-control">
-                            <label for="password" class="input-label" hidden>Password</label>
+                            <label for="password" class="input-label">Password</label>
                             <input type="password" name="password" id="password" class="input-field"
                                 placeholder="Password" v-model="state.password">
                         </div>
                         <div class="input-control" v-if="!isLogin">
-                            <label for="password" class="input-label" hidden>Repeat Password</label>
+                            <label for="password" class="input-label">Repeat Password</label>
                             <input type="password" name="password2" id="password2" class="input-field"
                                 placeholder="Repeat Password" v-model="state.password2">
                         </div>
-                        <div class="input-control" v-if="isLogin">
-                            <!-- <a href="#" class="text text-links">Forgot Password</a> -->
-                            <input @click="login()" name="submit" class="input-submit" value="Login">
+                        <div>
+                            <div class="input-control" v-if="isLogin">
+                                <button @click="login()" class="input-submit"
+                                    :disabled="v$.username.$invalid || v$.password.$invalid">Login</button>
+                            </div>
                         </div>
-                        <div class="input-control" v-else>
-                            <input @click="register()" name="submit" class="input-submit" value="Register">
+
+                        <div>
+                            <div class="input-control" v-if="!isLogin">
+                                <button @click="register()" class="input-submit"
+                                    :disabled="x$.username.$invalid || x$.password.$invalid || x$.email.$invalid || x$.password2.$invalid">Register</button>
+                            </div>
                         </div>
-                    </form>
+
+
+                    </div>
                     <!-- <div class="striped" v-if="isLogin">
                         <span class="striped-line"></span>
                         <span class="striped-text">Or</span>
@@ -52,19 +60,19 @@
                     </div>
                     <div class="method" v-if="isLogin">
                         <div class="method-control">
-                            <a href="#" class="method-action">
+                            <a   class="method-action">
                                 <i class="ion ion-logo-google"></i>
                                 <span>Sign in with Google</span>
                             </a>
                         </div>
                         <div class="method-control">
-                            <a href="#" class="method-action">
+                            <a   class="method-action">
                                 <i class="ion ion-logo-facebook"></i>
                                 <span>Sign in with Facebook</span>
                             </a>
                         </div>
                         <div class="method-control">
-                            <a href="#" class="method-action">
+                            <a   class="method-action">
                                 <i class="ion ion-logo-apple"></i>
                                 <span>Sign in with Apple</span>
                             </a>
@@ -79,6 +87,8 @@
 <script>
 import { useRouter } from 'vue-router';
 import { getCurrentInstance, reactive, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 export default {
     props: {
         isLogin: Boolean
@@ -95,22 +105,6 @@ export default {
             login: () => router.push({ name: 'login' }),
         };
 
-        const state = reactive({
-            username: "",
-            email: "",
-            password: "",
-            password2: ""
-        });
-
-        const login = () => {
-            const data = {
-                username: state.username,
-                password: state.password
-            };
-
-            emit('send', data);
-        }
-
         const register = () => {
             const data = {
                 username: state.username,
@@ -122,7 +116,57 @@ export default {
             emit('send', data);
         }
 
-        return { redirect, login, register, state }
+        const state = reactive({
+            username: '',
+            email: '',
+            password: '',
+            password2: '',
+        });
+
+        const rules_login = computed(() => ({
+            username: {
+                required,
+                minLength: minLength(2),
+            },
+            password: {
+                required,
+                minLength: minLength(4),
+            },
+        }))
+
+        const rules_register = computed(() => ({
+            username: {
+                required,
+                minLength: minLength(2),
+            },
+            email: {
+                required,
+                minLength: minLength(2),
+            },
+            password: {
+                required,
+                minLength: minLength(4),
+            },
+            password2: {
+                required,
+                minLength: minLength(4),
+            },
+        }))
+
+        //login
+        const v$ = useVuelidate(rules_login, state);
+        //register
+        const x$ = useVuelidate(rules_register, state);
+
+        const login = () => {
+            const data = {
+                username: state.username,
+                password: state.password
+            };
+            emit('send', data);
+        }
+
+        return { redirect, login, register, state, v$, x$ }
     }
 }
 </script>
@@ -150,6 +194,7 @@ export default {
 }
 
 .LoginRegisterForm {
+
     font-size: 100%;
     font-size-adjust: 100%;
     box-sizing: border-box;
