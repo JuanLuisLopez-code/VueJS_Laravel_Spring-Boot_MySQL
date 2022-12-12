@@ -7,6 +7,8 @@
                 </li>
                 <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
                 <li @click="redirects.login()" class="page link" :class="{ active: isLogin }">Login</li>
+                <li v-if="state.profile.photo" class="page link">{{ state.profile.photo }}</li>
+                <li @click="logout()" v-if="state.profile.photo" class="page link">Log Out</li>
             </ul>
             <search-vue v-if="!isReservation" />
             <div class="link" @click="redirects.home()">
@@ -19,6 +21,9 @@
 <script>
 import searchVue from './search.vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { reactive, computed } from 'vue';
+import Constant from '../Constant';
 export default {
     components: { searchVue },
     computed: {
@@ -39,13 +44,26 @@ export default {
     },
     setup() {
         const router = useRouter();
+        const store = useStore();
         const redirects = {
             home: () => router.push({ name: 'home' }),
             reservation: () => router.push({ name: 'reservation' }),
             dashboard: () => router.push({ name: 'dashboard' }),
             login: () => router.push({ name: 'login' }),
         };
-        return { redirects };
+
+        const state = reactive({
+            profile: computed(() => store.getters['user/GetProfile']),
+        });
+
+        const logout = () => {
+            store.dispatch(`user/${Constant.LOGOUT}`);
+            router.push({ name: "home" });
+        }
+
+        console.log(state.profile)
+
+        return { redirects, state, logout };
     }
 }
 </script>

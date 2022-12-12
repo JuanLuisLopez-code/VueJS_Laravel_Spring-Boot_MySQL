@@ -107,7 +107,7 @@ class UserController extends Controller
         if (!$token) {
             return response()->json([
                 "error" => "Unauthorized"
-            ], 401);
+            ], 400);
         }
 
         return response()->json(['Token' => $token]);
@@ -131,7 +131,7 @@ class UserController extends Controller
         try {
             return UserResource::make(auth()->user());
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'get user error'], 500);
+            return response()->json(['error' => 'get user error'], 401);
         }
     }
 }//class

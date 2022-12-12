@@ -11,8 +11,8 @@ export default {
         return Api(secrets.URL_LARAVEL).post('login', data);
     },//Login
 
-    Logout(data) {
-        return Api(secrets.URL_LARAVEL).post('logout', data);
+    Logout() {
+        return Api(secrets.URL_LARAVEL).post('logout');
     },//Logout
 
     Profile() {

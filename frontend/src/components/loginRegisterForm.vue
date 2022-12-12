@@ -47,7 +47,7 @@
                         <div>
                             <div class="input-control" v-if="!isLogin">
                                 <button @click="register()" class="input-submit"
-                                    :disabled="x$.username.$invalid || x$.password.$invalid || x$.email.$invalid || x$.password2.$invalid">Register</button>
+                                    :disabled="x$.username.$invalid || x$.password.$invalid || x$.email.$invalid || x$.password2.$invalid || state.password2 !== state.password">Register</button>
                             </div>
                         </div>
 
