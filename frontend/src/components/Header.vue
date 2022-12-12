@@ -1,14 +1,14 @@
 <template>
     <nav class="header">
         <div class="countainer">
-            <ul class="pages">
+            <ul class="pages" :key="state.profile.username">
                 <li @click="redirects.home()" class="page link" :class="{ active: isHome }">Home</li>
                 <li @click="redirects.reservation()" class="page link" :class="{ active: isReservation }">Reservation
                 </li>
                 <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
                 <li @click="redirects.login()" class="page link" :class="{ active: isLogin }">Login</li>
-                <li v-if="state.profile.photo" class="page link">{{ state.profile.photo }}</li>
-                <li @click="logout()" v-if="state.profile.photo" class="page link">Log Out</li>
+                <li v-if="state.profile.username" class="page link">{{ state.profile.username }}</li>
+                <li @click="logout()" v-if="state.profile.username" class="page link">Log Out</li>
             </ul>
             <search-vue v-if="!isReservation" />
             <div class="link" @click="redirects.home()">
@@ -59,9 +59,6 @@ export default {
         const logout = () => {
             store.dispatch(`user/${Constant.LOGOUT}`);
         }
-
-        console.log(state.profile, "state")
-
         return { redirects, state, logout };
     }
 }

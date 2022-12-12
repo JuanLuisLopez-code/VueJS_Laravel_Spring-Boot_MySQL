@@ -16,7 +16,7 @@ export const user = {
             try {
                 const response = await UserService.Login(payload);
                 if (response.status === 200) {
-                    store.commit(Constant.LOGIN, response.data.Token);
+                    store.commit(Constant.LOGIN, response.data);
                 }
             } catch (error) {
                 toaster.error('Login error');
@@ -60,7 +60,9 @@ export const user = {
         [Constant.LOGIN]: (state, payload) => {
             if (payload) {
                 toaster.success('Login successfuly');
-                localStorage.setItem("token", payload);
+                localStorage.setItem("token", payload.token);
+                state.user = payload.user;
+                state.isAuth = true;
                 router.push({ name: 'home' });
             }
         },//LOGIN

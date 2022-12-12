@@ -110,7 +110,7 @@ class UserController extends Controller
             ], 400);
         }
 
-        return response()->json(['Token' => $token]);
+        return response()->json(['token' => $token, 'user' => UserResource::make(auth()->user())]);
     } //login
 
     public function logout()
