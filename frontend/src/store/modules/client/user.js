@@ -33,7 +33,6 @@ export const user = {
         },//LOGOUT
 
         [Constant.ADD_USER]: async (store, payload) => {
-            console.log(payload);
             try {
                 const response = await UserService.Register(payload);
                 if (response.status === 201) {
@@ -61,7 +60,10 @@ export const user = {
             if (payload) {
                 toaster.success('Login successfuly');
                 localStorage.setItem("token", payload.token);
+                localStorage.setItem("isAuth", true);
+                localStorage.setItem("isAdmin", payload.user.type === 'admin');
                 state.user = payload.user;
+                state.isAdmin = payload.user.type === 'admin';
                 state.isAuth = true;
                 router.push({ name: 'home' });
             }
@@ -76,6 +78,9 @@ export const user = {
             if (payload) {
                 state.user = payload;
                 state.isAuth = true;
+                state.isAdmin = payload.type === 'admin';
+                localStorage.setItem("isAuth", true);
+                localStorage.setItem("isAdmin", payload.type === 'admin');
             }
         },//INITIALIZE_PROFILE
 
@@ -85,6 +90,8 @@ export const user = {
             state.isAuth = false;
             state.isAdmin = false;
             localStorage.removeItem('token');
+            localStorage.removeItem('isAuth');
+            localStorage.removeItem('isAdmin');
             router.push({ name: 'home' });
 
         },//LOGOUT
@@ -93,6 +100,12 @@ export const user = {
         GetProfile: (state) => {
             return state.user;
         },//GetProfile
+        GetIsAuth: (state) => {
+            return state.isAuth;
+        },//GetIsAuth
+        GetIsAdmin: (state) => {
+            return state.isAdmin;
+        },//GetIsAdmin
 
     }//getters
 }//export
