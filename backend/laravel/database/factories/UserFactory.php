@@ -13,7 +13,7 @@ class UserFactory extends Factory
         return [
             'username' => $this->faker->unique()->username,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => password_hash(strval('asdasdasd'), PASSWORD_DEFAULT, ['cost' => 12]),
+            'password' => bcrypt('pepito'),
             'type' => 'client',
             'photo' => $this->faker->imageUrl(360, 360, 'user', true, 'user'),
             'is_active' => true,

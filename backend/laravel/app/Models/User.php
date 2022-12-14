@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return parent::create([
             'username' => $fields['username'],
-            'password' => password_hash(strval($fields['password']), PASSWORD_DEFAULT, ['cost' => 12]),
+            'password' => bcrypt($fields['password']),
             'email' => $fields['email'],
             'type' => 'client',
             'is_active' =>  isset($fields['is_active']) ? $fields['is_active'] : true, //CHANGE TO FALSE, TRUE ONLY FOR TESTING
