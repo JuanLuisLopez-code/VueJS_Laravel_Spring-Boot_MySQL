@@ -29,11 +29,11 @@ public class User {
     private String email;
 
     @Column(name = "type")
-    private String type;
+    private String type = "client";
 
     @Column(name = "is_active")
-    private Boolean is_active;
+    private Boolean is_active = true;
 
     @Column(name = "photo")
-    private String photo;
+    private String photo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg";
 }
