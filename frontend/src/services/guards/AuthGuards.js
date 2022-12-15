@@ -3,14 +3,6 @@ import Constant from '../../Constant';
 
 export default {
 
-    // authGuardUser(to, from, next) {
-    //     if (store.getters['user/GetIsAuth'] && localStorage.getItem('isAuth')) {
-    //         next();
-    //     } else {
-    //         next('/login');
-    //     }
-    // },//authGuardUser
-
     async authGuardAdmin(to, from, next) {
 
         if (localStorage.getItem('isAdmin')) {

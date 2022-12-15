@@ -47,7 +47,7 @@ export const user = {
             try {
                 const response = await UserService.Profile();
                 if (response.status === 200) {
-                    store.commit(Constant.INITIALIZE_PROFILE, response.data.data);
+                    store.commit(Constant.INITIALIZE_PROFILE, response.data);
                 }
             } catch (error) {
                 console.error(error);

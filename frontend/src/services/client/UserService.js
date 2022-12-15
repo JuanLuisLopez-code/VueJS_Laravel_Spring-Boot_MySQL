@@ -8,7 +8,7 @@ export default {
     },//Register
 
     Login(data) {
-        return Api(secrets.URL_LARAVEL).post('login', data);
+        return Api(secrets.URL_SPRING).post('login', data);
     },//Login
 
     Logout() {
@@ -16,7 +16,7 @@ export default {
     },//Logout
 
     Profile() {
-        return Api(secrets.URL_LARAVEL).get('profile');
+        return Api(secrets.URL_SPRING).get('profile');
     },//Profile
 
 }//export

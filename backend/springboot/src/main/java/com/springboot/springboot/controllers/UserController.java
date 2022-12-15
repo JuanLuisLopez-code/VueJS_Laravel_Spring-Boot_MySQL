@@ -1,8 +1,5 @@
 package com.springboot.springboot.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.springboot.springboot.model.User;
+import com.springboot.springboot.model.UserAndToken;
 import com.springboot.springboot.repository.UserRepository;
+import com.springboot.springboot.security.jwt.JwtUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @CrossOrigin(origins = "http://localhost:5001")
 @RestController
@@ -22,17 +26,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
     @Autowired
-    UserRepository UserRepository;
+    private UserRepository UserRepository;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
-    @GetMapping("/user")
-    public ResponseEntity<List<User>> getAllUsers() {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> profile() {
         try {
-            List<User> users = new ArrayList<User>();
-            UserRepository.findAll().forEach(users::add);
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            User user = UserRepository.findByUsername(userDetails.getUsername()).get();
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             System.err.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,11 +51,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody User user) {
+    public ResponseEntity<UserAndToken> loginUser(@RequestBody User user) {
         try {
-            System.out.println(user.getUsername());
-            System.out.println(user.getPassword());
-            return new ResponseEntity<>(HttpStatus.OK);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            User user_ = UserRepository.findByUsername(user.getUsername()).get();
+            UserAndToken userToken = new UserAndToken(jwt, user_);
+
+            return new ResponseEntity<>(userToken, HttpStatus.OK);
+
         } catch (Exception e) {
             System.err.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -71,5 +88,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
