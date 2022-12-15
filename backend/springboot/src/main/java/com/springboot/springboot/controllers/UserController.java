@@ -44,7 +44,7 @@ public class UserController {
         try {
             System.out.println(user.getUsername());
             System.out.println(user.getPassword());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             System.err.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +64,7 @@ public class UserController {
                 user.setIs_active(true);
                 user.setPassword(encoder.encode(user.getPassword()));
                 UserRepository.save(user);
-                return new ResponseEntity<>(user, HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.CREATED);
             }
         } catch (Exception e) {
             System.err.println(e);

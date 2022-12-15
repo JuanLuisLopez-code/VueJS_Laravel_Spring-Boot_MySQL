@@ -4,7 +4,7 @@ import secrets from "../../secrets.example";
 export default {
 
     Register(data) {
-        return Api(secrets.URL_LARAVEL).post('user', data);
+        return Api(secrets.URL_SPRING).post('register', data);
     },//Register
 
     Login(data) {

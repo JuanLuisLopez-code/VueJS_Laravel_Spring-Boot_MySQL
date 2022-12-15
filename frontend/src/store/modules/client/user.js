@@ -36,7 +36,7 @@ export const user = {
             try {
                 const response = await UserService.Register(payload);
                 if (response.status === 201) {
-                    store.commit(Constant.ADD_USER, response.data.data);
+                    store.commit(Constant.ADD_USER, true);
                 }
             } catch (error) {
                 toaster.error('Register error');
