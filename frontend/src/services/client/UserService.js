@@ -12,7 +12,7 @@ export default {
     },//Login
 
     Logout() {
-        return Api(secrets.URL_LARAVEL).post('logout');
+        return Api(secrets.URL_SPRING).post('logout');
     },//Logout
 
     Profile() {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { createToaster } from "@meforma/vue-toaster";
+import Constant from '../Constant.js';
 
 
 export default (URL) => {

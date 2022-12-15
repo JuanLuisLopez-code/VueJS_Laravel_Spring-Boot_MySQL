@@ -46,7 +46,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             System.err.println(e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -83,6 +83,17 @@ public class UserController {
                 UserRepository.save(user);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
+        } catch (Exception e) {
+            System.err.println(e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser() {
+        try {
+            return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (Exception e) {
             System.err.println(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
