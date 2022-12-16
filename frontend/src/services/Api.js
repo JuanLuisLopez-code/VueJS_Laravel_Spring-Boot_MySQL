@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { createToaster } from "@meforma/vue-toaster";
+import Constant from '../Constant.js';
+import secrets from "../secrets";
 
 
 export default (URL) => {
@@ -13,7 +15,7 @@ export default (URL) => {
         baseURL: URL
     })
 
-    const token = localStorage.getItem('token');
+    const token = URL === secrets.URL_LARAVEL ? localStorage.getItem('tokenAdmin') : localStorage.getItem('token');
     if (token) {
         api.defaults.headers.common.Authorization = `Bearer ${token}`
     }//add token to header

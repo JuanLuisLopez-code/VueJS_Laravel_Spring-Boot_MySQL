@@ -71,7 +71,7 @@ class UserController extends Controller
             $user->email = $request->validated()['email'];
         }
         if (isset($request->validated()['password'])) {
-            $user->password = password_hash(strval($request->validated()['password']), PASSWORD_DEFAULT, ['cost' => 12]);
+            $user->password = bcrypt($request->validated()['password']);
         }
         if (isset($request->validated()['photo'])) {
             $user->photo = $request->validated()['photo'];
@@ -105,6 +105,11 @@ class UserController extends Controller
     {
         $token = auth()->attempt($request->validated());
         if (!$token) {
+            return response()->json([
+                "error" => "Unauthorized"
+            ], 400);
+        }
+        if (auth()->user()->type != "admin") {
             return response()->json([
                 "error" => "Unauthorized"
             ], 400);

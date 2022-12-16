@@ -5,10 +5,12 @@
                 <li @click="redirects.home()" class="page link" :class="{ active: isHome }">Home</li>
                 <li @click="redirects.reservation()" class="page link" :class="{ active: isReservation }">Reservation
                 </li>
-                <li @click="redirects.dashboard()" class="page link" :class="{ active: isDashboard }">Dashboard</li>
-                <li @click="redirects.login()" class="page link" :class="{ active: isLogin }">Login</li>
-                <li v-if="state.profile.username" class="page link">{{ state.profile.username }}</li>
-                <li @click="logout()" v-if="state.profile.username" class="page link">Log Out</li>
+                <li v-if="state.isAdmin" @click="redirects.dashboard()" class="page link"
+                    :class="{ active: isDashboard }">Dashboard</li>
+                <li v-if="!state.isLogged" @click="redirects.login()" class="page link" :class="{ active: isLogin }">
+                    Login</li>
+                <li v-if="state.isLogged" class="page link">{{ state.profile.username }}</li>
+                <li @click="logout()" v-if="state.isLogged" class="page link">Log Out</li>
             </ul>
             <search-vue v-if="!isReservation" />
             <div class="link" @click="redirects.home()">
@@ -54,6 +56,8 @@ export default {
 
         const state = reactive({
             profile: computed(() => store.getters['user/GetProfile']),
+            isAdmin: computed(() => store.getters['user/GetIsAdmin']),
+            isLogged: computed(() => store.getters['user/GetIsAuth']),
         });
 
         const logout = () => {

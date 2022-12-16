@@ -6,7 +6,15 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -26,39 +34,5 @@ public class Category {
     }, mappedBy = "categories")
     @JsonIgnore
     private Set<Mesa> mesas = new HashSet<>();
-
-    public Category() {
-
-    }
-
-    public Category(String name_category, String photo) {
-        this.name_category = name_category;
-        this.photo = photo;
-    }
-
-    public Set<Mesa> getMesas() {
-        return this.mesas;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public String getName_category() {
-        return this.name_category;
-    }
-
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                ", name_category='" + getName_category() + "'" +
-                ", photo='" + getPhoto() + "'" +
-                "}";
-    }
 
 }
