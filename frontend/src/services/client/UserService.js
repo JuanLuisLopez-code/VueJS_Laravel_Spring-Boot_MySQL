@@ -11,6 +11,10 @@ export default {
         return Api(secrets.URL_SPRING).post('login', data);
     },//Login
 
+    Login_admin(data) {
+        return Api(secrets.URL_LARAVEL).post('login', data);
+    },//Login
+
     Logout() {
         return Api(secrets.URL_SPRING).post('logout');
     },//Logout

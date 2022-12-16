@@ -21,5 +21,6 @@ export default {
     DELETE_USER: "DeleteUser",
     UPDATE_USER: "UpdateUser",
     LOGIN: "Login",
+    LOGIN_ADMIN: "Login_admin",
     LOGOUT: "Logout",
 }
