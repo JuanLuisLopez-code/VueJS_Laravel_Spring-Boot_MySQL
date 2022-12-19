@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 //JWT LIBRARY DELETE COMMENT LATER
 //https://laravel-jwt-auth.readthedocs.io/en/latest/
@@ -35,6 +36,11 @@ class User extends Authenticatable implements JWTSubject
             'photo' =>  isset($fields['photo']) ? $fields['photo'] : 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
         ]);
     } //create
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
 
     public function getJWTIdentifier()
     {

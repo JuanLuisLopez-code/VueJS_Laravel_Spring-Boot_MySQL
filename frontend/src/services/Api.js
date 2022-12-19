@@ -15,7 +15,7 @@ export default (URL) => {
         baseURL: URL
     })
 
-    const token = URL === secrets.URL_LARAVEL ? localStorage.getItem('tokenAdmin') : localStorage.getItem('token');
+    const token = URL === secrets.URL_LARAVEL ? localStorage.getItem('token_admin') : localStorage.getItem('token');
     if (token) {
         api.defaults.headers.common.Authorization = `Bearer ${token}`
     }//add token to header

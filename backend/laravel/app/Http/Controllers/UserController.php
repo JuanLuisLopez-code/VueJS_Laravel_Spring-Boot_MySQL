@@ -107,12 +107,12 @@ class UserController extends Controller
         if (!$token) {
             return response()->json([
                 "error" => "Unauthorized"
-            ], 400);
+            ], 401);
         }
         if (auth()->user()->type != "admin") {
             return response()->json([
                 "error" => "Unauthorized"
-            ], 400);
+            ], 401);
         }
 
         return response()->json(['token' => $token, 'user' => UserResource::make(auth()->user())]);
