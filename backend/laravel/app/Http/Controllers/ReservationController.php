@@ -8,6 +8,8 @@ use App\Models\Mesa;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Type\Integer;
 
 class ReservationController extends Controller
 {
@@ -16,37 +18,50 @@ class ReservationController extends Controller
         return ReservationResource::collection(Reservation::all());
     }
 
-    public function store(Request $request)
-    {
-        $user = User::where('id', $request->user_id)->firstOrFail();
-        $mesa = Mesa::where('id', $request->mesa_id)->firstOrFail();
-        $reservation = Reservation::create(['fecha_reserva' => $request->fecha_reserva, "type_reservation" => $request->type_reservation, 'accepted' => false, 'mesa_id' => $mesa->id, 'user_id' => $user->id]);
-        return ReservationResource::make($reservation);
-    }
+    // public function store(Request $request)
+    // {
+    //     $user = User::where('id', $request->user_id)->firstOrFail();
+    //     $mesa = Mesa::where('id', $request->mesa_id)->firstOrFail();
+    //     $reservation = Reservation::create(['fecha_reserva' => $request->fecha_reserva, "type_reservation" => $request->type_reservation, 'accepted' => false, 'mesa_id' => $mesa->id, 'user_id' => $user->id]);
+    //     return ReservationResource::make($reservation);
+    // }
 
     public function show($id)
     {
         return ReservationResource::make(Reservation::where('id', $id)->firstOrFail());
     }
 
-    // public function update(UpdateReservationRequest $request, $id)
-    // {
-    //     $data = $request->except(['user_id', 'mesa_id']);
-    //     $update = Reservation::where('id', $id)->update($data);
+    public function update(UpdateReservationRequest $request, $id)
+    {
+        $data = $request->except(['user_id', 'mesa_id']);
+        $reservation = Reservation::where('id', $id)->firstOrFail();
+        $mesa_id = $reservation->mesa_id;
 
-    //     if ($update == 1) {
-    //         $reservation = Reservation::where('id', $id)->firstOrFail();
-    //         $reservation->categories()->detach();
+        if (!isset($data["fecha_reserva"]) && !isset($data["type_reservation"])) {
+            $avalible = 0;
+        } else if ($reservation->type_reservation == $data["type_reservation"] && $reservation->fecha_reserva == $data["fecha_reserva"]) {
+            $avalible = 0;
+        } else {
+            $avalible = Reservation::where('fecha_reserva', $data["fecha_reserva"])->where('type_reservation', $data['type_reservation'])->where('mesa_id', $mesa_id)->count();
+        }
 
-    //         return response()->json([
-    //             "Message" => "Updated correctly"
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             "Status" => "Not found"
-    //         ], 404);
-    //     };
-    // }
+        if ($avalible == 0) {
+            $update = Reservation::where('id', $id)->update($data);
+            if ($update == 1) {
+                return response()->json([
+                    "Message" => "Updated correctly"
+                ]);
+            } else {
+                return response()->json([
+                    "Status" => "Not found"
+                ], 404);
+            };
+        } else {
+            return response()->json([
+                "Status" => "Already reservated"
+            ], 304);
+        };
+    }
 
     public function destroy($id)
     {
