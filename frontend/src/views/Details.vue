@@ -15,6 +15,7 @@
                 </div>
             </div>
         </div>
+        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas"/>    
     </div>
     <div v-else>
         <span>Table not available</span>
@@ -26,9 +27,10 @@ import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import card_mesa from '../components/card_mesa.vue';
+import form_details from '../components/form_details.vue';
 import Constant from '../Constant';
 export default {
-    components: { card_mesa },
+    components: { card_mesa, form_details },
 
     setup() {
         const store = useStore();
