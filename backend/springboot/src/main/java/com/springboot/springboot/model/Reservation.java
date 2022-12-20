@@ -1,18 +1,12 @@
 package com.springboot.springboot.model;
 
-import java.util.HashSet;
-
-import java.util.Set;
-import java.util.List;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
@@ -36,13 +30,13 @@ public class Reservation {
     private Boolean accepted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "mesa_id", nullable = false)
+    @JoinColumn(name = "mesa_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Mesa mesa;
