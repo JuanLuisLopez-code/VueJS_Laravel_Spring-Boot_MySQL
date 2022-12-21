@@ -18,14 +18,6 @@ class ReservationController extends Controller
         return ReservationResource::collection(Reservation::all());
     }
 
-    // public function store(Request $request)
-    // {
-    //     $user = User::where('id', $request->user_id)->firstOrFail();
-    //     $mesa = Mesa::where('id', $request->mesa_id)->firstOrFail();
-    //     $reservation = Reservation::create(['fecha_reserva' => $request->fecha_reserva, "type_reservation" => $request->type_reservation, 'accepted' => false, 'mesa_id' => $mesa->id, 'user_id' => $user->id]);
-    //     return ReservationResource::make($reservation);
-    // }
-
     public function show($id)
     {
         return ReservationResource::make(Reservation::where('id', $id)->firstOrFail());
