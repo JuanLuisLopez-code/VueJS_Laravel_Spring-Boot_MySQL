@@ -1,7 +1,7 @@
 <template>
     <div class="login-box">
         <h2>Update</h2>
-        <form>
+        <div>
             <div class="user-box">
                 <label>Name_mesa</label>
                 <input type="text" name="" required="" v-model="state.mesa.name_mesa" />
@@ -24,21 +24,15 @@
             <v-select multiple v-model="state.mesa.categories" :options="state.categories"
                 :getOptionLabel="categories => categories.name_category" />
             <br><br>
-            <a @click="createSubmit()" v-if="!isUpdate">
+            <button @click="sendSubmit()">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Create
-            </a>
-            <a @click="editSubmit()" v-if="isUpdate">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Update
-            </a>
-        </form>
+                <p v-if="isUpdate">Update</p>
+                <p v-else>Create</p>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -73,21 +67,15 @@ export default {
 
         state.mesa.is_active = Boolean(state.mesa.is_active);
 
-        const createSubmit = () => {
+        const sendSubmit = () => {
             const cat = state.mesa.categories;
             const names_cat = cat.map(item => item.name_category);
             state.mesa.categories = names_cat;
             emit('data', state.mesa)
         }
 
-        const editSubmit = () => {
-            const cat = state.mesa.categories;
-            const names_cat = cat.map(item => item.name_category);
-            state.mesa.categories = names_cat;
-            emit('data', state.mesa)
-        }
 
-        return { state, editSubmit, createSubmit }
+        return { state, sendSubmit }
     }
 }
 </script>
@@ -141,9 +129,16 @@ export default {
         }
     }
 
-    form a {
+    .error {
+        color: red !important;
+    }
+
+
+    div button {
+        background-color: transparent;
         position: relative;
         display: inline-block;
+        border: none;
         padding: 10px 20px;
         color: #03e9f4;
         font-size: 16px;
@@ -155,7 +150,7 @@ export default {
         letter-spacing: 4px;
     }
 
-    a {
+    button {
         &:hover {
             background: #03e9f4;
             color: #fff;

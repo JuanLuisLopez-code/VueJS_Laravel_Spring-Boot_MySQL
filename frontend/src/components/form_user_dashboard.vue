@@ -1,7 +1,7 @@
 <template>
     <div class="login-box">
         <h2>User</h2>
-        <form>
+        <div>
             <div class="user-box">
                 <label>Username</label>
                 <input type="text" v-model="state.userLocal.username">
@@ -22,26 +22,22 @@
                 <label>Active</label>
                 <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
             </div> -->
-            <a @click="sendData()" v-if="user">
+            <button @click="sendData()">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Update
-            </a>
-            <a @click="sendData()" v-else>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Create
-            </a>
-        </form>
+                <p v-if="user">Update</p>
+                <p v-else>Create</p>
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
+import { reactive, getCurrentInstance, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, url, minLength, email } from '@vuelidate/validators'
 
 export default {
 
@@ -68,7 +64,29 @@ export default {
             emit('data', emit_data);
         }
 
-        return { state, sendData };
+        const rules = computed(() => ({
+            username: {
+                required,
+                minLength: minLength(5),
+            },
+            photo: {
+                required,
+                url,
+            },
+            email: {
+                required,
+                email,
+            },
+            password: {
+                required,
+                minLength: minLength(5),
+
+            },
+        }));
+
+        const v$ = useVuelidate(rules, state.userLocal);
+
+        return { state, sendData, v$ };
     }
 }
 </script>
@@ -126,9 +144,16 @@ export default {
         }
     }
 
-    form a {
+    .error {
+        color: red !important;
+    }
+
+
+    div button {
+        background-color: transparent;
         position: relative;
         display: inline-block;
+        border: none;
         padding: 10px 20px;
         color: #03e9f4;
         font-size: 16px;
@@ -140,7 +165,7 @@ export default {
         letter-spacing: 4px;
     }
 
-    a {
+    button {
         &:hover {
             background: #03e9f4;
             color: #fff;

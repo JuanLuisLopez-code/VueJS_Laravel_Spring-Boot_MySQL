@@ -57,7 +57,6 @@ export default {
 
         const v$ = useVuelidate(rules, state.categoryLocal);
 
-
         const sendData = () => {
             emit('data', state.categoryLocal);
         }
