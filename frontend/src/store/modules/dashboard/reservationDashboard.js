@@ -14,11 +14,27 @@ export const reservationDashboard = {
                 console.error(error);
             }
         },
+        [Constant.DELETE_RESERVATION]: async (store, payload) => {
+            try {
+                const response = await ReservationServiceDashboard.DeleteReservation(payload);
+                if (response.status === 200) {
+                    store.commit(Constant.DELETE_RESERVATION, payload);
+                }
+            } catch (error) {
+                console.error(error);
+
+            }
+        },
     },//mutations
     mutations: {
         [Constant.INITIALIZE_RESERVATION]: (state, payload) => {
             if (payload) {
                 state.reservations = payload;
+            }
+        },
+        [Constant.DELETE_RESERVATION]: (state, payload) => {
+            if (payload) {
+                state.reservations = state.reservations.filter(item => item.id !== payload);
             }
         },
     },//actions

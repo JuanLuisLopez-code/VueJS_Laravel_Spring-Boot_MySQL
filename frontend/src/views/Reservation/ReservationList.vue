@@ -79,8 +79,7 @@ export default {
         const deleteReservation = () => {
             const indexs = dt.rows({ selected: true })[0];
             if (indexs.length > 0) {
-                console.log('OK delete')
-                // dt.rows({ selected: true }).every(index => store.dispatch(`categoryDashboard/${Constant.DELETE_CATEGORY}`, state.categories[index].id));
+                dt.rows({ selected: true }).every(index => store.dispatch(`reservationDashboard/${Constant.DELETE_RESERVATION}`, state.reservations[index].id));
             } else {
                 toaster.info('You have to select at last ONE reservation');
             }
