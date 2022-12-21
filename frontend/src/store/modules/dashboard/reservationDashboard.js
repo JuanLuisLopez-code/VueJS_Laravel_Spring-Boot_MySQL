@@ -1,7 +1,8 @@
 import Constant from '../../../Constant';
 import ReservationServiceDashboard from '../../../services/dashboard/ReservationServiceDashboard';
 import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster({ "position": "top-right", "duration": 1500 });
+import router from '../../../router/index.js'
+const toaster = createToaster({ "position": "top-right", "duration": 2300 });
 
 export const reservationDashboard = {
     namespaced: true,
@@ -45,7 +46,20 @@ export const reservationDashboard = {
             }
         },
         [Constant.UPDATE_RESERVATION]: async (store, payload) => {
-            store.commit(Constant.UPDATE_RESERVATION, payload);
+            try {
+                const response = await ReservationServiceDashboard.UpdateReservation(payload);
+                if (response.status == 200) {
+                    store.commit(Constant.UPDATE_RESERVATION, payload);
+                }
+            } catch (error) {
+                const status = error.response.status ?? 0;
+                if (status === 404) {
+                    toaster.error('Need to make a change');
+                }
+                if (status === 304) {
+                    toaster.error('The table is already reserved that day and in that type');
+                }
+            }
         },
     },//mutations
     mutations: {
@@ -66,7 +80,11 @@ export const reservationDashboard = {
         },
         [Constant.UPDATE_RESERVATION]: (state, payload) => {
             if (payload) {
-                console.log(payload);
+                const index = state.reservations.findIndex(item => item.id === payload.id);
+                if (index !== -1) {
+                    state.reservations[index] = payload;
+                    router.push({ name: 'reservationsList' });
+                }
             }
         },
     },//actions

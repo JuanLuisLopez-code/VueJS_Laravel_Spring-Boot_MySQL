@@ -29,7 +29,6 @@ export default {
 
         const updateReservation = (data) => {
             store.dispatch(`reservationDashboard/${Constant.UPDATE_RESERVATION}`, data);
-            redirects.return();
         }//updateReservation
 
         const redirects = {

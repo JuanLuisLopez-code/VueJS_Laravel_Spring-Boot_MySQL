@@ -1,6 +1,6 @@
 <template>
     <div class="login-box">
-        <h2>Reservstion</h2>
+        <h2>Reservstion Mesa {{ state.reservationLocal.mesa_id }}</h2>
         <form>
             <div class="user-box">
                 <label>Fecha</label>
@@ -18,8 +18,7 @@
             <br>
             <div class="user-box">
                 <label>Accepted: </label>
-                <input type="checkbox" v-model="state.reservationLocal.accepted"
-                    :checked="state.reservationLocal.accepted">
+                <input type="checkbox" v-model="state.reservationLocal.accepted">
             </div>
             <a @click="sendData()">
                 <span></span>
@@ -49,6 +48,7 @@ export default {
             reservationLocal: { ...props.reservation }
         });
 
+        state.reservationLocal.accepted = Boolean(state.reservationLocal.accepted);
         const sendData = () => {
             emit('data', state.reservationLocal);
         }
