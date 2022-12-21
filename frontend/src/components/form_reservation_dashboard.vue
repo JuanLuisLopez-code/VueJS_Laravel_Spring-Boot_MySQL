@@ -1,13 +1,17 @@
 <template>
     <div class="login-box">
         <h2>Reservstion Mesa {{ state.reservationLocal.mesa_id }}</h2>
-        <form>
+        <div>
             <div class="user-box">
-                <label>Fecha</label>
+                <label>Fecha</label><br>
+                <label class="error" v-if="v$.fecha_reserva.$invalid && !v$.fecha_reserva.$dirty">This input is
+                    required or have an incorrect format (YYYY-MM-DD)</label>
                 <input type="text" v-model="state.reservationLocal.fecha_reserva">
             </div>
             <div class="user-box">
-                <label>Type: </label>
+                <label>Type: </label><br>
+                <label class="error" v-if="v$.type_reservation.$invalid && !v$.type_reservation.$dirty">This input is
+                    required</label>
                 <select v-model="state.reservationLocal.type_reservation">
                     <option value="dinner" :selected="state.reservationLocal.type_reservation === 'dinner'">Dinner
                     </option>
@@ -16,23 +20,30 @@
                 </select>
             </div>
             <br>
-            <div class="user-box">
+            <div class="user-box"><br>
+                <label class="error" v-if="v$.accepted.$invalid && !v$.accepted.$dirty">This input is
+                    required</label>
                 <label>Accepted: </label>
                 <input type="checkbox" v-model="state.reservationLocal.accepted">
             </div>
-            <a @click="sendData()">
+
+            <button @click="sendData()"
+                :disabled="v$.fecha_reserva.$invalid || v$.type_reservation.$invalid || v$.accepted.$invalid">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Update
-            </a>
-        </form>
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
+import { reactive, getCurrentInstance, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, helpers } from '@vuelidate/validators'
+
 
 export default {
 
@@ -43,17 +54,33 @@ export default {
         data: Object
     },
     setup(props) {
+        const date_regex = helpers.regex(/^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[13578]|1[02])\1(?:31))|(?:(\/|-|\.)(?:0?[13-9]|1[0-2])\2(?:29|30)))$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\3(?:29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:0?[1-9]|1\d|2[0-8])$/gm);
         const { emit } = getCurrentInstance();
         const state = reactive({
             reservationLocal: { ...props.reservation }
         });
 
+
+        const rules = computed(() => ({
+            fecha_reserva: {
+                required,
+                date_regex,
+            },
+            type_reservation: {
+                required,
+            },
+            accepted: {
+                required,
+            },
+        }));
+
         state.reservationLocal.accepted = Boolean(state.reservationLocal.accepted);
+        const v$ = useVuelidate(rules, state.reservationLocal);
         const sendData = () => {
             emit('data', state.reservationLocal);
         }
 
-        return { state, sendData };
+        return { state, sendData, v$ };
     }
 }
 </script>
@@ -70,6 +97,10 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
     border-radius: 10px;
+
+    .error {
+        color: red !important;
+    }
 
     h2 {
         margin: 0 0 30px;
@@ -111,9 +142,11 @@ export default {
         }
     }
 
-    form a {
+    div button {
+        background-color: transparent;
         position: relative;
         display: inline-block;
+        border: none;
         padding: 10px 20px;
         color: #03e9f4;
         font-size: 16px;
@@ -125,7 +158,7 @@ export default {
         letter-spacing: 4px;
     }
 
-    a {
+    button {
         &:hover {
             background: #03e9f4;
             color: #fff;

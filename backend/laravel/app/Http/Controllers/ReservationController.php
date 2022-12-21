@@ -28,11 +28,14 @@ class ReservationController extends Controller
         $data = $request->except(['user_id', 'mesa_id']);
         $reservation = Reservation::where('id', $id)->firstOrFail();
         $mesa_id = $reservation->mesa_id;
+        $type_reservation_accepted = ['dinner', 'launch'];
 
         if (!isset($data["fecha_reserva"]) && !isset($data["type_reservation"])) {
             $avalible = 0;
         } else if ($reservation->type_reservation == $data["type_reservation"] && $reservation->fecha_reserva == $data["fecha_reserva"]) {
             $avalible = 0;
+        } else if (isset($data["type_reservation"]) && !in_array($data["type_reservation"], $type_reservation_accepted)) {
+            $avalible = 1;
         } else {
             $avalible = Reservation::where('fecha_reserva', $data["fecha_reserva"])->where('type_reservation', $data['type_reservation'])->where('mesa_id', $mesa_id)->count();
         }

@@ -80,12 +80,13 @@ export const reservationDashboard = {
         },
         [Constant.UPDATE_RESERVATION]: (state, payload) => {
             if (payload) {
-                const index = state.reservations.findIndex(item => item.id === payload.id);
+                const data = state.reservations ?? []
+                const index = data.findIndex(item => item.id === payload.id);
                 if (index !== -1) {
                     payload.accepted = Number(payload.accepted);
                     state.reservations[index] = payload;
-                    router.push({ name: 'reservationsList' });
                 }
+                router.push({ name: 'reservationsList' });
             }
         },
     },//actions

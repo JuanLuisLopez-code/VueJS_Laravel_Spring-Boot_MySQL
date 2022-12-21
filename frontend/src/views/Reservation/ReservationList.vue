@@ -6,8 +6,8 @@
         <div v-if="state.reservations">
             <button @click="updateReservation()" class="pulse update">UPDATE</button>
             <button @click="deleteReservation()" class="pulse delete">DELETE</button>
-            <button @click="activateDeactivete(true)" class="pulse create">ACTIVATE</button>
-            <button @click="activateDeactivete(false)" class="pulse delete">DEACTIVATE</button>
+            <button @click="activateDeactivete(true)" class="pulse create">ACCEPTED</button>
+            <button @click="activateDeactivete(false)" class="pulse delete">NOT ACCEPTED</button>
         </div>
         <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.reservations"
             ref="table">
