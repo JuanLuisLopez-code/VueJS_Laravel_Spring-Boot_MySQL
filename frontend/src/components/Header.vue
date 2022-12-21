@@ -9,7 +9,7 @@
                     :class="{ active: isDashboard }">Dashboard</li>
                 <li v-if="!state.isLogged" @click="redirects.login()" class="page link" :class="{ active: isLogin }">
                     Login</li>
-                <li v-if="state.isLogged" class="page link">{{ state.profile.username }}</li>
+                <li v-if="state.isLogged" @click="redirects.profile()" class="page link">{{ state.profile.username }}</li>
                 <li @click="logout()" v-if="state.isLogged" class="page link">Log Out</li>
             </ul>
             <search-vue v-if="!isReservation" />
@@ -52,6 +52,7 @@ export default {
             reservation: () => router.push({ name: 'reservation' }),
             dashboard: () => router.push({ name: 'dashboard' }),
             login: () => router.push({ name: 'login' }),
+            profile: () => router.push({ name: 'profile' }),
         };
 
         const state = reactive({
