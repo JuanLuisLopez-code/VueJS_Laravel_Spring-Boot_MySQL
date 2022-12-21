@@ -2,9 +2,9 @@
     <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" is-double-paned />
     <!-- <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
         :disabled-dates='{ weekdays: [1, 1] }' is-double-paned /> -->
-    <input type="checkbox" :disabled="state.dinner_check" v-model="state.dinner"> Dinner
-    <input type="checkbox" :disabled="state.launch_check" v-model="state.launch"> Launch
-    <button @click="send_data()">Reservation</button>
+    <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
+    <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
+    <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
 </template>
 
 <script>
@@ -91,7 +91,6 @@ export default {
                 state.launch_check = 1;
             } else {
                 full_date.push(String(state.data.getFullYear()), String(state.data.getMonth()), state.data.getDate());
-                localStorage.setItem('date', full_date.join('-'))
                 fecha_count.map(item => {
                     if (item.fecha_reserva == full_date.join()) {
                         if (item.count > 1) {
@@ -109,14 +108,16 @@ export default {
                         }
                     }
                 });
+                full_date = [];
+                full_date.push(String(state.data.getFullYear()), String(state.data.getMonth() + 1), state.data.getDate());
+                localStorage.setItem('date', full_date.join('-'))
             }
         }
 
         const send_data = () => {
             let data = {
-                date: localStorage.getItem('date'),
-                dinner: state.dinner,
-                launch: state.launch,
+                fecha_reserva: localStorage.getItem('date'),
+                type_reservation: state.dinner
             }
             localStorage.removeItem('date')
             emit('send_data', data);

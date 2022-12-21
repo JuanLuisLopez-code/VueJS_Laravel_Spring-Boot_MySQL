@@ -25,16 +25,18 @@
 <script>
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import card_mesa from '../components/card_mesa.vue';
 import form_details from '../components/form_details.vue';
 import Constant from '../Constant';
+import { useReservationCreate } from '../composables/reservation/useReservation'
 export default {
     components: { card_mesa, form_details },
 
     setup() {
         const store = useStore();
         const route = useRoute();
+        const router = useRouter();
         const id = route.params.id;
 
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
@@ -44,7 +46,9 @@ export default {
         })
 
         const reservation_emit = (data) => {
-            console.log(data, "details")
+            data.mesa_id = id;
+            useReservationCreate(data)
+            router.go(0)
         }
 
         return { stateOne, reservation_emit }
