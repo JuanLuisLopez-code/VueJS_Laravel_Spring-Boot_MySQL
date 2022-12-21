@@ -6,6 +6,8 @@
         <div v-if="state.reservations">
             <button @click="updateReservation()" class="pulse update">UPDATE</button>
             <button @click="deleteReservation()" class="pulse delete">DELETE</button>
+            <button @click="activateDeactivete(true)" class="pulse create">ACTIVATE</button>
+            <button @click="activateDeactivete(false)" class="pulse delete">DEACTIVATE</button>
         </div>
         <DataTable class="display" :options="{ select: true }" :columns="columns" :data="state.reservations"
             ref="table">
@@ -84,7 +86,22 @@ export default {
             }
         };
 
-        return { state, columns, table, redirects, updateReservation, deleteReservation };
+        const activateDeactivete = (status) => {
+            const indexs = dt.rows({ selected: true })[0];
+            if (indexs.length > 0) {
+                dt.rows({ selected: true }).every(index => {
+                    const data = state.reservations[index];
+                    if (data.accepted != status) {
+                        data.accepted = status;
+                        store.dispatch(`reservationDashboard/${Constant.UPDATE_RESERVATION}`, data);
+                    }
+                });
+            } else {
+                toaster.info('You have to select at last ONE reservation');
+            }
+        }
+
+        return { state, columns, table, redirects, updateReservation, deleteReservation, activateDeactivete };
     }
 }
 </script>
