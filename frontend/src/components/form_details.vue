@@ -1,7 +1,9 @@
 <template>
-    <!-- <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" is-double-paned /> -->
-    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
-        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
+    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" is-double-paned />
+    <!-- <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
+        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned /> -->
+    <input type="checkbox" :disabled="state.dinner_check"> Dinner
+    <input type="checkbox" :disabled="state.launch_check"> Launch
 </template>
 
 <script>
@@ -29,8 +31,13 @@ export default {
         const fecha_count = fecha_noRep.map(item => {
             const item_ = {
                 fecha_reserva: item,
-                count: props.reservations.filter(item_ => item_.fecha_reserva === item).length
+                count: props.reservations.filter(item_ => item_.fecha_reserva === item).length,
+                type_reservation: props.reservations.filter(item_ => item_.fecha_reserva === item)
+                    .map(item_map => {
+                        return item_map.type_reservation
+                    })
             }
+
             if (item_.count > 1) {
                 same_day.push(item_.fecha_reserva)
             } else {
@@ -40,6 +47,8 @@ export default {
         });
 
         const state = reactive({
+            dinner_check: 0,
+            launch_check: 0,
             data: new Date(undefined),
             attributes: [
                 {
@@ -63,11 +72,23 @@ export default {
 
         const getDay = () => {
             let full_date = [];
+            state.dinner_check = 0;
+            state.launch_check = 0;
             full_date.push(String(state.data.getFullYear()), String(state.data.getMonth()), state.data.getDate());
             fecha_count.map(item => {
                 if (item.fecha_reserva == full_date.join()) {
                     if (item.count > 1) {
+                        state.dinner_check = 1;
+                        state.launch_check = 1;
                         toaster.error('Day completed');
+                    } else {
+                        if (item.type_reservation[0] == 'dinner') {
+                            state.dinner_check = 1;
+                            state.launch_check = 0;
+                        } else if (item.type_reservation[0] == 'launch') {
+                            state.dinner_check = 0;
+                            state.launch_check = 1;
+                        }
                     }
                 }
             });
