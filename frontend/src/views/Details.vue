@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas"/>    
+        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas" @send_data="reservation_emit" />
     </div>
     <div v-else>
         <span>Table not available</span>
@@ -43,7 +43,11 @@ export default {
             mesas: computed(() => store.getters["mesa/getOneMesa"])
         })
 
-        return { stateOne }
+        const reservation_emit = (data) => {
+            console.log(data, "details")
+        }
+
+        return { stateOne, reservation_emit }
     }
 }
 </script>

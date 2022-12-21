@@ -2,19 +2,26 @@
     <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" is-double-paned />
     <!-- <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
         :disabled-dates='{ weekdays: [1, 1] }' is-double-paned /> -->
-    <input type="checkbox" :disabled="state.dinner_check"> Dinner
-    <input type="checkbox" :disabled="state.launch_check"> Launch
+    <input type="checkbox" :disabled="state.dinner_check" v-model="state.dinner"> Dinner
+    <input type="checkbox" :disabled="state.launch_check" v-model="state.launch"> Launch
+    <button @click="send_data()">Reservation</button>
 </template>
 
 <script>
 import 'v-calendar/dist/style.css';
 import { createToaster } from "@meforma/vue-toaster";
+import { getCurrentInstance } from 'vue';
 import { reactive } from 'vue';
 export default {
     props: {
         reservations: Object
     },
+    emits: {
+        send_data: Object
+    },
     setup(props) {
+        const { emit } = getCurrentInstance();
+
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
 
         for (let i = 0; i < props.reservations.length; i++) {
@@ -47,6 +54,8 @@ export default {
         });
 
         const state = reactive({
+            dinner: 0,
+            launch: 0,
             dinner_check: 0,
             launch_check: 0,
             data: new Date(undefined),
@@ -69,32 +78,51 @@ export default {
                 },
             ]
         })
-
+        state.dinner_check = 1;
+        state.launch_check = 1;
         const getDay = () => {
             let full_date = [];
             state.dinner_check = 0;
             state.launch_check = 0;
-            full_date.push(String(state.data.getFullYear()), String(state.data.getMonth()), state.data.getDate());
-            fecha_count.map(item => {
-                if (item.fecha_reserva == full_date.join()) {
-                    if (item.count > 1) {
-                        state.dinner_check = 1;
-                        state.launch_check = 1;
-                        toaster.error('Day completed');
-                    } else {
-                        if (item.type_reservation[0] == 'dinner') {
+            state.dinner = 0;
+            state.launch = 0;
+            if (state.data == null) {
+                state.dinner_check = 1;
+                state.launch_check = 1;
+            } else {
+                full_date.push(String(state.data.getFullYear()), String(state.data.getMonth()), state.data.getDate());
+                localStorage.setItem('date', full_date.join('-'))
+                fecha_count.map(item => {
+                    if (item.fecha_reserva == full_date.join()) {
+                        if (item.count > 1) {
                             state.dinner_check = 1;
-                            state.launch_check = 0;
-                        } else if (item.type_reservation[0] == 'launch') {
-                            state.dinner_check = 0;
                             state.launch_check = 1;
+                            toaster.error('Day completed');
+                        } else {
+                            if (item.type_reservation[0] == 'dinner') {
+                                state.dinner_check = 1;
+                                state.launch_check = 0;
+                            } else if (item.type_reservation[0] == 'launch') {
+                                state.dinner_check = 0;
+                                state.launch_check = 1;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
-        return { state, getDay }
+        const send_data = () => {
+            let data = {
+                date: localStorage.getItem('date'),
+                dinner: state.dinner,
+                launch: state.launch,
+            }
+            localStorage.removeItem('date')
+            emit('send_data', data);
+        }
+
+        return { state, getDay, send_data }
     }
 
 }
