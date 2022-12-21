@@ -44,7 +44,6 @@
 
 <script>
 import { reactive, getCurrentInstance, computed } from 'vue'
-import { useRouter } from 'vue-router';
 import Constant from '../Constant';
 import { useStore } from 'vuex'
 export default {
@@ -61,7 +60,6 @@ export default {
         },
     },
     setup(props) {
-        const router = useRouter();
         const mesa = props.mesa;
         const { emit } = getCurrentInstance();
         const store = useStore();

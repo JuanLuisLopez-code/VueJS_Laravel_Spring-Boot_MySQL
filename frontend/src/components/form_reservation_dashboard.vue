@@ -4,13 +4,13 @@
         <div>
             <div class="user-box">
                 <label>Fecha</label><br>
-                <label class="error" v-if="v$.fecha_reserva.$invalid && !v$.fecha_reserva.$dirty">This input is
+                <label class="error" v-if="v$.fecha_reserva.$invalid">This input is
                     required or have an incorrect format (YYYY-MM-DD)</label>
                 <input type="text" v-model="state.reservationLocal.fecha_reserva">
             </div>
             <div class="user-box">
                 <label>Type: </label><br>
-                <label class="error" v-if="v$.type_reservation.$invalid && !v$.type_reservation.$dirty">This input is
+                <label class="error" v-if="v$.type_reservation.$invalid">This input is
                     required</label>
                 <select v-model="state.reservationLocal.type_reservation">
                     <option value="dinner" :selected="state.reservationLocal.type_reservation === 'dinner'">Dinner
@@ -44,7 +44,6 @@ import { reactive, getCurrentInstance, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 
-
 export default {
 
     props: {
@@ -54,7 +53,7 @@ export default {
         data: Object
     },
     setup(props) {
-        const date_regex = helpers.regex(/^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[13578]|1[02])\1(?:31))|(?:(\/|-|\.)(?:0?[13-9]|1[0-2])\2(?:29|30)))$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\3(?:29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:0?[1-9]|1\d|2[0-8])$/gm);
+        const date_regex = helpers.regex(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/);
         const { emit } = getCurrentInstance();
         const state = reactive({
             reservationLocal: { ...props.reservation }

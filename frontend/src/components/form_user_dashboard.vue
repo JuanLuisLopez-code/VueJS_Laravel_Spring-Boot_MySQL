@@ -18,10 +18,10 @@
                 <label>Photo</label>
                 <input type="url" v-model="state.userLocal.photo">
             </div>
-            <div class="user-box">
+            <!-- <div class="user-box">
                 <label>Active</label>
                 <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
-            </div>
+            </div> -->
             <a @click="sendData()" v-if="user">
                 <span></span>
                 <span></span>
@@ -42,7 +42,6 @@
 
 <script>
 import { reactive, getCurrentInstance } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default {
 
@@ -53,7 +52,6 @@ export default {
         data: Object
     },
     setup(props) {
-        const router = useRouter();
         const { emit } = getCurrentInstance();
 
         const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 0 };

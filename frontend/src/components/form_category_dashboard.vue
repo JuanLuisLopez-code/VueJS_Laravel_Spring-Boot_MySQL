@@ -1,36 +1,33 @@
 <template>
     <div class="login-box">
         <h2>Category</h2>
-        <form>
+        <div>
             <div class="user-box">
-                <label>Category name</label>
+                <label>Category name</label><br>
+                <label class="error" v-if="v$.name_category.$invalid">This input is required and alpha numeric.</label>
                 <input type="text" v-model="state.categoryLocal.name_category">
             </div>
             <div class="user-box">
-                <label>Category Photo</label>
+                <label>Category Photo</label><br>
+                <label class="error" v-if="v$.photo.$invalid">This input is required and a url.</label>
                 <input type="url" v-model="state.categoryLocal.photo">
             </div>
-            <a @click="sendData()" v-if="category">
+            <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Update
-            </a>
-            <a @click="sendData()" v-else>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Create
-            </a>
-        </form>
+                <p v-if="category">Update</p>
+                <p v-else>Create</p>
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive, getCurrentInstance, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, url, alphaNum } from '@vuelidate/validators'
 
 export default {
 
@@ -41,18 +38,31 @@ export default {
         data: Object
     },
     setup(props) {
-        const router = useRouter();
         const { emit } = getCurrentInstance();
         const category_ = props.category ? props.category : { 'name_category': '', 'photo': '' };
         const state = reactive({
             categoryLocal: { ...category_ }
         });
 
+        const rules = computed(() => ({
+            name_category: {
+                required,
+                alphaNum,
+            },
+            photo: {
+                required,
+                url,
+            }
+        }));
+
+        const v$ = useVuelidate(rules, state.categoryLocal);
+
+
         const sendData = () => {
             emit('data', state.categoryLocal);
         }
 
-        return { state, sendData };
+        return { state, sendData, v$ };
     }
 }
 </script>
@@ -69,6 +79,10 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
     border-radius: 10px;
+
+    .error {
+        color: red !important;
+    }
 
     h2 {
         margin: 0 0 30px;
@@ -110,9 +124,11 @@ export default {
         }
     }
 
-    form a {
+    div button {
+        background-color: transparent;
         position: relative;
         display: inline-block;
+        border: none;
         padding: 10px 20px;
         color: #03e9f4;
         font-size: 16px;
@@ -124,7 +140,7 @@ export default {
         letter-spacing: 4px;
     }
 
-    a {
+    button {
         &:hover {
             background: #03e9f4;
             color: #fff;
