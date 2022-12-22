@@ -3,7 +3,7 @@ import MesaServiceDashboard from "../../../services/dashboard/MesaServiceDashboa
 
 export const mesaDashboard = {
     namespaced: true,
-    satisfies: { mesa: [] },
+    state: { mesa: [] },
     mutations: {
         [Constant.INITIALIZE_MESA]: (state, payload) => {
             if (payload) {
@@ -30,7 +30,9 @@ export const mesaDashboard = {
             }
         },
         [Constant.CREATE_ONE_MESA]: (state, payload) => {
-            state.mesa.push({ ...payload });
+            if (payload) {
+                state.mesa.push({ ...payload });
+            }
         },
     },//mutations
     actions: {
