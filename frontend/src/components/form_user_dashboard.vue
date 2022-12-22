@@ -62,11 +62,22 @@ export default {
         state.userLocal.is_active = Boolean(state.userLocal.is_active);
 
         const sendData = () => {
-            const emit_data = state.userLocal;
-            Object.entries(emit_data).forEach(item => {
-                if (!item[1] && item[0] !== 'is_active') { delete (emit_data[item[0]]); }
-            });
-            emit('data', emit_data);
+            const data = { ...state.userLocal };
+            if (data.username === user_.username) {
+                delete (data.username)
+            }
+            if (data.email === user_.email) {
+                delete (data.email)
+            }
+            if (data.photo === user_.photo) {
+                delete (data.photo)
+            }
+            if (data.password === '') {
+                delete (data.password);
+            }
+            delete (data.type);
+            delete (data.is_active);
+            emit('data', data);
         }
 
         let rules = computed(() => ({

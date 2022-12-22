@@ -81,9 +81,7 @@ class UserController extends Controller
         }
 
         $user->save();
-        return response()->json([
-            "Message" => "Updated correctly"
-        ]);
+        return UserResource::make($user);
     } //update
 
     public function destroy($id)
