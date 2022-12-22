@@ -3,6 +3,7 @@ import MesaServiceDashboard from "../../../services/dashboard/MesaServiceDashboa
 
 export const mesaDashboard = {
     namespaced: true,
+    satisfies: { mesa: [] },
     mutations: {
         [Constant.INITIALIZE_MESA]: (state, payload) => {
             if (payload) {

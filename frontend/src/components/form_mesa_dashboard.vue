@@ -3,28 +3,34 @@
         <h2>Update</h2>
         <div>
             <div class="user-box">
-                <label>Name_mesa</label>
+                <label>Name_mesa</label><br>
+                <label class="error" v-if="v$.name_mesa.$invalid">This field is required or invalid</label>
                 <input type="text" name="" required="" v-model="state.mesa.name_mesa" />
             </div>
             <div class="user-box">
-                <label>Capacity</label>
+                <label>Capacity</label><br>
+                <label class="error" v-if="v$.capacity.$invalid">This field is required</label>
                 <input type="number" name="" required="" v-model="state.mesa.capacity" />
             </div>
             <div class="user-box">
-                <label>Photo</label>
+                <label>Photo</label><br>
+                <label class="error" v-if="v$.photo.$invalid">This field is required and an url</label>
                 <input type="url" name="" required="" v-model="state.mesa.photo" />
             </div>
             <div class="user-box">
-                <label>Active</label>
+                <label>Active</label><br>
+                <label class="error" v-if="v$.is_active.$invalid">This field is required</label>
                 <input type="checkbox" name="" required="" v-model="state.mesa.is_active" />
             </div>
-            <label>Choose a categories:</label>
+            <label>Choose a categories:</label><br>
+            <label class="error" v-if="(state.mesa.categories ?? []).length == 0">This field is required</label>
             <br>
             <br>
             <v-select multiple v-model="state.mesa.categories" :options="state.categories"
                 :getOptionLabel="categories => categories.name_category" />
             <br><br>
-            <button @click="sendSubmit()">
+            <button @click="sendSubmit()"
+                :disabled="v$.name_mesa.$invalid || v$.capacity.$invalid || v$.photo.$invalid || v$.is_active.$invalid || (state.mesa.categories ?? []).length == 0">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -40,6 +46,8 @@
 import { reactive, getCurrentInstance, computed } from 'vue'
 import Constant from '../Constant';
 import { useStore } from 'vuex'
+import { useVuelidate } from '@vuelidate/core'
+import { required, url, alphaNum, numeric, minValue } from '@vuelidate/validators'
 export default {
     props: {
         mesa: Object
@@ -66,16 +74,35 @@ export default {
         });
 
         state.mesa.is_active = Boolean(state.mesa.is_active);
-
         const sendSubmit = () => {
             const cat = state.mesa.categories;
             const names_cat = cat.map(item => item.name_category);
             state.mesa.categories = names_cat;
+            delete (state.mesa.reservations);
             emit('data', state.mesa)
         }
 
+        const rules = computed(() => ({
+            name_mesa: {
+                required,
+                alphaNum,
+            },
+            capacity: {
+                required,
+                numeric,
+                minValue: minValue(1),
+            },
+            photo: {
+                required,
+                url,
+            },
+            is_active: {
+                required,
+            },
+        }));
 
-        return { state, sendSubmit }
+        const v$ = useVuelidate(rules, state.mesa);
+        return { state, sendSubmit, v$ }
     }
 }
 </script>
