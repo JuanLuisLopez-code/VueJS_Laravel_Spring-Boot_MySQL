@@ -3,26 +3,31 @@
         <h2>User</h2>
         <div>
             <div class="user-box">
-                <label>Username</label>
+                <label>Username</label><br>
+                <label class="error" v-if="v$.username.$invalid">Min lenth 5 and alpha numeric</label>
                 <input type="text" v-model="state.userLocal.username">
             </div>
             <div class="user-box">
-                <label>Email</label>
+                <label>Email</label><br>
+                <label class="error" v-if="v$.email.$invalid">Must be an email</label>
                 <input type="text" v-model="state.userLocal.email">
             </div>
             <div class="user-box">
-                <label>Password</label>
+                <label>Password</label><br>
+                <label class="error" v-if="v$.password.$invalid">Min lenth 5</label>
                 <input type="password" v-model="state.userLocal.password">
             </div>
             <div class="user-box">
-                <label>Photo</label>
+                <label>Photo</label><br>
+                <label class="error" v-if="v$.photo.$invalid">Must be an url</label>
                 <input type="url" v-model="state.userLocal.photo">
             </div>
             <!-- <div class="user-box">
                 <label>Active</label>
                 <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
             </div> -->
-            <button @click="sendData()">
+            <button @click="sendData()"
+                :disabled="v$.username.$invalid || v$.email.$invalid || v$.password.$invalid || v$.photo.$invalid">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -37,7 +42,7 @@
 <script>
 import { reactive, getCurrentInstance, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, url, minLength, email } from '@vuelidate/validators'
+import { required, url, minLength, email, alphaNum } from '@vuelidate/validators'
 
 export default {
 
@@ -50,7 +55,7 @@ export default {
     setup(props) {
         const { emit } = getCurrentInstance();
 
-        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 0 };
+        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 1 };
         const state = reactive({
             userLocal: { ...user_ }
         });
@@ -64,13 +69,13 @@ export default {
             emit('data', emit_data);
         }
 
-        const rules = computed(() => ({
+        let rules = computed(() => ({
             username: {
                 required,
+                alphaNum,
                 minLength: minLength(5),
             },
             photo: {
-                required,
                 url,
             },
             email: {
@@ -78,14 +83,33 @@ export default {
                 email,
             },
             password: {
-                required,
                 minLength: minLength(5),
-
             },
         }));
 
-        const v$ = useVuelidate(rules, state.userLocal);
+        //Rules for create
+        if (!props.user) {
+            rules = computed(() => ({
+                username: {
+                    required,
+                    alphaNum,
+                    minLength: minLength(5),
+                },
+                photo: {
+                    url,
+                },
+                email: {
+                    required,
+                    email,
+                },
+                password: {
+                    minLength: minLength(5),
+                    required
+                },
+            }));
+        }
 
+        const v$ = useVuelidate(rules, state.userLocal);
         return { state, sendData, v$ };
     }
 }

@@ -15,7 +15,7 @@
                     </span>
                 </div>
             </div>
-            <div class="gallery-item-info">
+            <!-- <div class="gallery-item-info">
                 <ul>
                     <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span>
                         34
@@ -26,7 +26,7 @@
                         <font-awesome-icon icon="fa-solid fa-comment" />
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </main>
 </template>

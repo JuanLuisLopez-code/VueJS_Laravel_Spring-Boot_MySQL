@@ -32,7 +32,12 @@ export const user = {
         [Constant.LOGOUT]: async (store) => {
             try {
                 const response = await UserService.Logout();
-                store.commit(Constant.LOGOUT);
+                let data = { status: response.status };
+                if (store.state.isAdmin) {
+                    const response_admin = await UserService.Logout_admin();
+                    data.status_admin = response_admin.status;
+                }
+                store.commit(Constant.LOGOUT, data);
             } catch (error) {
                 toaster.error('Logout error');
             }
@@ -64,6 +69,7 @@ export const user = {
     mutations: {
         [Constant.LOGIN]: (state, payload) => {
             if (payload) {
+                toaster.success('Login successfuly');
                 localStorage.setItem("token", payload.token);
                 localStorage.setItem("isAuth", true);
                 state.user = payload.user;
@@ -97,8 +103,7 @@ export const user = {
             }
         },//INITIALIZE_PROFILE
 
-        [Constant.LOGOUT]: (state) => {
-            toaster.success('Logout successfuly');
+        [Constant.LOGOUT]: (state, payload) => {
             state.user = {};
             state.isAuth = false;
             state.isAdmin = false;
@@ -107,6 +112,13 @@ export const user = {
             localStorage.removeItem('isAuth');
             localStorage.removeItem('isAdmin');
             router.push({ name: 'home' });
+
+            if (payload.status === 200) {
+                toaster.success('Logout successfuly')
+            }
+            if (payload.status_admin === 200) {
+                toaster.success('Logout admin successfuly')
+            }
 
         },//LOGOUT
     },//mutations

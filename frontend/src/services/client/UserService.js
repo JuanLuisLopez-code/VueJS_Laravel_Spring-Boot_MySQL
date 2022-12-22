@@ -19,6 +19,10 @@ export default {
         return Api(secrets.URL_SPRING).post('logout');
     },//Logout
 
+    Logout_admin() {
+        return Api(secrets.URL_LARAVEL).post('logout');
+    },//Logout
+
     Profile() {
         return Api(secrets.URL_SPRING).get('profile');
     },//Profile
