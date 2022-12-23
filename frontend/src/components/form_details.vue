@@ -1,7 +1,6 @@
 <template>
-    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" is-double-paned />
-    <!-- <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
-        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned /> -->
+    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
+        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
     <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
     <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
     <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
