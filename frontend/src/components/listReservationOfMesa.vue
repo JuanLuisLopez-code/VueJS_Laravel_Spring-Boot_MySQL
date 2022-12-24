@@ -11,7 +11,7 @@
             <tr v-for="mesa in state.reservations">
                 <td class="text-left">{{ mesa.fecha_reserva }}</td>
                 <td class="text-left">{{ mesa.type_reservation }}</td>
-                <td class="text-left"><button>Delete</button></td>
+                <td class="text-left"><button @click="delete_reservation(mesa.id)">Delete</button></td>
             </tr>
         </tbody>
     </table>
@@ -19,20 +19,26 @@
 
 <script>
 import { reactive } from 'vue';
-import { useListReservationsOfMesa } from '../composables/reservation/useReservation'
+import { useListReservationsOfMesa, deleteReservation } from '../composables/reservation/useReservation'
 export default {
-    components: { useListReservationsOfMesa },
+    components: { useListReservationsOfMesa, deleteReservation },
     props: {
-        mesa_id: Number
+        id: Number
     },
     setup(props) {
 
         const state = reactive({
-            // mesa_id: props.mesa_id,
-            reservations: useListReservationsOfMesa(props.mesa_id),
+            reservations: useListReservationsOfMesa(props.id),
         })
 
-        return { state };
+        const delete_reservation = (id) => {
+            const check = deleteReservation(id);
+            if (check) {
+                state.reservations = state.reservations.filter(item => item.id !== id)
+            }
+        }
+
+        return { state, delete_reservation };
     }
 
 }

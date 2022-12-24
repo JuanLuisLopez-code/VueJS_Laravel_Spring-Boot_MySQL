@@ -13,6 +13,10 @@ export default {
 
     ListReservationsOfMesa(mesa_id) {
         return Api(secrets.URL_SPRING).get(`listReservation/${mesa_id}`);
-    },//ListReservationUser
+    },//ListReservationsOfMesa
+
+    DeleteReservation(mesa_id) {
+        return Api(secrets.URL_SPRING).delete(`reservation/${mesa_id}`);
+    },//DeleteReservation
 
 }//export

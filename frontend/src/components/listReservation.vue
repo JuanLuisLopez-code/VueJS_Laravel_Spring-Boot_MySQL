@@ -17,7 +17,7 @@
     </table>
     <br>
     <br>
-    <listReservationOfMesa v-if="state.mesa_id != null" :mesa_id="state.mesa_id" :key="state.mesa_id"/>
+    <listReservationOfMesa v-if="state.mesa_id != null" :id="state.mesa_id" :key="state.mesa_id"/>
 </template>
 
 <script>

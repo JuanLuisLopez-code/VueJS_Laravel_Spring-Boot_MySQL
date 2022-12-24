@@ -26,3 +26,12 @@ export const useListReservationsOfMesa = (mesa_id) => {
         .catch(error => console.error(error))
     return reservationOfMesa;
 };
+
+export const deleteReservation = (mesa_id) => {
+    const deleteReservation = ref([])
+    ReservationService.DeleteReservation(mesa_id)
+        .then(res => { deleteReservation.value = res.data })
+        // .then(res => { console.log(res.data) })
+        .catch(error => console.error(error))
+    return deleteReservation;
+};
