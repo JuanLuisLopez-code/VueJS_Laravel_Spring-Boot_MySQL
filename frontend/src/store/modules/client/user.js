@@ -30,6 +30,8 @@ export const user = {
         },//LOGIN
 
         [Constant.LOGOUT]: async (store) => {
+
+            console.log('a');
             try {
                 const response = await UserService.Logout();
                 let data = { status: response.status };
@@ -40,6 +42,7 @@ export const user = {
                 store.commit(Constant.LOGOUT, data);
             } catch (error) {
                 toaster.error('Logout error');
+                store.commit(Constant.LOGOUT, { status: null, status_admin: null });
             }
         },//LOGOUT
 

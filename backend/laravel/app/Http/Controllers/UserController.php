@@ -137,4 +137,22 @@ class UserController extends Controller
             return response()->json(['error' => 'get user error'], 401);
         }
     }
+
+    public function isAdmin()
+    {
+        try {
+            if (auth()->user() == null || auth()->user()->type != "admin") {
+                return response()->json([
+                    "error" => "Unauthorized"
+                ], 403);
+            }
+            return response()->json([
+                "msg" => "You are and admin"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => "Unauthorized"
+            ], 403);
+        }
+    }
 }//class

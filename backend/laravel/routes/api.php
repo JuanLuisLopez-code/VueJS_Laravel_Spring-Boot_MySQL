@@ -17,3 +17,4 @@ Route::group(['middleware' => ['admin']], function () {
 Route::post('login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout']);
 Route::get('profile', [UserController::class, 'getUserToken']);
+Route::get('isAdmin', [UserController::class, 'isAdmin']);
