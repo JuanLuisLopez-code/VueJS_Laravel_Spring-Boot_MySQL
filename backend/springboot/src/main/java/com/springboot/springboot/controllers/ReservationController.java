@@ -74,8 +74,6 @@ public class ReservationController {
     public ResponseEntity<Reservation> UpdateReservation(@RequestBody Reservation reservation_,
             @PathVariable(required = true) Long id_reserv) {
         try {
-            System.out.println("asd");
-            System.out.println(reservation_);
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                     .getPrincipal();
             User user = UserRepository.findByUsername(userDetails.getUsername()).get();
