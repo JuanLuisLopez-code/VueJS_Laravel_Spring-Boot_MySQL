@@ -7,7 +7,7 @@
     </div>
 
     <div class="container_filter_search">
-        <searchVue :search="state.filters.name_mesa" @emitSearch="updateSearch" />
+        <searchVue :search="state.filters.name_mesa" @emitSearch="updateSearch" :key="state.filters.name_mesa" />
     </div>
     <div class="container_filter">
         <input type="number" min="0" v-model="state.filters.capacity" class="input_capacity"
