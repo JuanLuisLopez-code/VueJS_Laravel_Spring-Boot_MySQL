@@ -52,7 +52,6 @@ export default {
         const state = reactive({
             selected_day: '',
             dinner: 0,
-            launch: 0,
             dinner_check: 0,
             launch_check: 0,
             data: new Date(undefined),
@@ -74,7 +73,6 @@ export default {
             state.dinner_check = 0;
             state.launch_check = 0;
             state.dinner = 0;
-            state.launch = 0;
             if (state.data == null) {
                 state.dinner_check = 1;
                 state.launch_check = 1;
@@ -107,7 +105,6 @@ export default {
                 fecha_reserva: state.selected_day,
                 type_reservation: state.dinner
             }
-            localStorage.removeItem('date')
             emit('send_data', data);
         }
 
