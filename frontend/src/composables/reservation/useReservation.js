@@ -2,11 +2,10 @@ import { ref } from 'vue';
 import ReservationService from '../../services/client/ReservationService';
 
 export const useReservationCreate = (data) => {
-//IMPORT ALERTS
+    //IMPORT ALERTS
     const reservation = ref([])
     ReservationService.CreateReservation(data)
-        .then(res => { console.log(res) })
-        // .then(res => { toastr })
+        .then(res => {  })
         .catch(error => console.error(error))
     return reservation;
 };
@@ -27,12 +26,17 @@ export const useListReservationsOfMesa = (mesa_id) => {
     return reservationOfMesa;
 };
 
-export const UpdateReservation = (mesa_id) => {
-    const reservationOfMesa = ref([])
-    ReservationService.ListReservationsOfMesa(mesa_id)
-        .then(res => { reservationOfMesa.value = res.data })
+export const UpdateReservation = (data) => {
+    let data_ = {
+        fecha_reserva: data.fecha_reserva,
+        type_reservation: data.type_reservation
+    }
+    let id = data.mesa_id
+    const UpdateReservation = ref([])
+    ReservationService.UpdateReservation(data_, id)
+        .then(res => { UpdateReservation.value = res.data })
         .catch(error => console.error(error))
-    return reservationOfMesa;
+    return UpdateReservation;
 };
 
 export const deleteReservation = (mesa_id) => {

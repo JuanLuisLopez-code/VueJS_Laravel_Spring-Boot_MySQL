@@ -34,8 +34,6 @@ public class ReservationController {
     @Autowired
     private UserRepository UserRepository;
 
-    
-
     @PostMapping("/reservation/{id_mesa}")
     public ResponseEntity<Reservation> CreateReservation(@RequestBody Reservation reservation,
             @PathVariable(required = true) Long id_mesa) {
@@ -76,6 +74,8 @@ public class ReservationController {
     public ResponseEntity<Reservation> UpdateReservation(@RequestBody Reservation reservation_,
             @PathVariable(required = true) Long id_reserv) {
         try {
+            System.out.println("asd");
+            System.out.println(reservation_);
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                     .getPrincipal();
             User user = UserRepository.findByUsername(userDetails.getUsername()).get();

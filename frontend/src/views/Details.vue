@@ -47,8 +47,6 @@ export default {
             mesas: computed(() => store.getters["mesa/getOneMesa"])
         })
 
-        console.log(stateOne.mesas)
-
         const reservation_emit = (data) => {
             data.mesa_id = id;
             useReservationCreate(data)

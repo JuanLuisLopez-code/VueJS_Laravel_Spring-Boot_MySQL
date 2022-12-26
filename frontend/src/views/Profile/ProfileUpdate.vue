@@ -16,6 +16,7 @@ import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import Constant from '../../Constant';
+import { UpdateReservation } from '../../composables/reservation/useReservation'
 export default {
   components: { form_details },
   setup() {
@@ -32,9 +33,8 @@ export default {
 
     const reservation_emit = (data) => {
       data.mesa_id = id;
-      console.log(data)
-      // useReservationCreate(data)
-      // router.go(0)
+      UpdateReservation(data)
+      router.push({ name: "profile" })
     }
 
     return { stateOne, reservation_emit }

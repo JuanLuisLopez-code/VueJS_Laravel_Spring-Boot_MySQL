@@ -16,6 +16,7 @@ import 'v-calendar/dist/style.css';
 import { createToaster } from "@meforma/vue-toaster";
 import { getCurrentInstance } from 'vue';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 export default {
     props: {
         reservations: Object
@@ -31,38 +32,41 @@ export default {
             reservas = JSON.parse(sessionStorage.getItem("reservations"))
         }
         const { emit } = getCurrentInstance();
+        const router = useRouter();
 
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         let same_day = []
         let different_day = []
+        if (!reservas) {
+            router.push({ name: "home" })
+        }
 
-        if (reservas) {
-            for (let i = 0; i < reservas.length; i++) {
-                let num = reservas[i].fecha_reserva.split('-');
-                num[1] = num[1] - 1;
-                reservas[i].fecha_reserva = num.join(',');
+        for (let i = 0; i < reservas.length; i++) {
+            let num = reservas[i].fecha_reserva.split('-');
+            num[1] = num[1] - 1;
+            reservas[i].fecha_reserva = num.join(',');
+        }
+
+        const fecha_noRep = Array.from(new Set(reservas.map(item => item.fecha_reserva)));
+
+        const fecha_count = fecha_noRep.map(item => {
+            const item_ = {
+                fecha_reserva: item,
+                count: reservas.filter(item_ => item_.fecha_reserva === item).length,
+                type_reservation: reservas.filter(item_ => item_.fecha_reserva === item)
+                    .map(item_map => {
+                        return item_map.type_reservation
+                    })
             }
 
-            const fecha_noRep = Array.from(new Set(reservas.map(item => item.fecha_reserva)));
+            if (item_.count > 1) {
+                same_day.push(item_.fecha_reserva)
+            } else {
+                different_day.push(item_.fecha_reserva)
+            }
+            return item_
+        });
 
-            const fecha_count = fecha_noRep.map(item => {
-                const item_ = {
-                    fecha_reserva: item,
-                    count: reservas.filter(item_ => item_.fecha_reserva === item).length,
-                    type_reservation: reservas.filter(item_ => item_.fecha_reserva === item)
-                        .map(item_map => {
-                            return item_map.type_reservation
-                        })
-                }
-
-                if (item_.count > 1) {
-                    same_day.push(item_.fecha_reserva)
-                } else {
-                    different_day.push(item_.fecha_reserva)
-                }
-                return item_
-            });
-        }
         const state = reactive({
             dinner: 0,
             launch: 0,
