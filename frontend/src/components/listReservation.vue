@@ -9,7 +9,7 @@
         </thead>
         <tbody class="table-hover">
             <tr v-for="mesa in state.mesas">
-                <td class="text-left">{{ mesa.name_mesa }}</td>
+                <td class="text-left">{{ mesa.name_mesa }} (ID: {{ mesa.id }})</td>
                 <td class="text-left"><img :src="mesa.photo" alt="" style="width: 10em;"></td>
                 <td class="text-left"><button @click="getId(mesa.id)">Check</button></td>
             </tr>

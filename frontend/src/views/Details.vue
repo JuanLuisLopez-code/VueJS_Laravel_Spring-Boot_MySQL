@@ -15,7 +15,8 @@
                 </div>
             </div>
         </div>
-        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas" @send_data="reservation_emit" />
+        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas" @send_data="reservation_emit"
+            v-if="stateOne.is_login" />
     </div>
     <div v-else>
         <span>Table not available</span>
@@ -44,7 +45,8 @@ export default {
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
 
         const stateOne = reactive({
-            mesas: computed(() => store.getters["mesa/getOneMesa"])
+            mesas: computed(() => store.getters["mesa/getOneMesa"]),
+            is_login: store.getters["user/GetIsAuth"],
         })
 
         const reservation_emit = (data) => {

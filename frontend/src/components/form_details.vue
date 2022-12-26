@@ -25,49 +25,32 @@ export default {
         send_data: Object
     },
     setup(props) {
-        let reservas = props.reservations;
-        if (props.reservations.length > 0) {
-            sessionStorage.setItem("reservations", JSON.stringify(props.reservations))
-        } else {
-            reservas = JSON.parse(sessionStorage.getItem("reservations"))
-        }
         const { emit } = getCurrentInstance();
         const router = useRouter();
-
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
-        let same_day = []
-        let different_day = []
-        if (!reservas) {
-            router.push({ name: "home" })
-        }
-
-        for (let i = 0; i < reservas.length; i++) {
-            let num = reservas[i].fecha_reserva.split('-');
-            num[1] = num[1] - 1;
-            reservas[i].fecha_reserva = num.join(',');
-        }
+        let reservas = props.reservations || [];
 
         const fecha_noRep = Array.from(new Set(reservas.map(item => item.fecha_reserva)));
 
         const fecha_count = fecha_noRep.map(item => {
+            let fecha_split = item.split('-');
+            fecha_split[1] = fecha_split[1] - 1;
             const item_ = {
-                fecha_reserva: item,
+                fecha_reserva: new Date(fecha_split[0], fecha_split[1], fecha_split[2]),
                 count: reservas.filter(item_ => item_.fecha_reserva === item).length,
                 type_reservation: reservas.filter(item_ => item_.fecha_reserva === item)
                     .map(item_map => {
                         return item_map.type_reservation
                     })
             }
-
-            if (item_.count > 1) {
-                same_day.push(item_.fecha_reserva)
-            } else {
-                different_day.push(item_.fecha_reserva)
-            }
             return item_
         });
 
+        const same_day = fecha_count.filter(item => item.count > 1);
+        const different_day = fecha_count.filter(item => item.count <= 1);
+
         const state = reactive({
+            selected_day: '',
             dinner: 0,
             launch: 0,
             dinner_check: 0,
@@ -76,26 +59,18 @@ export default {
             attributes: [
                 {
                     highlight: 'red',
-                    dates: same_day.map((item) => {
-                        let day = item.split(',');
-                        return new Date(day[0], day[1], day[2]);
-                    })
-                    ,
+                    dates: same_day.map(item => item.fecha_reserva)
+
                 },
                 {
                     highlight: 'green',
-                    dates: different_day.map((item) => {
-                        let day = item.split(',');
-                        return new Date(day[0], day[1], day[2]);
-                    })
-                    ,
+                    dates: different_day.map(item => item.fecha_reserva)
                 },
             ]
         })
         state.dinner_check = 1;
         state.launch_check = 1;
         const getDay = () => {
-            let full_date = [];
             state.dinner_check = 0;
             state.launch_check = 0;
             state.dinner = 0;
@@ -104,9 +79,11 @@ export default {
                 state.dinner_check = 1;
                 state.launch_check = 1;
             } else {
-                full_date.push(String(state.data.getFullYear()), String(state.data.getMonth()), state.data.getDate());
+                const full_date = `${state.data.getFullYear()}-${state.data.getMonth() + 1}-${state.data.getDate()}`;
+                state.selected_day = full_date;
                 fecha_count.map(item => {
-                    if (item.fecha_reserva == full_date.join()) {
+                    const full_date_item = `${item.fecha_reserva.getFullYear()}-${item.fecha_reserva.getMonth() + 1}-${item.fecha_reserva.getDate()}`;
+                    if (full_date_item == full_date) {
                         if (item.count > 1) {
                             state.dinner_check = 1;
                             state.launch_check = 1;
@@ -122,15 +99,12 @@ export default {
                         }
                     }
                 });
-                full_date = [];
-                full_date.push(String(state.data.getFullYear()), String(state.data.getMonth() + 1), state.data.getDate());
-                localStorage.setItem('date', full_date.join('-'))
             }
         }
 
         const send_data = () => {
             let data = {
-                fecha_reserva: localStorage.getItem('date'),
+                fecha_reserva: state.selected_day,
                 type_reservation: state.dinner
             }
             localStorage.removeItem('date')

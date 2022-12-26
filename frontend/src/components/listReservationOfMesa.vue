@@ -4,7 +4,7 @@
             <tr>
                 <th class="text-left">fecha_reserva</th>
                 <th class="text-left">type_reservation</th>
-                <th class="text-left">Update</th>
+                <th class="text-left" v-if="state.isAdmin">Update</th>
                 <th class="text-left">Delete</th>
             </tr>
         </thead>
@@ -12,7 +12,8 @@
             <tr v-for="mesa in state.reservations">
                 <td class="text-left">{{ mesa.fecha_reserva }}</td>
                 <td class="text-left">{{ mesa.type_reservation }}</td>
-                <td class="text-left"><button @click="update_reservation(mesa.id)">Update</button></td>
+                <td class="text-left"><button @click="update_reservation(mesa.id)" v-if="state.isAdmin">Update</button>
+                </td>
                 <td class="text-left"><button @click="delete_reservation(mesa.id)">Delete</button></td>
             </tr>
         </tbody>
@@ -40,6 +41,7 @@ export default {
         const state = reactive({
             mesas: computed(() => store.getters["mesa/getOneMesa"]),
             reservations: useListReservationsOfMesa(props.id),
+            isAdmin: store.getters["user/GetIsAdmin"],
         })
 
         const update_reservation = (id) => {
