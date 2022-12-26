@@ -1,5 +1,7 @@
 package com.springboot.springboot.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +10,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.springboot.springboot.model.BlacklistToken;
 import com.springboot.springboot.model.User;
 import com.springboot.springboot.model.UserAndToken;
+import com.springboot.springboot.repository.BlacklistTokenRepository;
 import com.springboot.springboot.repository.UserRepository;
 import com.springboot.springboot.security.jwt.JwtUtils;
+import com.springboot.springboot.security.jwt.AuthTokenFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +33,12 @@ public class UserController {
 
     @Autowired
     private UserRepository UserRepository;
+
+    @Autowired
+    private BlacklistTokenRepository BlacklistTokenRepository;
+
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -90,8 +102,14 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser() {
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) {
         try {
+            String token = authTokenFilter.parseJwt(request);
+            if (BlacklistTokenRepository.TokenExist(token) == 0) {
+                BlacklistToken blacklistToken = new BlacklistToken();
+                blacklistToken.setToken(token);
+                BlacklistTokenRepository.save(blacklistToken);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {

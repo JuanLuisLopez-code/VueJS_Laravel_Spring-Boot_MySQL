@@ -40,6 +40,7 @@ export const user = {
                 store.commit(Constant.LOGOUT, data);
             } catch (error) {
                 toaster.error('Logout error');
+                store.commit(Constant.LOGOUT, { status: null, status_admin: null });
             }
         },//LOGOUT
 
