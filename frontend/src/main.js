@@ -9,6 +9,7 @@ import vSelect from 'vue-select'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './assets/main.scss';
 import Paginate from "vuejs-paginate-next";
+import { SetupCalendar, DatePicker } from 'v-calendar';
 
 //////ADD ICONS//////
 import { faFishFins, faHeart, faComment, faMagnifyingGlass, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -27,3 +28,6 @@ app.use(Paginate);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('v-select', vSelect)
 app.mount('#app');
+
+app.use(SetupCalendar, {})
+app.component('DatePicker', DatePicker)

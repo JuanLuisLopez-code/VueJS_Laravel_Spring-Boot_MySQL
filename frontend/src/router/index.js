@@ -43,6 +43,18 @@ const router = createRouter({
       component: () => import('../views/Register.vue'),
       beforeEnter: AuthGuards.noAuthGuard, meta: { requiresAuth: true }
     },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import('../views/Profile.vue'),
+      beforeEnter: AuthGuards.AuthGuard, meta: { requiresAuth: true }
+    },
+    {
+      path: "/profile/reservation/:id",
+      name: "updateReservation",
+      component: () => import('../views/Profile/ProfileUpdate.vue'),
+      beforeEnter: AuthGuards.AuthGuard, meta: { requiresAuth: true }
+    },
 
     ///DASHBOARD///
     {
