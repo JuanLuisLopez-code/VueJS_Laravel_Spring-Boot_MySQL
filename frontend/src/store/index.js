@@ -6,6 +6,7 @@ import { mesaDashboard } from './modules/dashboard/mesaDashboard';
 import { categoryDashboard } from './modules/dashboard/categoryDashboard';
 import { userDashboard } from "./modules/dashboard/userDashboard.js";
 import { user } from "./modules/client/user.js";
+import { reservationDashboard } from "./modules/dashboard/reservationDashboard.js";
 
 export default Vuex.createStore({
 
@@ -15,6 +16,7 @@ export default Vuex.createStore({
         mesaDashboard: mesaDashboard,
         categoryDashboard: categoryDashboard,
         userDashboard: userDashboard,
-        user: user
+        user: user,
+        reservationDashboard: reservationDashboard,
     }
 });

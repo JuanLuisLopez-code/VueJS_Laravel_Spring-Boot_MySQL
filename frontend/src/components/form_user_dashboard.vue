@@ -1,48 +1,48 @@
 <template>
     <div class="login-box">
         <h2>User</h2>
-        <form>
+        <div>
             <div class="user-box">
-                <label>Username</label>
+                <label>Username</label><br>
+                <label class="error" v-if="v$.username.$invalid">Min lenth 5 and alpha numeric</label>
                 <input type="text" v-model="state.userLocal.username">
             </div>
             <div class="user-box">
-                <label>Email</label>
+                <label>Email</label><br>
+                <label class="error" v-if="v$.email.$invalid">Must be an email</label>
                 <input type="text" v-model="state.userLocal.email">
             </div>
             <div class="user-box">
-                <label>Password</label>
+                <label>Password</label><br>
+                <label class="error" v-if="v$.password.$invalid">Min lenth 5</label>
                 <input type="password" v-model="state.userLocal.password">
             </div>
             <div class="user-box">
-                <label>Photo</label>
+                <label>Photo</label><br>
+                <label class="error" v-if="v$.photo.$invalid">Must be an url</label>
                 <input type="url" v-model="state.userLocal.photo">
             </div>
-            <div class="user-box">
+            <!-- <div class="user-box">
                 <label>Active</label>
                 <input type="checkbox" v-model="state.userLocal.is_active" :checked="state.userLocal.is_active">
-            </div>
-            <a @click="sendData()" v-if="user">
+            </div> -->
+            <button @click="sendData()"
+                :disabled="v$.username.$invalid || v$.email.$invalid || v$.password.$invalid || v$.photo.$invalid">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Update
-            </a>
-            <a @click="sendData()" v-else>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Create
-            </a>
-        </form>
+                <p v-if="user">Update</p>
+                <p v-else>Create</p>
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive, getCurrentInstance, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, url, minLength, email, alphaNum } from '@vuelidate/validators'
 
 export default {
 
@@ -53,24 +53,75 @@ export default {
         data: Object
     },
     setup(props) {
-        const router = useRouter();
         const { emit } = getCurrentInstance();
 
-        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 0 };
+        const user_ = props.user ? props.user : { 'username': '', 'photo': '', 'email': '', 'password': '', 'is_active': 1 };
         const state = reactive({
             userLocal: { ...user_ }
         });
         state.userLocal.is_active = Boolean(state.userLocal.is_active);
 
         const sendData = () => {
-            const emit_data = state.userLocal;
-            Object.entries(emit_data).forEach(item => {
-                if (!item[1] && item[0] !== 'is_active') { delete (emit_data[item[0]]); }
-            });
-            emit('data', emit_data);
+            const data = { ...state.userLocal };
+            if (data.username === user_.username) {
+                delete (data.username)
+            }
+            if (data.email === user_.email) {
+                delete (data.email)
+            }
+            if (data.photo === user_.photo) {
+                delete (data.photo)
+            }
+            if (data.password === '') {
+                delete (data.password);
+            }
+            delete (data.type);
+            delete (data.is_active);
+            emit('data', data);
         }
 
-        return { state, sendData };
+        let rules = computed(() => ({
+            username: {
+                required,
+                alphaNum,
+                minLength: minLength(5),
+            },
+            photo: {
+                url,
+            },
+            email: {
+                required,
+                email,
+            },
+            password: {
+                minLength: minLength(5),
+            },
+        }));
+
+        //Rules for create
+        if (!props.user) {
+            rules = computed(() => ({
+                username: {
+                    required,
+                    alphaNum,
+                    minLength: minLength(5),
+                },
+                photo: {
+                    url,
+                },
+                email: {
+                    required,
+                    email,
+                },
+                password: {
+                    minLength: minLength(5),
+                    required
+                },
+            }));
+        }
+
+        const v$ = useVuelidate(rules, state.userLocal);
+        return { state, sendData, v$ };
     }
 }
 </script>
@@ -128,9 +179,16 @@ export default {
         }
     }
 
-    form a {
+    .error {
+        color: red !important;
+    }
+
+
+    div button {
+        background-color: transparent;
         position: relative;
         display: inline-block;
+        border: none;
         padding: 10px 20px;
         color: #03e9f4;
         font-size: 16px;
@@ -142,7 +200,7 @@ export default {
         letter-spacing: 4px;
     }
 
-    a {
+    button {
         &:hover {
             background: #03e9f4;
             color: #fff;

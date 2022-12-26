@@ -1,24 +1,39 @@
 <template>
     <div class="login-box">
-        <h2>Category</h2>
+        <h2>Reservstion Mesa {{ state.reservationLocal.mesa_id }}</h2>
         <div>
             <div class="user-box">
-                <label>Category name</label><br>
-                <label class="error" v-if="v$.name_category.$invalid">This input is required and alpha numeric.</label>
-                <input type="text" v-model="state.categoryLocal.name_category">
+                <label>Fecha</label><br>
+                <label class="error" v-if="v$.fecha_reserva.$invalid">This input is
+                    required or have an incorrect format (YYYY-MM-DD)</label>
+                <input type="text" v-model="state.reservationLocal.fecha_reserva">
             </div>
             <div class="user-box">
-                <label>Category Photo</label><br>
-                <label class="error" v-if="v$.photo.$invalid">This input is required and a url.</label>
-                <input type="url" v-model="state.categoryLocal.photo">
+                <label>Type: </label><br>
+                <label class="error" v-if="v$.type_reservation.$invalid">This input is
+                    required</label>
+                <select v-model="state.reservationLocal.type_reservation">
+                    <option value="dinner" :selected="state.reservationLocal.type_reservation === 'dinner'">Dinner
+                    </option>
+                    <option value="launch" :selected="state.reservationLocal.type_reservation === 'launch'">Launch
+                    </option>
+                </select>
             </div>
-            <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
+            <br>
+            <div class="user-box"><br>
+                <label class="error" v-if="v$.accepted.$invalid && !v$.accepted.$dirty">This input is
+                    required</label>
+                <label>Accepted: </label>
+                <input type="checkbox" v-model="state.reservationLocal.accepted">
+            </div>
+
+            <button @click="sendData()"
+                :disabled="v$.fecha_reserva.$invalid || v$.type_reservation.$invalid || v$.accepted.$invalid">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                <p v-if="category">Update</p>
-                <p v-else>Create</p>
+                Update
             </button>
         </div>
     </div>
@@ -27,38 +42,41 @@
 <script>
 import { reactive, getCurrentInstance, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, url, alphaNum } from '@vuelidate/validators'
+import { required, helpers } from '@vuelidate/validators'
 
 export default {
 
     props: {
-        category: Object
+        reservation: Object
     },
     emits: {
         data: Object
     },
     setup(props) {
+        const date_regex = helpers.regex(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/);
         const { emit } = getCurrentInstance();
-        const category_ = props.category ? props.category : { 'name_category': '', 'photo': '' };
         const state = reactive({
-            categoryLocal: { ...category_ }
+            reservationLocal: { ...props.reservation }
         });
 
+
         const rules = computed(() => ({
-            name_category: {
+            fecha_reserva: {
                 required,
-                alphaNum,
+                date_regex,
             },
-            photo: {
+            type_reservation: {
                 required,
-                url,
-            }
+            },
+            accepted: {
+                required,
+            },
         }));
 
-        const v$ = useVuelidate(rules, state.categoryLocal);
-
+        state.reservationLocal.accepted = Boolean(state.reservationLocal.accepted);
+        const v$ = useVuelidate(rules, state.reservationLocal);
         const sendData = () => {
-            emit('data', state.categoryLocal);
+            emit('data', state.reservationLocal);
         }
 
         return { state, sendData, v$ };

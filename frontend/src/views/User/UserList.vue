@@ -16,7 +16,7 @@
                     <th>Email</th>
                     <th>Photo</th>
                     <th>Type</th>
-                    <th>Active</th>
+                    <!-- <th>Active</th> -->
                 </tr>
             </thead>
         </DataTable>
@@ -52,7 +52,7 @@ export default {
             { data: 'email' },
             { data: 'photo' },
             { data: 'type' },
-            { data: 'is_active' },
+            // { data: 'is_active' },
         ];
 
         let dt;
