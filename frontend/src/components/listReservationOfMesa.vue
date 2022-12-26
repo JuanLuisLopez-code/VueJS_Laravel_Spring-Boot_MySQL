@@ -4,13 +4,15 @@
             <tr>
                 <th class="text-left">fecha_reserva</th>
                 <th class="text-left">type_reservation</th>
-                <th class="text-left"></th>
+                <th class="text-left">Update</th>
+                <th class="text-left">Delete</th>
             </tr>
         </thead>
         <tbody class="table-hover">
             <tr v-for="mesa in state.reservations">
                 <td class="text-left">{{ mesa.fecha_reserva }}</td>
                 <td class="text-left">{{ mesa.type_reservation }}</td>
+                <td class="text-left"><button @click="update_reservation(mesa.id)">Update</button></td>
                 <td class="text-left"><button @click="delete_reservation(mesa.id)">Delete</button></td>
             </tr>
         </tbody>
@@ -18,7 +20,11 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import 'v-calendar/dist/style.css';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex'
+import { reactive, computed } from 'vue'
+import Constant from '../Constant';
 import { useListReservationsOfMesa, deleteReservation } from '../composables/reservation/useReservation'
 export default {
     components: { useListReservationsOfMesa, deleteReservation },
@@ -26,10 +32,19 @@ export default {
         id: Number
     },
     setup(props) {
+        const router = useRouter();
 
+        const store = useStore();
+
+        store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, props.id)
         const state = reactive({
+            mesas: computed(() => store.getters["mesa/getOneMesa"]),
             reservations: useListReservationsOfMesa(props.id),
         })
+
+        const update_reservation = (id) => {
+            router.push({ name: "updateReservation", params: { id } })
+        }
 
         const delete_reservation = (id) => {
             const check = deleteReservation(id);
@@ -38,7 +53,7 @@ export default {
             }
         }
 
-        return { state, delete_reservation };
+        return { state, delete_reservation, update_reservation };
     }
 
 }

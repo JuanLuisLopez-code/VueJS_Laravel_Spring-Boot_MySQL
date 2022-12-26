@@ -1,9 +1,14 @@
 <template>
-    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
-        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
-    <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
-    <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
-    <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
+    <div v-if="reservas">
+        <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
+            :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
+        <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
+        <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
+        <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
+    </div>
+    <div v-else>
+        No data
+    </div>
 </template>
 
 <script>
@@ -19,39 +24,45 @@ export default {
         send_data: Object
     },
     setup(props) {
+        let reservas = props.reservations;
+        if (props.reservations.length > 0) {
+            sessionStorage.setItem("reservations", JSON.stringify(props.reservations))
+        } else {
+            reservas = JSON.parse(sessionStorage.getItem("reservations"))
+        }
         const { emit } = getCurrentInstance();
 
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
-
-        for (let i = 0; i < props.reservations.length; i++) {
-            let num = props.reservations[i].fecha_reserva.split('-');
-            num[1] = num[1] - 1;
-            props.reservations[i].fecha_reserva = num.join(',');
-        }
-
         let same_day = []
         let different_day = []
 
-        const fecha_noRep = Array.from(new Set(props.reservations.map(item => item.fecha_reserva)));
-
-        const fecha_count = fecha_noRep.map(item => {
-            const item_ = {
-                fecha_reserva: item,
-                count: props.reservations.filter(item_ => item_.fecha_reserva === item).length,
-                type_reservation: props.reservations.filter(item_ => item_.fecha_reserva === item)
-                    .map(item_map => {
-                        return item_map.type_reservation
-                    })
+        if (reservas) {
+            for (let i = 0; i < reservas.length; i++) {
+                let num = reservas[i].fecha_reserva.split('-');
+                num[1] = num[1] - 1;
+                reservas[i].fecha_reserva = num.join(',');
             }
 
-            if (item_.count > 1) {
-                same_day.push(item_.fecha_reserva)
-            } else {
-                different_day.push(item_.fecha_reserva)
-            }
-            return item_
-        });
+            const fecha_noRep = Array.from(new Set(reservas.map(item => item.fecha_reserva)));
 
+            const fecha_count = fecha_noRep.map(item => {
+                const item_ = {
+                    fecha_reserva: item,
+                    count: reservas.filter(item_ => item_.fecha_reserva === item).length,
+                    type_reservation: reservas.filter(item_ => item_.fecha_reserva === item)
+                        .map(item_map => {
+                            return item_map.type_reservation
+                        })
+                }
+
+                if (item_.count > 1) {
+                    same_day.push(item_.fecha_reserva)
+                } else {
+                    different_day.push(item_.fecha_reserva)
+                }
+                return item_
+            });
+        }
         const state = reactive({
             dinner: 0,
             launch: 0,
@@ -122,7 +133,7 @@ export default {
             emit('send_data', data);
         }
 
-        return { state, getDay, send_data }
+        return { state, getDay, send_data, reservas }
     }
 
 }

@@ -32,8 +32,10 @@ import Constant from '../Constant';
 import { useReservationCreate } from '../composables/reservation/useReservation'
 export default {
     components: { card_mesa, form_details },
-
-    setup() {
+    props: {
+        id_mesa: Number
+    },
+    setup(props) {
         const store = useStore();
         const route = useRoute();
         const router = useRouter();
@@ -44,6 +46,8 @@ export default {
         const stateOne = reactive({
             mesas: computed(() => store.getters["mesa/getOneMesa"])
         })
+
+        console.log(stateOne.mesas)
 
         const reservation_emit = (data) => {
             data.mesa_id = id;

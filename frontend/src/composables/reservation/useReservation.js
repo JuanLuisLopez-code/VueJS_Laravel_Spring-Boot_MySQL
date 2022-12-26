@@ -27,11 +27,18 @@ export const useListReservationsOfMesa = (mesa_id) => {
     return reservationOfMesa;
 };
 
+export const UpdateReservation = (mesa_id) => {
+    const reservationOfMesa = ref([])
+    ReservationService.ListReservationsOfMesa(mesa_id)
+        .then(res => { reservationOfMesa.value = res.data })
+        .catch(error => console.error(error))
+    return reservationOfMesa;
+};
+
 export const deleteReservation = (mesa_id) => {
     const deleteReservation = ref([])
     ReservationService.DeleteReservation(mesa_id)
         .then(res => { deleteReservation.value = res.data })
-        // .then(res => { console.log(res.data) })
         .catch(error => console.error(error))
     return deleteReservation;
 };

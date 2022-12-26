@@ -17,7 +17,7 @@
     </table>
     <br>
     <br>
-    <listReservationOfMesa v-if="state.mesa_id != null" :id="state.mesa_id" :key="state.mesa_id"/>
+    <listReservationOfMesa v-if="state.mesa_id != null" :id="state.mesa_id" :key="state.count_refresh" />
 </template>
 
 <script>
@@ -33,11 +33,13 @@ export default {
         const state = reactive({
             profile: store.getters['user/GetProfile'],
             mesas: useShowUserReservation(),
-            mesa_id: null
+            mesa_id: null,
+            count_refresh: 0
         })
 
         const getId = (id) => {
             state.mesa_id = id;
+            state.count_refresh++;
         }
 
         return { state, getId };
