@@ -16,7 +16,6 @@ export default {
                 next('/login');
             }
         } catch (error) {
-            // next('/login');
             store.dispatch(`user/${Constant.LOGOUT}`);
 
         }
