@@ -4,6 +4,7 @@
             <tr>
                 <th class="text-left">fecha_reserva</th>
                 <th class="text-left">type_reservation</th>
+                <th class="text-left">Accepet</th>
                 <th class="text-left">Update</th>
                 <th class="text-left">Delete</th>
             </tr>
@@ -12,8 +13,11 @@
             <tr v-for="mesa in state.reservations">
                 <td class="text-left">{{ mesa.fecha_reserva }}</td>
                 <td class="text-left">{{ mesa.type_reservation }}</td>
-                <td class="text-left"><button @click="update_reservation(mesa.id)">Update</button></td>
-                <td class="text-left"><button @click="delete_reservation(mesa.id)">Delete</button></td>
+                <td class="text-left">{{ mesa.accepted }}</td>
+                <td class="text-left" v-if="!mesa.accepted"><button @click="update_reservation(mesa.id)">Update</button></td>
+                <td class="text-left" v-if="mesa.accepted">Contact with staff for update</td>
+                <td class="text-left" v-if="!mesa.accepted"><button @click="delete_reservation(mesa.id)">Delete</button></td>
+                <td class="text-left" v-if="mesa.accepted">Contact with staff for delete</td>
             </tr>
         </tbody>
     </table>
