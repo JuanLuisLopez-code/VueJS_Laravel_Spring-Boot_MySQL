@@ -18,11 +18,10 @@ export default {
         const router = useRouter();
 
         const createUser = (data) => {
-            console.log(data);
             store.dispatch(`userDashboard/${Constant.ADD_USER}`, data);
             toaster.success('User added');
             redirects.return();
-        }//createCategory
+        }//createUser
 
         const redirects = {
             return: () => router.push({ name: 'usersList' }),

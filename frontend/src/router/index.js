@@ -43,6 +43,18 @@ const router = createRouter({
       component: () => import('../views/Register.vue'),
       beforeEnter: AuthGuards.noAuthGuard, meta: { requiresAuth: true }
     },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import('../views/Profile.vue'),
+      beforeEnter: AuthGuards.AuthGuard, meta: { requiresAuth: true }
+    },
+    {
+      path: "/profile/reservation/:id",
+      name: "updateReservationUser",
+      component: () => import('../views/Profile/ProfileUpdate.vue'),
+      beforeEnter: AuthGuards.AuthGuard, meta: { requiresAuth: true }
+    },
 
     ///DASHBOARD///
     {
@@ -108,6 +120,20 @@ const router = createRouter({
       path: "/dashboard/users/create",
       name: "createUser",
       component: () => import('../views/User/UserCreate.vue'),
+      beforeEnter: AuthGuards.authGuardAdmin, meta: { requiresAuth: true }
+    },
+
+    //Reservation dashboard//
+    {
+      path: "/dashboard/reservations",
+      name: "reservationsList",
+      component: () => import('../views/Reservation/ReservationList.vue'),
+      beforeEnter: AuthGuards.authGuardAdmin, meta: { requiresAuth: true }
+    },
+    {
+      path: "/dashboard/reservations/update/:id",
+      name: "updateReservation",
+      component: () => import('../views/Reservation/ReservationUpdate.vue'),
       beforeEnter: AuthGuards.authGuardAdmin, meta: { requiresAuth: true }
     },
   ]

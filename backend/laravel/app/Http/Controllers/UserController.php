@@ -81,9 +81,7 @@ class UserController extends Controller
         }
 
         $user->save();
-        return response()->json([
-            "Message" => "Updated correctly"
-        ]);
+        return UserResource::make($user);
     } //update
 
     public function destroy($id)
@@ -107,12 +105,12 @@ class UserController extends Controller
         if (!$token) {
             return response()->json([
                 "error" => "Unauthorized"
-            ], 400);
+            ], 401);
         }
         if (auth()->user()->type != "admin") {
             return response()->json([
                 "error" => "Unauthorized"
-            ], 400);
+            ], 401);
         }
 
         return response()->json(['token' => $token, 'user' => UserResource::make(auth()->user())]);
@@ -137,6 +135,24 @@ class UserController extends Controller
             return UserResource::make(auth()->user());
         } catch (\Throwable $th) {
             return response()->json(['error' => 'get user error'], 401);
+        }
+    }
+
+    public function isAdmin()
+    {
+        try {
+            if (auth()->user() == null || auth()->user()->type != "admin") {
+                return response()->json([
+                    "error" => "Unauthorized"
+                ], 403);
+            }
+            return response()->json([
+                "msg" => "You are and admin"
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => "Unauthorized"
+            ], 403);
         }
     }
 }//class

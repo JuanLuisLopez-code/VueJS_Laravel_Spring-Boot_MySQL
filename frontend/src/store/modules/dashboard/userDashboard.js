@@ -1,5 +1,8 @@
 import Constant from '../../../Constant';
 import UserServiceDashboard from '../../../services/dashboard/UserServiceDashboard';
+import { createToaster } from "@meforma/vue-toaster";
+import router from '../../../router/index.js'
+const toaster = createToaster({ "position": "top-right", "duration": 2300 });
 
 export const userDashboard = {
     namespaced: true,
@@ -43,18 +46,14 @@ export const userDashboard = {
 
         [Constant.UPDATE_USER]: async (store, payload) => {
             try {
-                let data_ = { ...payload };
-                delete (data_['type']);
-                if (typeof data_['is_active'] === 'number') { data_['is_active'] = Boolean(data_['is_active']) }
-                if (data_['username'] === payload.username) { delete (data_['username']); }
-                if (data_['email'] === payload.email) { delete (data_['email']); }
-
-                const response = await UserServiceDashboard.UpdateUser(data_)
+                const response = await UserServiceDashboard.UpdateUser(payload);
                 if (response.status === 200) {
-                    store.commit(Constant.UPDATE_USER, payload);
+                    store.commit(Constant.UPDATE_USER, response.data.data);
                 }
             } catch (error) {
-                console.error(error);
+                if (error.response.status === 400) {
+                    toaster.error('Username or email taken');
+                };
             }
         },//UPDATE_USER
 
@@ -95,6 +94,8 @@ export const userDashboard = {
                 let data = { ...payload };
                 data['is_active'] = Number(data['is_active']);
                 state.users[index] = data;
+                toaster.success('User updated');
+                router.push({ name: 'usersList' });
             }
         },//UPDATE_USER
 

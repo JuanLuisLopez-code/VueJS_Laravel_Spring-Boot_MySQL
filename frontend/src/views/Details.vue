@@ -15,6 +15,7 @@
                 </div>
             </div>
         </div>
+        <form_details :reservations="stateOne.mesas.reservations" :key="stateOne.mesas" @send_data="reservation_emit" />
     </div>
     <div v-else>
         <span>Table not available</span>
@@ -24,15 +25,20 @@
 <script>
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import card_mesa from '../components/card_mesa.vue';
+import form_details from '../components/form_details.vue';
 import Constant from '../Constant';
+import { useReservationCreate } from '../composables/reservation/useReservation'
 export default {
-    components: { card_mesa },
-
-    setup() {
+    components: { card_mesa, form_details },
+    props: {
+        id_mesa: Number
+    },
+    setup(props) {
         const store = useStore();
         const route = useRoute();
+        const router = useRouter();
         const id = route.params.id;
 
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
@@ -41,7 +47,13 @@ export default {
             mesas: computed(() => store.getters["mesa/getOneMesa"])
         })
 
-        return { stateOne }
+        const reservation_emit = (data) => {
+            data.mesa_id = id;
+            useReservationCreate(data)
+            router.go(0)
+        }
+
+        return { stateOne, reservation_emit }
     }
 }
 </script>
