@@ -35,7 +35,7 @@ export default {
         },
         isReservation() {
             const path = this.$route.path.split('/');
-            if (this.$route.name == undefined || this.$route.name == 'updateReservation') {
+            if (this.$route.name == undefined || this.$route.name == 'updateReservationUser') {
             } else {
                 sessionStorage.removeItem("reservations")
             }

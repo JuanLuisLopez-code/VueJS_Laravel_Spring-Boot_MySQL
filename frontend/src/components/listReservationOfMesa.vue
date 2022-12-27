@@ -43,7 +43,7 @@ export default {
         })
 
         const update_reservation = (id) => {
-            router.push({ name: "updateReservation", params: { id } })
+            router.push({ name: "updateReservationUser", params: { id } })
         }
 
         const delete_reservation = (id) => {

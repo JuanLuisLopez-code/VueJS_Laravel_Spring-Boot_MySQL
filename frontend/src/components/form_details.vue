@@ -1,14 +1,14 @@
 <template>
-    <div v-if="reservas">
-        <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
-            :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
-        <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
-        <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
-        <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
-    </div>
-    <div v-else>
-        No data
-    </div>
+    <!-- <div v-if="reservas"> -->
+    <DatePicker v-model="state.data" @dayclick="getDay" :attributes="state.attributes" :min-date='new Date()'
+        :disabled-dates='{ weekdays: [1, 1] }' is-double-paned />
+    <input type="radio" :disabled="state.dinner_check" v-model="state.dinner" name="type" value="dinner"> Dinner
+    <input type="radio" :disabled="state.launch_check" v-model="state.dinner" name="type" value="launch"> Launch
+    <button @click="send_data()" :disabled="!state.dinner">Reservation</button>
+    <!-- </div>
+        <div v-else>
+            No data
+        </div> -->
 </template>
 
 <script>
@@ -16,7 +16,7 @@ import 'v-calendar/dist/style.css';
 import { createToaster } from "@meforma/vue-toaster";
 import { getCurrentInstance } from 'vue';
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 export default {
     props: {
         reservations: Object
@@ -33,12 +33,13 @@ export default {
         }
         const { emit } = getCurrentInstance();
         const router = useRouter();
-
+        const route = useRoute();
+        const path = route.fullPath.split('/')
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         let same_day = []
         let different_day = []
-        if (!reservas) {
-            router.push({ name: "home" })
+        if (!reservas && path[2] == 'details') {
+            reservas = [];
         }
 
         for (let i = 0; i < reservas.length; i++) {
@@ -59,6 +60,7 @@ export default {
                     })
             }
 
+
             if (item_.count > 1) {
                 same_day.push(item_.fecha_reserva)
             } else {
@@ -66,7 +68,6 @@ export default {
             }
             return item_
         });
-
         const state = reactive({
             dinner: 0,
             launch: 0,
@@ -137,7 +138,7 @@ export default {
             emit('send_data', data);
         }
 
-        return { state, getDay, send_data, reservas }
+        return { state, getDay, send_data }
     }
 
 }
