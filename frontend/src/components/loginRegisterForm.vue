@@ -1,4 +1,5 @@
 <template>
+    {{ x$.password2 }}
     <div class="LoginRegisterForm">
         <main class="main">
             <div class="container">
@@ -22,20 +23,45 @@
                             <input type="username" name="username" id="username" class="input-field"
                                 placeholder="Username" v-model="state.username">
                         </div>
+                        <div v-if="x$.username.$invalid">
+                            <label class="error">Invalid Username.</label>
+                            <br>
+                            <br>
+                        </div>
                         <div class="input-control" v-if="!isLogin">
                             <label for="email" class="input-label">Email Address</label>
                             <input type="email" name="email" id="email" class="input-field" placeholder="Email Address"
                                 v-model="state.email">
+                        </div>
+                        <div v-if="x$.email.$invalid && !isLogin">
+                            <label class="error">Invalid EMAIL.</label>
+                            <br>
+                            <br>
                         </div>
                         <div class="input-control">
                             <label for="password" class="input-label">Password</label>
                             <input type="password" name="password" id="password" class="input-field"
                                 placeholder="Password" v-model="state.password">
                         </div>
+                        <div v-if="x$.password.$invalid">
+                            <label class="error">Invalid Password.</label>
+                            <br>
+                            <br>
+                        </div>
                         <div class="input-control" v-if="!isLogin">
                             <label for="password" class="input-label">Repeat Password</label>
                             <input type="password" name="password2" id="password2" class="input-field"
                                 placeholder="Repeat Password" v-model="state.password2">
+                        </div>
+                        <div v-if="!isLogin && state.password != state.password2">
+                            <label class="error">Passwords do not match</label>
+                            <br>
+                            <br>
+                        </div>
+                        <div v-if="x$.password2.$invalid && !isLogin">
+                            <label class="error">Need confirm password</label>
+                            <br>
+                            <br>
                         </div>
                         <div>
                             <div class="input-control" v-if="isLogin">
@@ -50,34 +76,7 @@
                                     :disabled="x$.username.$invalid || x$.password.$invalid || x$.email.$invalid || x$.password2.$invalid || state.password2 !== state.password">Register</button>
                             </div>
                         </div>
-
-
                     </div>
-                    <!-- <div class="striped" v-if="isLogin">
-                        <span class="striped-line"></span>
-                        <span class="striped-text">Or</span>
-                        <span class="striped-line"></span>
-                    </div>
-                    <div class="method" v-if="isLogin">
-                        <div class="method-control">
-                            <a   class="method-action">
-                                <i class="ion ion-logo-google"></i>
-                                <span>Sign in with Google</span>
-                            </a>
-                        </div>
-                        <div class="method-control">
-                            <a   class="method-action">
-                                <i class="ion ion-logo-facebook"></i>
-                                <span>Sign in with Facebook</span>
-                            </a>
-                        </div>
-                        <div class="method-control">
-                            <a   class="method-action">
-                                <i class="ion ion-logo-apple"></i>
-                                <span>Sign in with Apple</span>
-                            </a>
-                        </div>
-                    </div> -->
                 </section>
             </div>
         </main>
@@ -88,7 +87,7 @@
 import { useRouter } from 'vue-router';
 import { getCurrentInstance, reactive, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { required, minLength, email, alphaNum } from '@vuelidate/validators'
 export default {
     props: {
         isLogin: Boolean
@@ -127,6 +126,7 @@ export default {
             username: {
                 required,
                 minLength: minLength(2),
+                alphaNum
             },
             password: {
                 required,
@@ -142,6 +142,7 @@ export default {
             email: {
                 required,
                 minLength: minLength(2),
+                email
             },
             password: {
                 required,
@@ -221,6 +222,10 @@ export default {
         line-height: 1.5;
         color: var(--color-black);
         background: var(--color-light);
+    }
+
+    .error {
+        color: red;
     }
 
     a,
