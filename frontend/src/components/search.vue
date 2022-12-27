@@ -33,12 +33,13 @@ export default {
 
         const search = () => {
             if (state.name_mesa !== "") {
-
                 const filters = {
                     categories: [],
                     capacity: 0,
                     order: 0,
                     name_mesa: state.name_mesa,
+                    page: 1,
+                    limit: 9,
                 };
                 const filters_64 = btoa(JSON.stringify(filters));
                 router.push({ name: "reservationFilters", params: { filters: filters_64 } });

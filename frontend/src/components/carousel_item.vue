@@ -1,6 +1,6 @@
 <template>
-    <div class="carusel_item" @click="emitAction()">
-        <img :src="item.photo" />
+    <div class="carusel_item">
+        <img :src="item.photo" @click="emitAction()" />
     </div>
 </template>
 

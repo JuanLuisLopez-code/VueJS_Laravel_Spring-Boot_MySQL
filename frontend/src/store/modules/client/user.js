@@ -25,7 +25,7 @@ export const user = {
                     }
                 }
             } catch (error) {
-                toaster.error('Login error');
+                toaster.error('Username or password incorrect');
             }
         },//LOGIN
 
