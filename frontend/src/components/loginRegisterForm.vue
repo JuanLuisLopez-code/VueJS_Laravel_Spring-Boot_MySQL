@@ -1,5 +1,4 @@
 <template>
-    {{ x$.password2 }}
     <div class="LoginRegisterForm">
         <main class="main">
             <div class="container">
