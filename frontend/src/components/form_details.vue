@@ -21,13 +21,13 @@ export default {
     },
     setup(props) {
         let reservas = props.reservations;
+        sessionStorage.removeItem("reservations")
         if (props.reservations.length > 0) {
             sessionStorage.setItem("reservations", JSON.stringify(props.reservations))
         } else {
             reservas = JSON.parse(sessionStorage.getItem("reservations"))
         }
         const { emit } = getCurrentInstance();
-        const router = useRouter();
         const route = useRoute();
         const path = route.fullPath.split('/')
         const toaster = createToaster({ "position": "top-right", "duration": 1500 });

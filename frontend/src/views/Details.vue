@@ -53,7 +53,7 @@ export default {
             router.go(0)
         }
 
-        return { stateOne, reservation_emit }
+        return { stateOne, reservation_emit, id }
     }
 }
 </script>
