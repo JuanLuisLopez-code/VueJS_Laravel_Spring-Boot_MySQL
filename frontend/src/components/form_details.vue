@@ -11,7 +11,7 @@ import 'v-calendar/dist/style.css';
 import { createToaster } from "@meforma/vue-toaster";
 import { getCurrentInstance } from 'vue';
 import { reactive } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 export default {
     props: {
         reservations: Object

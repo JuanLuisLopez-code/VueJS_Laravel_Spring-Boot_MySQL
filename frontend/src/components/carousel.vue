@@ -24,7 +24,7 @@ export default {
         emitAction: Object
     },
 
-    setup(props) {
+    setup() {
         const { emit } = getCurrentInstance();
         const emitAction = (item) => {
             emit('emitAction', item);

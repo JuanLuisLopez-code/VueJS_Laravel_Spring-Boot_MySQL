@@ -29,7 +29,7 @@ export default {
     emits: {
         page: Number
     },
-    setup(props) {
+    setup() {
         const { emit } = getCurrentInstance();
         let page = 1;
         const scroll = ($state) => {

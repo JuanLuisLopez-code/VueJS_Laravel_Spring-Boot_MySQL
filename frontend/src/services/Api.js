@@ -17,20 +17,20 @@ export default (URL) => {
 
     const token = URL === secrets.URL_LARAVEL ? localStorage.getItem('token_admin') : localStorage.getItem('token');
     if (token) {
-        api.defaults.headers.common.Authorization = `Bearer ${token}`
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
     }//add token to header
 
 
     api.interceptors.response.use(
         (response) => response,
         (error) => {
-            console.log(error)
+            console.error(error);
             if (error.response.status === 401) {
-                toaster.error('Forced logout. Unauthorized action')
+                toaster.error('Forced logout. Unauthorized action');
                 store.dispatch(`user/${Constant.LOGOUT}`);
                 router.push({ name: "home" });
             }
-            return Promise.reject(error)
+            return Promise.reject(error);
         }//end if
     );//response interceptor remove token and user when unauthorized
 

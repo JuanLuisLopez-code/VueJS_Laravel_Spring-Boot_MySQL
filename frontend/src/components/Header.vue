@@ -27,7 +27,6 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { reactive, computed } from 'vue';
 import Constant from '../Constant';
-import router from '../router';
 export default {
     components: { searchVue },
     computed: {

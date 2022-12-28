@@ -15,18 +15,6 @@
                     </span>
                 </div>
             </div>
-            <!-- <div class="gallery-item-info">
-                <ul>
-                    <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span>
-                        34
-                        <font-awesome-icon icon="fa-solid fa-heart" />
-                    </li>
-                    <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span>
-                        1
-                        <font-awesome-icon icon="fa-solid fa-comment" />
-                    </li>
-                </ul>
-            </div> -->
         </div>
     </main>
 </template>

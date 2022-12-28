@@ -29,13 +29,15 @@ import { useRoute, useRouter } from 'vue-router'
 import card_mesa from '../components/card_mesa.vue';
 import form_details from '../components/form_details.vue';
 import Constant from '../Constant';
+import { createToaster } from "@meforma/vue-toaster";
 import { useReservationCreate } from '../composables/reservation/useReservation'
 export default {
     components: { card_mesa, form_details },
     props: {
         id_mesa: Number
     },
-    setup(props) {
+    setup() {
+        const toaster = createToaster({ "position": "top-right", "duration": 1500 });
         const store = useStore();
         const route = useRoute();
         const router = useRouter();
@@ -44,16 +46,21 @@ export default {
         store.dispatch(`mesa/${Constant.INITIALIZE_ONE_STATE_MESA}`, id)
 
         const stateOne = reactive({
-            mesas: computed(() => store.getters["mesa/getOneMesa"])
+            mesas: computed(() => store.getters["mesa/getOneMesa"]),
+            isLoged: store.getters['user/GetIsAuth'],
         })
 
         const reservation_emit = (data) => {
-            data.mesa_id = id;
-            useReservationCreate(data)
-            router.go(0)
+            if (stateOne.isLoged) {
+                data.mesa_id = id;
+                useReservationCreate(data)
+                router.go(0)
+            } else {
+                toaster.info('Please login to make a reservation');
+            }
         }
 
-        return { stateOne, reservation_emit, id }
+        return { stateOne, reservation_emit }
     }
 }
 </script>
