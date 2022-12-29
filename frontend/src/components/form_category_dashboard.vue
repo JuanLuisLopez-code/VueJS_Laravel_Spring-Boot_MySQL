@@ -10,7 +10,7 @@
             <div class="user-box">
                 <label>Category Photo</label><br>
                 <label class="error" v-if="v$.photo.$invalid">This input is required.</label>
-                <input type="file" accept="image/*" ref="file_upload" @change="updateImage">
+                <input type="file" accept="image/*" @change="updateImage">
             </div>
             <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
                 <span></span>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { reactive, getCurrentInstance, computed, ref } from 'vue';
+import { reactive, getCurrentInstance, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, url, alphaNum } from '@vuelidate/validators'
 
@@ -38,7 +38,6 @@ export default {
         data: Object
     },
     setup(props) {
-        const file_upload = ref();
         const { emit } = getCurrentInstance();
         const category_ = props.category ? props.category : { 'name_category': '', 'photo': null };
         const state = reactive({
@@ -73,7 +72,7 @@ export default {
             emit('data', form_data);
         }
 
-        return { state, sendData, v$, file_upload, updateImage };
+        return { state, sendData, v$, updateImage };
     }
 }
 </script>

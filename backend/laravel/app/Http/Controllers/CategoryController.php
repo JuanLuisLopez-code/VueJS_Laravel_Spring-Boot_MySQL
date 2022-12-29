@@ -17,14 +17,7 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-
-        if (isset($request['photo'])) {
-            if ($request['photo'] != null && $request['photo'] != '' && !is_string($request['photo'])) {
-                $file_URL  = FileUploader::store($request['photo'], 'categories');
-            } else {
-                $file_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Cat_on_its_back.jpg/1280px-Cat_on_its_back.jpg';
-            }
-        }
+        $file_URL  = FileUploader::store($request['photo'], 'categories');
         $data = ['name_category' => $request->validated()['name_category'], 'photo' => $file_URL];
         return CategoryResource::make(Category::create($data));
     }
