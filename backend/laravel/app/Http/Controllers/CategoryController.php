@@ -6,6 +6,7 @@ use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Helpers\FileUploader;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,16 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        return CategoryResource::make(Category::create($request->validated()));
+
+        if (isset($request['photo'])) {
+            if ($request['photo'] != null && $request['photo'] != '' && !is_string($request['photo'])) {
+                $file_URL  = FileUploader::store($request['photo'], 'categories');
+            } else {
+                $file_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Cat_on_its_back.jpg/1280px-Cat_on_its_back.jpg';
+            }
+        }
+        $data = ['name_category' => $request->validated()['name_category'], 'photo' => $file_URL];
+        return CategoryResource::make(Category::create($data));
     }
 
     public function show($id)
