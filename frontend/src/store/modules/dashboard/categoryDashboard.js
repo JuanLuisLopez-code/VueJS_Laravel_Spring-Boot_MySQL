@@ -3,6 +3,9 @@ import CategoryServiceDashboard from '../../../services/dashboard/CategoryServic
 
 export const categoryDashboard = {
     namespaced: true,
+    state: {
+        categories: []
+    },
     actions: {
         [Constant.INITIALIZE_CATEGORY]: async (store) => {
             try {

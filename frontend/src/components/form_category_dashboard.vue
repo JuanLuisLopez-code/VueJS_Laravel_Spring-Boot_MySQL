@@ -9,8 +9,8 @@
             </div>
             <div class="user-box">
                 <label>Category Photo</label><br>
-                <label class="error" v-if="v$.photo.$invalid">This input is required and a url.</label>
-                <input type="url" v-model="state.categoryLocal.photo">
+                <label class="error" v-if="v$.photo.$invalid">This input is required.</label>
+                <input type="file" accept="image/*" ref="file_upload" @change="updateImage">
             </div>
             <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
                 <span></span>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { reactive, getCurrentInstance, computed } from 'vue';
+import { reactive, getCurrentInstance, computed, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, url, alphaNum } from '@vuelidate/validators'
 
@@ -38,8 +38,9 @@ export default {
         data: Object
     },
     setup(props) {
+        const file_upload = ref();
         const { emit } = getCurrentInstance();
-        const category_ = props.category ? props.category : { 'name_category': '', 'photo': '' };
+        const category_ = props.category ? props.category : { 'name_category': '', 'photo': null };
         const state = reactive({
             categoryLocal: { ...category_ }
         });
@@ -51,17 +52,28 @@ export default {
             },
             photo: {
                 required,
-                url,
             }
         }));
 
         const v$ = useVuelidate(rules, state.categoryLocal);
 
-        const sendData = () => {
-            emit('data', state.categoryLocal);
+
+        const updateImage = (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                state.categoryLocal.photo = null;
+            } else {
+                state.categoryLocal.photo = file;
+            }
         }
 
-        return { state, sendData, v$ };
+        const sendData = () => {
+            const form_data = new FormData()
+            Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
+            emit('data', form_data);
+        }
+
+        return { state, sendData, v$, file_upload, updateImage };
     }
 }
 </script>
