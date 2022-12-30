@@ -12,6 +12,10 @@
                 <label class="error" v-if="v$.photo.$invalid">This input is required.</label>
                 <input type="file" accept="image/*" @change="updateImage">
             </div>
+            <div v-if="state.old_photo" class="user-box">
+                <label>Old Photo</label><br>
+                <img :src="state.old_photo" height="300">
+            </div>
             <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
                 <span></span>
                 <span></span>
@@ -41,7 +45,8 @@ export default {
         const { emit } = getCurrentInstance();
         const category_ = props.category ? props.category : { 'name_category': '', 'photo': null };
         const state = reactive({
-            categoryLocal: { ...category_ }
+            categoryLocal: { ...category_ },
+            old_photo: props.category ? props.category.photo : null
         });
 
         const rules = computed(() => ({
@@ -56,7 +61,6 @@ export default {
 
         const v$ = useVuelidate(rules, state.categoryLocal);
 
-
         const updateImage = (e) => {
             const file = e.target.files[0];
             if (!file) {
@@ -67,9 +71,15 @@ export default {
         }
 
         const sendData = () => {
-            const form_data = new FormData()
-            Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
-            emit('data', form_data);
+            if (state.categoryLocal.id) { delete (state.categoryLocal.id); }
+            if (state.categoryLocal.photo === state.old_photo) { delete (state.categoryLocal.photo); }
+            if (!state.categoryLocal.photo) {
+                emit('data', state.categoryLocal);
+            } else {
+                const form_data = new FormData()
+                Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
+                emit('data', form_data);
+            }
         }
 
         return { state, sendData, v$, updateImage };

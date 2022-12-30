@@ -29,11 +29,18 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $update = Category::where('id', $id)->update($request->validated());
+        $data = null;
+        $category = Category::where('id', $id)->firstOrFail();
+        if (isset($request['photo'])) {
+            $data['photo'] =  FileUploader::update($request['photo'], $category['photo']);
+        }
+        if (isset($request['name_category'])) {
+            $data['name_category'] = $request['name_category'];
+        }
+        error_log(json_encode($data));
+        $update = Category::where('id', $id)->update($data);
         if ($update == 1) {
-            return response()->json([
-                "Message" => "Updated correctly"
-            ]);
+            return CategoryResource::make(Category::where('id', $id)->firstOrFail());
         } else {
             return response()->json([
                 "Status" => "Not found"
@@ -43,7 +50,9 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        $delete = Category::where('id', $id)->delete();
+        $category = Category::where('id', $id)->firstOrFail();
+        FileUploader::delete($category['photo']);
+        $delete = $category->delete();
 
         if ($delete == 1) {
             return response()->json([

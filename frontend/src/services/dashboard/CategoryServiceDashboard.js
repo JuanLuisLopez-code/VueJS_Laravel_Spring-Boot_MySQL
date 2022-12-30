@@ -20,8 +20,8 @@ export default {
         return Api(secrets.URL_LARAVEL).post('category', data);
     },//CreateCategory
 
-    UpdateCategory(data) {
-        return Api(secrets.URL_LARAVEL).put(`category/${data.id}`, data);
+    UpdateCategory(data, id) {
+        return Api(secrets.URL_LARAVEL).put(`category/${id}`, data);
     },//UpdateCategory
 
 }//export

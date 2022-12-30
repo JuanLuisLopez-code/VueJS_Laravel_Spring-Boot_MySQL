@@ -51,9 +51,9 @@ export const categoryDashboard = {
         },//ADD_CATEGORY
         [Constant.UPDATE_CATEGORY]: async (store, payload) => {
             try {
-                const response = await CategoryServiceDashboard.UpdateCategory(payload);
+                const response = await CategoryServiceDashboard.UpdateCategory(payload.data, payload.id);
                 if (response.status === 200) {
-                    store.commit(Constant.UPDATE_CATEGORY, payload);
+                    store.commit(Constant.UPDATE_CATEGORY, response.data.data);
                 }
             } catch (error) {
                 console.error(error);
