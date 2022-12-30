@@ -9,8 +9,12 @@
             </div>
             <div class="user-box">
                 <label>Category Photo</label><br>
-                <label class="error" v-if="v$.photo.$invalid">This input is required and a url.</label>
-                <input type="url" v-model="state.categoryLocal.photo">
+                <label class="error" v-if="v$.photo.$invalid">This input is required.</label>
+                <input type="file" accept="image/*" @change="updateImage">
+            </div>
+            <div v-if="state.old_photo" class="user-box">
+                <label>Old Photo</label><br>
+                <img :src="state.old_photo" height="300">
             </div>
             <button @click="sendData()" :disabled="v$.name_category.$invalid || v$.photo.$invalid">
                 <span></span>
@@ -39,9 +43,10 @@ export default {
     },
     setup(props) {
         const { emit } = getCurrentInstance();
-        const category_ = props.category ? props.category : { 'name_category': '', 'photo': '' };
+        const category_ = props.category ? props.category : { 'name_category': '', 'photo': null };
         const state = reactive({
-            categoryLocal: { ...category_ }
+            categoryLocal: { ...category_ },
+            old_photo: props.category ? props.category.photo : null
         });
 
         const rules = computed(() => ({
@@ -51,17 +56,29 @@ export default {
             },
             photo: {
                 required,
-                url,
             }
         }));
 
         const v$ = useVuelidate(rules, state.categoryLocal);
 
-        const sendData = () => {
-            emit('data', state.categoryLocal);
+        const updateImage = (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                state.categoryLocal.photo = null;
+            } else {
+                state.categoryLocal.photo = file;
+            }
         }
 
-        return { state, sendData, v$ };
+        const sendData = () => {
+            if (state.categoryLocal.photo === state.old_photo) { delete (state.categoryLocal.photo); }
+            if (state.categoryLocal.name_category === category_.name_category) { delete (state.categoryLocal.name_category); }
+            const form_data = new FormData()
+            Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
+            emit('data', form_data);
+        }
+
+        return { state, sendData, v$, updateImage };
     }
 }
 </script>
