@@ -28,6 +28,7 @@ export default {
         });
 
         const updateCategory = (data) => {
+            data.delete('id');
             const data_dispatch = { data: data, id: route.params.id };
             store.dispatch(`categoryDashboard/${Constant.UPDATE_CATEGORY}`, data_dispatch);
             toaster.success('Category updated');

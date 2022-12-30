@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $file_URL  = FileUploader::store($request['photo'], 'categories');
+        $file_URL  = FileUploader::store($request->validated()['photo'], 'categories');
         $data = ['name_category' => $request->validated()['name_category'], 'photo' => $file_URL];
         return CategoryResource::make(Category::create($data));
     }
@@ -37,10 +37,9 @@ class CategoryController extends Controller
         if (isset($request['name_category'])) {
             $data['name_category'] = $request['name_category'];
         }
-        error_log(json_encode($data));
-        $update = Category::where('id', $id)->update($data);
+        $update = $category->update($data);
         if ($update == 1) {
-            return CategoryResource::make(Category::where('id', $id)->firstOrFail());
+            return CategoryResource::make($category->firstOrFail());
         } else {
             return response()->json([
                 "Status" => "Not found"

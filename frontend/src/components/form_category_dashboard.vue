@@ -71,15 +71,11 @@ export default {
         }
 
         const sendData = () => {
-            if (state.categoryLocal.id) { delete (state.categoryLocal.id); }
             if (state.categoryLocal.photo === state.old_photo) { delete (state.categoryLocal.photo); }
-            if (!state.categoryLocal.photo) {
-                emit('data', state.categoryLocal);
-            } else {
-                const form_data = new FormData()
-                Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
-                emit('data', form_data);
-            }
+            if (state.categoryLocal.name_category === category_.name_category) { delete (state.categoryLocal.name_category); }
+            const form_data = new FormData()
+            Object.entries(state.categoryLocal).forEach(item => form_data.append(item[0], item[1]));
+            emit('data', form_data);
         }
 
         return { state, sendData, v$, updateImage };
